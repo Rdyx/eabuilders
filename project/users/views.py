@@ -10,7 +10,7 @@ from .forms import SigninForm
 
 
 def user_login_view(request):
-    # Is user is auth, get him to home
+    # If user is auth, get him to home
     if request.user.is_authenticated:
         return redirect("/")
     else:
@@ -40,7 +40,7 @@ def user_logout_view(request):
 
 
 def user_signup_view(request):
-    # Is user is auth, get him to home
+    # If user is auth, get him to home
     if request.user.is_authenticated:
         return redirect("/")
     else:
