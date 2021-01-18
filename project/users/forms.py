@@ -1,12 +1,14 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ("username", "password")
-        # widgets = {"password": forms.PasswordInput()}
+class SigninForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput())
 
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+    def signin_user(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+
+        return authenticate(username=username, password=password)
