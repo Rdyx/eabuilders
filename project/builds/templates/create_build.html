@@ -1,3 +1,13 @@
+{% load static %}
+
+
 <body>
-    {{form}}
+    <form method="POST" id="create-build-form">    
+        {{form}}
+    </form>
+
+    <script type="text/javascript">
+        const chars = JSON.parse('{{ chars | safe }}');
+    </script>
+    <script src="{% static 'createBuildForm.js'%}"></script>
 </body>

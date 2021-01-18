@@ -5,6 +5,7 @@ class RaceModel(models.Model):
     race_id = models.IntegerField(unique=True, null=False)
     race_img = models.ImageField(upload_to="assets/race", null=False)
     race_name = models.CharField(max_length=150, unique=True, null=False)
+    race_slug = models.SlugField(max_length=150, unique=True, null=False)
     race_bonus_1 = models.CharField(max_length=1000, null=False)
     race_bonus_2 = models.CharField(max_length=1000, null=False)
     race_bonus_3 = models.CharField(max_length=1000, blank=True, null=True)
@@ -17,6 +18,7 @@ class MaterialModel(models.Model):
     material_id = models.IntegerField(unique=True, null=False)
     material_img = models.ImageField(upload_to="assets/material", null=False)
     material_name = models.CharField(max_length=150, unique=True, null=False)
+    material_slug = models.SlugField(max_length=150, unique=True, null=False)
     material_bonus_1 = models.CharField(max_length=1000, null=False)
     material_bonus_2 = models.CharField(max_length=1000, null=False)
     material_bonus_3 = models.CharField(max_length=1000, blank=True, null=True)
@@ -32,6 +34,7 @@ class ItemModel(models.Model):
     item_buy_cost = models.IntegerField(null=False)
     item_sell_cost = models.IntegerField(blank=True, null=True)
     item_name = models.CharField(max_length=100, unique=True, null=False)
+    item_slug = models.SlugField(max_length=100, unique=True, null=False)
     item_desc = models.CharField(max_length=1000, null=False)
     item_race = models.ForeignKey("RaceModel", on_delete=models.CASCADE, null=False)
     item_material = models.ForeignKey(

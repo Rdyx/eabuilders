@@ -1,0 +1,8 @@
+{% load static %}
+
+<body>
+    {% for character in characters %}
+        {{character.char_slug}}
+        <img src="/media/{{character.char_img}}" alt="{{characters.char_name}}"/>
+    {% endfor %}
+</body>
