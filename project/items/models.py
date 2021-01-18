@@ -56,4 +56,6 @@ class ItemModel(models.Model):
         super(ItemModel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "{} ({}, {})".format(self.item_name, self.item_race, self.item_material)
+        return "{}. {} ({}, {})".format(
+            self.item_id, self.item_name, self.item_race, self.item_material
+        )

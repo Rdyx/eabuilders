@@ -68,7 +68,7 @@ def user_profile_page(request, username):
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        return render(request, "common/wrong.html")
+        return redirect("oops")
 
     context = {"username": user}
     return render(request, "profile.html", context)
@@ -79,12 +79,13 @@ def user_delete(request, username):
     # Try to get targeted user
     try:
         user = User.objects.get(username=username)
+        print(user, request.user)
     except User.DoesNotExist:
-        return render(request, "common/wrong.html")
+        return redirect("oops")
 
     # Delete user only if it's the same as logged in
     if request.user == user:
         user.delete()
         return render(request, "user_deleted.html")
 
-    return render(request, "common/wrong.html")
+    return redirect("oops")
