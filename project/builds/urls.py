@@ -18,6 +18,6 @@ urlpatterns = [
         views.create_build_skill_item_selection_view,
         name="create_build_skill_item_selection",
     ),
-    path("<slug:build_slug>/", views.get_build_view, name="get_build"),
+    path("view/<slug:build_slug>/", views.get_build_view, name="get_build"),
     path("delete/<slug:build_slug>/", views.delete_build_view, name="delete_build"),
 ]

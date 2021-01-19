@@ -8,7 +8,8 @@ class BuildModel(models.Model):
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False
     )
-    name = models.CharField(max_length=100, null=False, unique=True)
+    version = models.IntegerField(null=False)
+    name = models.CharField(max_length=100, null=False)
     slug = models.SlugField(max_length=120, null=False, unique=True)
     notes = models.TextField(blank=True, null=True)
     char = models.ForeignKey(
@@ -75,5 +76,7 @@ class BuildModel(models.Model):
         "items.ItemModel", on_delete=models.CASCADE, null=False, related_name="item_8"
     )
 
+    unique_together = [["name", "version"]]
+
     def __str__(self):
-        return "{} ({})".format(self.name, self.creator)
+        return "{} {} ({})".format(self.name, self.version, self.creator)
