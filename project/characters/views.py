@@ -9,7 +9,7 @@ def get_char_view(request, char_slug):
     except CharacterModel.DoesNotExist:
         return redirect("oops")
 
-    character_skills = list(SkillModel.objects.filter(skill_owner=character))
+    character_skills = list(SkillModel.objects.filter(owner=character))
 
     context = {"character": character, "character_skills": character_skills}
     return render(request, "character.html", context)

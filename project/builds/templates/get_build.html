@@ -1,0 +1,10 @@
+<body>
+    aze
+    {{build.owner}}
+    {{user.get_id}}
+    {% if build.owner == user.get_id %}
+        <a href="/build/delete/{{ build.slug }}">delete</a>
+    {%endif%}
+    {{build_creation_message}}
+    {{build}}
+</body>

@@ -4,7 +4,7 @@ from .models import SkillTypeModel, SkillModel, CharacterModel
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"char_slug": ("char_name",)}
+    prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.register(SkillTypeModel)

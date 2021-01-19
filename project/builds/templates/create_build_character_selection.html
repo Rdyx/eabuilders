@@ -1,12 +1,23 @@
 {% load static %}
 
 <body>
-    <form action="{% url 'create_build_skill_selection' %}" method="POST">
+    <!-- <form action="" method="POST">
         {% csrf_token %}
         {% for character in characters %}
         {{character.char_slug}}
-        <button name="char-slug" type="submit" value="{{character.char_slug}}">
+        <button name="char_slug" type="submit" value="{{character.char_slug}}">
             <img src="/media/{{character.char_img}}" alt="{{character.char_name}}"/>
+        </button>
+        {% endfor %}
+        {{form}}
+    </form> -->
+    <form action="{% url 'create_build_skill_item_selection' %}" method="POST">
+        {% csrf_token %}
+        {% for character in characters %}
+        {{character.slug}}
+        <button name="char_slug" type="submit" value="{{character.slug}}">
+            <!-- <img src="/media/{{character.img}}" alt="{{character.name}}"/> -->
+            <img src="/media/{{character.img}}" alt="{{character.name}}"/>
         </button>
         {% endfor %}
     </form>

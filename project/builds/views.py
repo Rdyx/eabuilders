@@ -1,91 +1,87 @@
 import json
 
+from django.conf import settings
 from django.forms.models import model_to_dict
 from django.shortcuts import render, redirect
 from django.core import serializers
 
+from .models import BuildModel
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
+from items.models import ItemModel
 
-from .forms import CreateBuildForm, SkillSelectionForm
-from .utils import get_selected_skills
-
-
-def create_build_view(request):
-    return redirect("create_build_character_selection")
-    chars = serializers.serialize(
-        "json",
-        CharacterModel.objects.select_related(
-            "char_skill_1__skill_type",
-            "char_skill_2__skill_type",
-            "char_skill_3__skill_type",
-            "char_skill_4__skill_type",
-            "char_skill_5__skill_type",
-            "char_skill_6__skill_type",
-            "char_skill_7__skill_type",
-            "char_skill_8__skill_type",
-            "char_skill_9__skill_type",
-        ).all(),
-        fields=["char_skill_1"],
-    )
-
-    context = {"form": CreateBuildForm, "chars": chars}
-    return render(request, "create_build.html", context)
+from .forms import BuildSelectionForm
+from .utils import get_selected_skills, check_form_values
 
 
 def create_build_character_selection_view(request):
-    characters = CharacterModel.objects.all().values(
-        "char_slug", "char_name", "char_img"
-    )
+    characters = CharacterModel.objects.all().values("slug", "name", "img")
 
     context = {"characters": characters}
     return render(request, "create_build_character_selection.html", context)
 
 
-def create_build_skill_selection_view(request):
+def create_build_skill_item_selection_view(request, build_slug=""):
     if request.method == "POST":
         try:
-            char_slug = request.POST["char-slug"]
-            character = CharacterModel.objects.get(char_slug=char_slug)
+            char_slug = request.POST["char_slug"]
+            character = CharacterModel.objects.get(slug=char_slug)
         except CharacterModel.DoesNotExist:
             return redirect("oops")
+
+        error_message = ""
+        skills = SkillModel.objects.filter(owner__slug=char_slug).select_related(
+            "owner", "stype"
+        )
+        items = ItemModel.objects.all().select_related("race", "material")
+
+        build_form = BuildSelectionForm(
+            request.POST, char_slug=char_slug, skills=skills, items=items
+        )
+
+        if build_form.is_valid():
+            build_save = build_form.save(request=request, char_slug=char_slug)
+
+            if build_save != "This build name already exists.":
+                request.session["build_created"] = True
+                return redirect("/build/{}".format(build_save))
+            error_message = build_save
+
+    elif request.method == "GET":
+        build = BuildModel.objects.get(slug=build_slug)
+
     else:
         return redirect("oops")
-
-    skills = SkillModel.objects.select_related("skill_type").filter(
-        skill_owner=character
-    )
-
     context = {
-        "form": SkillSelectionForm(skills=skills),
+        "build_form": build_form,
+        "character": character,
         "skills": serializers.serialize("json", skills, use_natural_foreign_keys=True),
+        "items": serializers.serialize("json", items, use_natural_foreign_keys=True),
+        "error_message": error_message,
     }
 
-    return render(request, "create_build_skill_selection.html", context)
+    return render(request, "create_build_skill_item_selection.html", context)
 
 
-def create_build_items_selection_view(request):
-    if request.method == "POST":
-        skills_list = get_selected_skills(request)
-        skill_owner = skills_list[0].skill_owner.id
+def get_build_view(request, build_slug):
+    build = BuildModel.objects.get(slug=build_slug)
+    build_creation_message = ""
 
-        # If all skill have the same owner id, get the owner
-        if all(skill.skill_owner.id == skill_owner for skill in skills_list):
-            try:
-                character = CharacterModel.objects.get(id=skill_owner)
-            except CharacterModel.DoesNotExist:
-                return redirect("oops")
-        else:
-            return redirect("oops")
-    else:
+    if request.session["build_created"]:
+        build_creation_message = "Build has been created."
+        request.session["build_created"] = ""
+
+    context = {"build": build, "build_creation_message": build_creation_message}
+
+    return render(request, "get_build.html", context)
+
+
+def delete_build_view(request, build_slug):
+    try:
+        build = BuildModel.objects.get(slug=build_slug)
+    except BuildModel.DoesNotExist:
         return redirect("oops")
 
-    skills = SkillModel.objects.select_related("skill_type").filter(
-        skill_owner=character
-    )
-
-    context = {
-        "form": SkillSelectionForm(skills=skills),
-        "skills": serializers.serialize("json", skills, use_natural_foreign_keys=True),
-    }
-
-    return render(request, "create_build_skill_selection.html", context)
+    # Delete build only if the user is the owner
+    if build.creator == request.user:
+        build.delete()
+        return render(request, "build_deleted.html")

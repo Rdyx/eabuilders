@@ -79,7 +79,6 @@ def user_delete(request, username):
     # Try to get targeted user
     try:
         user = User.objects.get(username=username)
-        print(user, request.user)
     except User.DoesNotExist:
         return redirect("oops")
 
