@@ -21,6 +21,7 @@ from . import settings, views
 
 urlpatterns = (
     [
+        path("", views.index_view, name="index"),
         path("user/", include("users.urls")),
         path("item/", include("items.urls")),
         path("build/", include("builds.urls")),

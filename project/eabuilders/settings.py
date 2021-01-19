@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "tailwind",
+    "theme",
     "debug_toolbar",
 ]
 
@@ -134,5 +136,12 @@ STATIC_URL = "/static/"
 STATIC_ROOT = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# Tailwind CSS
+# Start: python manage.py tailwind start
+# Purge useless CSS & build for prod: python manage.py tailwind build
+# Check updates: python manage.py tailwind check-updates
+# update: python manage.py tailwind update
+TAILWIND_APP_NAME = "theme"
 
 LOGIN_URL = "/user/login/"
