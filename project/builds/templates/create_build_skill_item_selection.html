@@ -1,0 +1,21 @@
+{% load static %}
+
+<body>
+    {{error_message}}
+    <img src="/media/{{character.img}}" alt=""/>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in build_form %}
+        {{field}}
+        {%endfor%}
+            <!-- {{field}} -->
+        <input type="submit" value="Submit">
+    </form>
+    <script type="text/javascript" >
+        const skills = JSON.parse('{{ skills | safe }}');
+        console.log(skills)
+        const items = JSON.parse('{{ items | safe }}');
+        console.log(items)
+    </script>
+    <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>
+</body>

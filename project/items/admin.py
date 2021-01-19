@@ -4,15 +4,15 @@ from .models import RaceModel, MaterialModel, ItemModel
 
 
 class RaceAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"race_slug": ("race_name",)}
+    prepopulated_fields = {"slug": ("name",)}
 
 
 class MaterialAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"material_slug": ("material_name",)}
+    prepopulated_fields = {"slug": ("name",)}
 
 
 class ItemAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"item_slug": ("item_name",)}
+    prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.register(RaceModel, RaceAdmin)
