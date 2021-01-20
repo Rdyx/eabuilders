@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "items.apps.ItemsConfig",
     "builds.apps.BuildsConfig",
     "characters.apps.CharactersConfig",
+    "news.apps.NewsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "tailwind",
     "theme",
+    "django_quill",
     "debug_toolbar",
 ]
 

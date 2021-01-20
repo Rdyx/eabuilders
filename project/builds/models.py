@@ -1,17 +1,21 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
-# from items.models import ItemModel
+from django_quill.fields import QuillField
 
-# Create your models here.
+
 class BuildModel(models.Model):
     creator = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=False,
     )
     version = models.IntegerField(null=False)
+    creation_date = models.DateField(null=False, default=timezone.now)
     name = models.CharField(max_length=100, null=False)
     slug = models.SlugField(max_length=120, null=False, unique=True)
-    notes = models.TextField(blank=True, null=True)
+    notes = QuillField(max_length=500, blank=True, null=True)
     char = models.ForeignKey(
         "characters.CharacterModel", on_delete=models.CASCADE, null=False
     )

@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path(
-        "create/character-selection/",
+        "create/",
         views.create_build_character_selection_view,
         name="create_build_character_selection",
     ),

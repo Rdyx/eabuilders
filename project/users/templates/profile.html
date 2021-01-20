@@ -3,6 +3,7 @@
 
 {% block content %}
 {{ user }}
+{{ user.bio.html | safe }}
 
 {% for build in user_builds %}
     {% for field in build.first %}

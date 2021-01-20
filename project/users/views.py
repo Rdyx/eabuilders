@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
 from django.template import loaders
 
-from .forms import SigninForm, EditUserForm, UserChangeForm
+from .forms import SigninForm, EditUserForm, UserCreationForm, UserChangeForm
 
 from .utils import get_user_builds
 

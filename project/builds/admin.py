@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from django_quill.fields import QuillFormField
 from .models import BuildModel
 
 

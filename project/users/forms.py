@@ -1,8 +1,15 @@
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.forms import UserChangeForm, UsernameField
+from django.contrib.auth.forms import UserChangeForm, UsernameField, UserCreationForm
 
 User = get_user_model()
+
+
+class UserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ("username",)
+        field_classes = {"username": UsernameField}
 
 
 class UserChangeForm(UserChangeForm):
@@ -43,7 +50,6 @@ class EditUserForm(UserChangeForm):
             "logentry",
             "user_permissions",
             "password",
+            "date_joined",
+            "username",
         ]
-
-    date_joined = forms.CharField(disabled=True)
-    username = forms.CharField(disabled=True)
