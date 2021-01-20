@@ -1,1 +1,19 @@
-{{ username }}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{{ user }}
+
+{% for build in user_builds %}
+    {% for field in build.first %}
+    {{field.name}}
+    {{field_value}}
+    azezzz
+        <!-- {% if item in field %} -->
+            <!-- <img src="/asset/item/{{ field_value }}" alt="{{ item.name }}"/> -->
+            <!-- {% endif %} -->
+            {% endfor %}
+            <img src="/asset/item/{{ build.item_1.img }}" alt="{{ build.item_1.name }}"/>
+            {% endfor %}
+<!-- {{ user_builds.0.item_1 }} -->
+{% endblock %}

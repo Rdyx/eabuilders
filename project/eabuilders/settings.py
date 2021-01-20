@@ -148,3 +148,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TAILWIND_APP_NAME = "theme"
 
 LOGIN_URL = "/user/login/"
+
+AUTH_USER_MODEL = "users.User"

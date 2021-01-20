@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
 from django.template import loaders
 
-from .forms import SigninForm
+from .forms import SigninForm, EditUserForm, UserCreationForm
+
+from .utils import get_user_builds
+
+User = get_user_model()
 
 
 def user_login_view(request):
@@ -70,8 +72,21 @@ def user_profile_page(request, username):
     except User.DoesNotExist:
         return redirect("oops")
 
-    context = {"username": user}
+    user_builds = get_user_builds(user)
+
+    context = {"user": user, "user_builds": user_builds}
     return render(request, "profile.html", context)
+
+
+@login_required
+def user_edit_view(request):
+    user = User.objects.get(username=request.user)
+
+    edit_user_form = EditUserForm(instance=user)
+
+    context = {"user": user, "edit_user_form": edit_user_form}
+    return render(request, "user_edit.html", context)
+    # return redirect("/")
 
 
 @login_required
