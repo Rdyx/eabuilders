@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {{ news.title }}
+    {{ news.content.html | safe }}
+{% endblock %}

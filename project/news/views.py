@@ -1,3 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
+from .models import NewsModel
+
+
+def news_view(request, news_slug):
+    news = NewsModel.objects.select_related("author").get(slug=news_slug)
+
+    context = {"news": news}
+    return render(request, "news.html", context)

@@ -26,6 +26,7 @@ urlpatterns = (
         path("item/", include("items.urls")),
         path("build/", include("builds.urls")),
         path("character/", include("characters.urls")),
+        path("news/", include("news.urls")),
         path("admin/", admin.site.urls),
         path("oops/", views.oops_view, name="oops"),
     ]
