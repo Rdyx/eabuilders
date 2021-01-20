@@ -65,16 +65,46 @@ def user_signup_view(request):
         return render(request, "register.html", context)
 
 
-def user_profile_page(request, username):
+# def builds_index_view(request, page_number=1):
+#     pagination = 1
+#     total_builds = BuildModel.objects.all().count()
+#     previous_page = page_number - 1 if page_number > 1 else 0
+#     next_page = page_number + 1 if (page_number * pagination) < total_builds else 0
+
+#     context = {
+#         "builds": builds,
+#         "total_builds": total_builds,
+#         "previous_page": previous_page,
+#         "current_page": page_number,
+#         "next_page": next_page,
+#     }
+#     return render(request, "builds_index.html", context)
+
+
+def user_profile_page(request, username, page_number=1):
     # Try to get targeted user
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         return redirect("oops")
 
-    user_builds = get_user_builds(user)
+    pagination = 1
+    total_user_builds = get_user_builds(user).count()
+    previous_page = page_number - 1 if page_number > 1 else 0
+    next_page = page_number + 1 if (page_number * pagination) < total_user_builds else 0
 
-    context = {"user": user, "user_builds": user_builds}
+    user_builds = get_user_builds(user).order_by("-id")[
+        pagination * (page_number - 1) : page_number * pagination
+    ]
+
+    context = {
+        "user": user,
+        "user_builds": user_builds,
+        "total_user_builds": total_user_builds,
+        "previous_page": previous_page,
+        "current_page": page_number,
+        "next_page": next_page,
+    }
     return render(request, "profile.html", context)
 
 

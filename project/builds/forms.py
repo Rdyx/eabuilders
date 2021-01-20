@@ -127,8 +127,9 @@ class BuildSelectionForm(forms.Form):
         return build.slug
 
 
+# Note there's js trick to make fields non required and avoid GET request to overload url
 class SearchBuildForm(forms.ModelForm):
-    creator = forms.CharField(required=False)
+    creator = forms.CharField()
 
     class Meta:
         model = BuildModel
@@ -144,45 +145,30 @@ class SearchBuildForm(forms.ModelForm):
             "skill_4",
             "skill_5",
             "skill_6",
+            "item_1",
+            "item_2",
+            "item_3",
+            "item_4",
+            "item_5",
+            "item_6",
+            "item_7",
+            "item_8",
         ]
-
-    def save(self):
-        super(SearchBuildForm, self)
-        for field in self.fields:
-            print(self.fields[field])
-            self.fields[field] = self.fields[field] or None
-
-        return self
 
     def __init__(self, *args, items=[], **kwargs):
         super(SearchBuildForm, self).__init__(*args, **kwargs)
 
-        self.fields["char"].required = False
+        self.fields["char"] = forms.ChoiceField(
+            choices=CharacterModel.objects.all().values_list("slug", "name")
+        )
+
         self.items = items
         if items:
-            self.items_values = list(self.items.values_list("id", "name"))
+            self.items_values = list(self.items.values_list("slug", "name"))
             self.items_values.insert(0, ("", ""))
-            self.fields["item_1"] = forms.ChoiceField(
-                choices=self.items_values, required=False
+            self.fields["items"] = forms.MultipleChoiceField(
+                choices=self.items_values, label="Includes"
             )
-            self.fields["item_2"] = forms.ChoiceField(
-                choices=self.items_values, required=False
-            )
-            self.fields["item_3"] = forms.ChoiceField(
-                choices=self.items_values, required=False
-            )
-            self.fields["item_4"] = forms.ChoiceField(
-                choices=self.items_values, required=False
-            )
-            self.fields["item_5"] = forms.ChoiceField(
-                choices=self.items_values, required=False
-            )
-            self.fields["item_6"] = forms.ChoiceField(
-                choices=self.items_values, required=False
-            )
-            self.fields["item_7"] = forms.ChoiceField(
-                choices=self.items_values, required=False
-            )
-            self.fields["item_8"] = forms.ChoiceField(
-                choices=self.items_values, required=False
+            self.fields["exclude_items"] = forms.MultipleChoiceField(
+                choices=self.items_values, label="Excludes"
             )

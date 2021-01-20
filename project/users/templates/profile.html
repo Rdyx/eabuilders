@@ -2,19 +2,19 @@
 {% load static %}
 
 {% block content %}
-{{ user }}
-{{ user.bio.html | safe }}
+    {{ user }}
+    {{ user.bio.html | safe }}
 
-{% for build in user_builds %}
-    {% for field in build.first %}
-    {{field.name}}
-    {{field_value}}
-    azezzz
-        <!-- {% if item in field %} -->
-            <!-- <img src="/asset/item/{{ field_value }}" alt="{{ item.name }}"/> -->
-            <!-- {% endif %} -->
-            {% endfor %}
-            <img src="/asset/item/{{ build.item_1.img }}" alt="{{ build.item_1.name }}"/>
-            {% endfor %}
-<!-- {{ user_builds.0.item_1 }} -->
+    {% for build in user_builds %}
+        {{ build.name }}
+        <img src="/media/{{ build.item_1.img }}" alt="{{ build.item_1.name }}"/>
+    {% endfor %}
+
+    User has {{ total_user_builds }} builds
+    {% if previous_page %}
+        <a href="{% url 'profile_page' user.username previous_page %}">Previous</a>
+    {% endif %}
+    {% if next_page %}
+        <a href="{% url 'profile_page' user.username next_page %}">Next</a>
+    {% endif %}
 {% endblock %}

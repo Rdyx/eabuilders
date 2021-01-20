@@ -3,6 +3,8 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
+    path("", views.builds_index_view, name="builds_index"),
+    path("<int:page_number>/", views.builds_index_view, name="builds_index"),
     path(
         "create/",
         views.create_build_character_selection_view,
@@ -23,5 +25,10 @@ urlpatterns = [
     path("search/", views.search_build_view, name="search_build"),
     path(
         "search/results/", views.search_build_results_view, name="search_build_results"
+    ),
+    path(
+        "search/results/<int:page_number>/",
+        views.search_build_results_view,
+        name="search_build_results",
     ),
 ]

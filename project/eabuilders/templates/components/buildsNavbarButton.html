@@ -1,9 +1,9 @@
-<div x-data="{ isOpen: false }" class="relative inline-block text pr-3">
+<div x-data="{ isOpen: false }" class="relative md:inline-block md:py-0 py-3 pr-3">
     <button @click="isOpen = !isOpen" type="button" 
         id="options-menu" aria-haspopup="true" aria-expanded="true"
-        class="inline-flex justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 cursor-pointer h-full focus:outline-none focus:bg-gray-600"
+        class="inline-flex justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 cursor-pointer  focus:outline-none focus:bg-gray-600 w-full md:w-auto"
         >
-        Index
+        Builds
     </button>
 
     <div x-show="isOpen" x-on:click.away="isOpen = false"
@@ -15,10 +15,8 @@
         x-transition:leave-end="opacity-0 scale-95"
         class="origin-top-right absolute right-3 mt-1 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
         <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <a href="{% url 'chars_index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Heroes</a>
-            <a href="{% url 'items_index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Items</a>
-            <a href="{% url 'races_index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Races</a>
-            <a href="{% url 'materials_index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Materials</a>
+            <a href="{% url 'builds_index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Latest Builds</a>
+            <a href="{% url 'search_build' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Search Builds</a>
         </div>
     </div>
 </div>
