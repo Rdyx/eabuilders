@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if builds_found.count == 0 %}
+        No build found. 
+        <a href="{% url 'search_build' %}">Return to search</a>
+    {% else %}
+        {{builds_found}}
+    {% endif %}
+{% endblock %}

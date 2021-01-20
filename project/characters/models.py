@@ -4,6 +4,9 @@ from django.db import models
 class SkillLevelModel(models.Model):
     level = models.CharField(max_length=10, null=False)
 
+    def natural_key(self):
+        return self.level
+
     def __str__(self):
         return self.level
 

@@ -125,3 +125,64 @@ class BuildSelectionForm(forms.Form):
         build.save()
 
         return build.slug
+
+
+class SearchBuildForm(forms.ModelForm):
+    creator = forms.CharField(required=False)
+
+    class Meta:
+        model = BuildModel
+        fields = "__all__"
+        exclude = [
+            "version",
+            "creation_date",
+            "slug",
+            "notes",
+            "skill_1",
+            "skill_2",
+            "skill_3",
+            "skill_4",
+            "skill_5",
+            "skill_6",
+        ]
+
+    def save(self):
+        super(SearchBuildForm, self)
+        for field in self.fields:
+            print(self.fields[field])
+            self.fields[field] = self.fields[field] or None
+
+        return self
+
+    def __init__(self, *args, items=[], **kwargs):
+        super(SearchBuildForm, self).__init__(*args, **kwargs)
+
+        self.fields["char"].required = False
+        self.items = items
+        if items:
+            self.items_values = list(self.items.values_list("id", "name"))
+            self.items_values.insert(0, ("", ""))
+            self.fields["item_1"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_2"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_3"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_4"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_5"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_6"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_7"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )
+            self.fields["item_8"] = forms.ChoiceField(
+                choices=self.items_values, required=False
+            )

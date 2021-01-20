@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    {% for news in latest_news %}
+        <h1>
+
+            {{ news.title}}
+        </h1>
+        <div>
+            {{ news.content.html | safe }}
+        </div>
+        <div>{{ news.author }} {{ news.date }}</div>
+    {% endfor %}
 <section class="flex items-center justify-center h-screen">
     <h1 class="text-5xl">Django + Tailwind = ❤️</h1>
 </section>

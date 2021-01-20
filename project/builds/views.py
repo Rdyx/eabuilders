@@ -6,12 +6,13 @@ from django.forms.models import model_to_dict
 from django.shortcuts import render, redirect
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from .models import BuildModel
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
 from items.models import ItemModel
 
-from .forms import BuildSelectionForm
+from .forms import BuildSelectionForm, SearchBuildForm
 from .utils import get_selected_skills, check_form_values
 
 
@@ -35,9 +36,9 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         except CharacterModel.DoesNotExist:
             return redirect("oops")
 
-        skills = SkillModel.objects.filter(owner__slug=char_slug).select_related(
-            "owner", "stype"
-        )
+        skills = SkillModel.objects.filter(
+            owner__slug=char_slug, level__level="4 (Max)"
+        ).select_related("owner", "stype", "level")
 
         build_form = BuildSelectionForm(
             request.POST, char_slug=char_slug, skills=skills, items=items
@@ -146,3 +147,49 @@ def delete_build_view(request, build_slug):
         return render(request, "build_deleted.html")
 
     return redirect("oops")
+
+
+def search_build_view(request):
+    items = ItemModel.objects.all().select_related("race", "material")
+    search_build_form = SearchBuildForm(items=items)
+    context = {"search_build_form": search_build_form}
+    return render(request, "build_search.html", context)
+
+
+def search_build_results_view(request):
+
+    query_dict = request.GET
+
+    builds_found = BuildModel.objects.select_related(
+        "creator",
+        "char",
+        "skill_1",
+        "skill_2",
+        "skill_3",
+        "skill_4",
+        "skill_5",
+        "skill_6",
+        "item_1__race",
+        "item_1__material",
+        "item_2__race",
+        "item_2__material",
+        "item_3__race",
+        "item_3__material",
+        "item_4__race",
+        "item_4__material",
+        "item_5__race",
+        "item_5__material",
+        "item_6__race",
+        "item_6__material",
+        "item_7__race",
+        "item_7__material",
+        "item_8__race",
+        "item_8__material",
+    ).filter(
+        Q(name__icontains=query_dict["test"])
+        & Q(char__slug__icontains=query_dict["test2"])
+    )
+
+    context = {"builds_found": builds_found}
+
+    return render(request, "build_search_results.html", context)
