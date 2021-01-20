@@ -68,7 +68,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "eabuilders/templates"),
-            os.path.join(BASE_DIR, "users/templates"),
+            os.path.join(BASE_DIR, "eabuilders/static"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -134,6 +134,9 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = "/static/"
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "eabuilders/static")]
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
