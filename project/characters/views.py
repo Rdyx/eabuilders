@@ -2,8 +2,6 @@ from django.shortcuts import render
 
 from .models import SkillLevelModel, SkillModel, CharacterModel
 
-from .forms import SkillLevelForm
-
 
 def chars_index_view(request):
     characters = CharacterModel.objects.all()
