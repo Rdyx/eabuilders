@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
 from django.template import loaders
 
-from .forms import SigninForm, EditUserForm, UserCreationForm
+from .forms import SigninForm, EditUserForm, UserChangeForm
 
 from .utils import get_user_builds
 
@@ -80,13 +81,24 @@ def user_profile_page(request, username):
 
 @login_required
 def user_edit_view(request):
+    context_message = ""
     user = User.objects.get(username=request.user)
 
-    edit_user_form = EditUserForm(instance=user)
+    if request.method == "POST":
+        edit_user_form = EditUserForm(request.POST, instance=user)
 
-    context = {"user": user, "edit_user_form": edit_user_form}
+        if edit_user_form.is_valid():
+            edit_user_form.save()
+            context_message = "Your profile has been edited."
+    else:
+        edit_user_form = EditUserForm(instance=user)
+
+    context = {
+        "user": user,
+        "edit_user_form": edit_user_form,
+        "context_message": context_message,
+    }
     return render(request, "user_edit.html", context)
-    # return redirect("/")
 
 
 @login_required

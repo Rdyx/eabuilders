@@ -1,12 +1,13 @@
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.forms import UserChangeForm, UsernameField
 
 User = get_user_model()
 
-from django.contrib.auth.forms import UserCreationForm, UsernameField
 
+class UserChangeForm(UserChangeForm):
+    password = None
 
-class UserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username",)
@@ -24,7 +25,7 @@ class SigninForm(forms.Form):
         return authenticate(username=username, password=password)
 
 
-class EditUserForm(forms.ModelForm):
+class EditUserForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = "__all__"
@@ -41,8 +42,8 @@ class EditUserForm(forms.ModelForm):
             "last_name",
             "logentry",
             "user_permissions",
+            "password",
         ]
 
     date_joined = forms.CharField(disabled=True)
     username = forms.CharField(disabled=True)
-    password = forms.CharField(widget=forms.PasswordInput(), max_length=100)

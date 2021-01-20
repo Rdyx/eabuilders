@@ -2,5 +2,10 @@
 {% load static %}
 
 {% block content %}
+{{ context_message }}
+<form method="POST">
+    {% csrf_token %}
     {{edit_user_form}}
+    <input type="submit" value="ok">
+</form>
 {% endblock %}
