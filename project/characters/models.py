@@ -1,6 +1,13 @@
 from django.db import models
 
 
+class SkillLevelModel(models.Model):
+    level = models.CharField(max_length=10, null=False)
+
+    def __str__(self):
+        return self.level
+
+
 class SkillTypeModel(models.Model):
     name = models.CharField(max_length=50, null=False)
     color = models.CharField(max_length=50, null=False)
@@ -15,7 +22,7 @@ class SkillTypeModel(models.Model):
 class SkillModel(models.Model):
     owner = models.ForeignKey("CharacterModel", on_delete=models.CASCADE, null=False)
     img = models.ImageField(upload_to="assets/skills", null=False)
-    name = models.CharField(max_length=100, null=False, unique=True)
+    name = models.CharField(max_length=100, null=False)
     desc = models.TextField(null=False)
     stype = models.ForeignKey(
         "SkillTypeModel",
@@ -26,9 +33,16 @@ class SkillModel(models.Model):
     range = models.IntegerField(null=False)
     targets = models.CharField(max_length=20, null=False)
     cd = models.IntegerField(null=False)
+    level = models.ForeignKey("SkillLevelModel", on_delete=models.CASCADE, null=False)
+
+    class Meta:
+        unique_together = (
+            "name",
+            "level",
+        )
 
     def __str__(self):
-        return self.name
+        return "{} (Level {})".format(self.name, self.level)
 
 
 class CharacterModel(models.Model):

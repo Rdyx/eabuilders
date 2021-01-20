@@ -80,7 +80,5 @@ class BuildModel(models.Model):
         "items.ItemModel", on_delete=models.CASCADE, null=False, related_name="item_8"
     )
 
-    unique_together = [["name", "version"]]
-
     def __str__(self):
         return "{} {} ({})".format(self.name, self.version, self.creator)

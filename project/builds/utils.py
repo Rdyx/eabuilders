@@ -7,7 +7,9 @@ def get_selected_skills(request):
         if "skill_" in key:
             skills_id_list.append(request.POST[key])
 
-    return SkillModel.objects.filter(id__in=skills_id_list).select_related("owner")
+    return SkillModel.objects.filter(id__in=skills_id_list).select_related(
+        "owner", "stype", "level"
+    )
 
 
 def check_form_values(form, field_name_to_check, fields_number_target):

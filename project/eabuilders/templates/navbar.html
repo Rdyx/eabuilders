@@ -5,13 +5,24 @@
                 menu
             </p>
 
-        <ul class="hidden md:flex md:flex-row" id="mobileMenu"">
+        <ul class="hidden md:flex md:flex-row" id="mobileMenu">
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            {% include 'components/indexNavbarButton.html' %}
             <li class="pr-5"><a> Services </a></li>
-            <li class="pr-5"><a>Porfolio</a></li>
+            <li class="pr-5"><a>Index</a></li>
             <li class="pr-5"><a>About</a></li>
-            <li class="pr-5"><a>Contact</a></li>
-            <li class="pr-5"><a href="">Sign In</a></li>
-            <li><a href="">Sign Up</a></li>
+            <li class="pr-5"><a href="{% url 'news' 'about' %}">About</a></li>
+
+            {% if user.is_authenticated %}
+                <li class="pr-5"><a href="{% url 'user_edit' %}">{{ user | title }}</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li class="pr-5">
+                    <a href="{% url 'login' %}">Sign In</a>
+                </li>
+                <li><a href="{% url 'register' %}">Sign Up</a></li>
+            {% endif %}
+
         </ul>
     </nav>
 </div>

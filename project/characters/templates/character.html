@@ -1,4 +1,7 @@
-<body>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
     <!-- <ul>
         {% for k,v in character.items %}
         <li>{{k}}: {{v}}</li>
@@ -7,13 +10,21 @@
     <!-- {% for field in character.dict %} -->
     <!-- {{field}} -->
     <!-- {% endfor %} -->
+
+    <a href="{% url 'get_char_with_skill_level' character.slug 1 %}">1</a>
+    <a href="{% url 'get_char_with_skill_level' character.slug 2 %}">2</a>
+    <a href="{% url 'get_char_with_skill_level' character.slug 3 %}">3</a>
+    <a href="{% url 'get_char_with_skill_level' character.slug '4 (Max)' %}">4</a>
     {{character}}
     {% for skill in character_skills %}
     {{skill}}
+    {{skill.stype}}
     {%endfor%}
-    {{character_skills}}
+    {{character_skills.stype}}
+
+    <a href="{% url 'get_char_with_skill_level' character.slug "></a>
     <!-- {{character.char_skill_1}}
     {{character.char_skill_1.skill_type.color}}
     {{character.char_skill_2.skill_type.color}}
     {{character.char_skill_3.skill_type.name}} -->
-</body>
+{% endblock %}
