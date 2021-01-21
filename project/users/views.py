@@ -97,6 +97,7 @@ def user_profile_view(request, username, page_number=1):
         "user_profile": user_profile,
         "user_builds": user_builds,
         "total_user_builds": total_user_builds,
+        "pagination": pagination,
         "previous_page": previous_page,
         "current_page": page_number,
         "next_page": next_page,

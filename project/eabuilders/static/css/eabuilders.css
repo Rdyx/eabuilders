@@ -2,6 +2,7 @@ body {
   background: repeat;
   background-image: url(../assets/bg-sword.png);
   background-color: #000;
+  background-attachment: fixed;
 }
 
 .box-shadow-outline {
