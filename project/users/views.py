@@ -106,7 +106,6 @@ def user_profile_view(request, username, page_number=1):
 
 @login_required
 def user_edit_view(request):
-    context_message = ""
     user = User.objects.get(username=request.user)
 
     if request.method == "POST":
@@ -114,14 +113,13 @@ def user_edit_view(request):
 
         if edit_user_form.is_valid():
             edit_user_form.save()
-            context_message = "Your profile has been edited."
+            return redirect("user_profile", user.get_username())
     else:
         edit_user_form = EditUserForm(instance=user)
 
     context = {
         "user": user,
         "edit_user_form": edit_user_form,
-        "context_message": context_message,
     }
     return render(request, "user_edit.html", context)
 

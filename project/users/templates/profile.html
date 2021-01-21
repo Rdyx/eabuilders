@@ -8,13 +8,15 @@
             <p class="text-3xl font-bold {% if user_profile.bio.html %}mb-2{% endif %}">
                 {{ user_profile | title }}
             </p>
+            
             {% if user_profile.bio.html %}
-                <!-- {{ user_profile.bio }} -->
-                <div class="flex flex-col">
-                    <p>Bio:</p>
+            <p>Bio:</p>
+            <div class="flex flex-col px-2 bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 rounded-md md:mr-2 md:mb-0 mb-2 box-shadow-outline">
+                
                     {{ user_profile.bio.html | safe }}
                 </div>
             {% endif %}
+
         </div>
         <div class="md:w-3/12 flex flex-col text-center">
             {% if user_profile.ingame_name or user_profile.discord or user_profile.clan %}
@@ -36,6 +38,7 @@
                     {% endif %}
                 </div>
             {% endif %}
+
             {% if user_profile.username == user.username %}
                 <a href="{% url 'user_edit' %}" class="mt-3 focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
                     Edit profile
