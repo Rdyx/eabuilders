@@ -57,9 +57,11 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         except CharacterModel.DoesNotExist:
             return redirect("oops")
 
-        skills = SkillModel.objects.filter(
-            owner__slug=char_slug, level__level="4 (Max)"
-        ).select_related("owner", "stype", "level")
+        skills = (
+            SkillModel.objects.filter(owner__slug=char_slug, level__level="4 (Max)")
+            .select_related("owner", "stype", "level")
+            .exclude(deprecated=True)
+        )
 
         build_form = BuildSelectionForm(
             request.POST, char_slug=char_slug, skills=skills, items=items

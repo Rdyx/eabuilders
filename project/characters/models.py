@@ -37,6 +37,7 @@ class SkillModel(models.Model):
     targets = models.CharField(max_length=20, null=False)
     cd = models.IntegerField(null=False)
     level = models.ForeignKey("SkillLevelModel", on_delete=models.CASCADE, null=False)
+    deprecated = models.BooleanField(default=False)
 
     class Meta:
         unique_together = (
