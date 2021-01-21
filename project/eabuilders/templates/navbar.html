@@ -1,14 +1,16 @@
+{% load static %}
+
 <div class="text-white bg-gray-800 p-5 border-b-2 border-gray-900 sticky top-0 max-h-16 overflow-visible">
     <nav class="flex md:flex-row justify-between">
         <div>
             <a href="{% url 'index' %}">Logo</a>
         </div>
-        <div class="w-40 md:w-auto">
-            <p id="hamburgerbtn" class="md:hidden bg-purple-800">
-                menu
-            </p>
+        <div class="w-44 md:w-auto flex justify-end">
+            <div id="hamburgerbtn" class="md:hidden h-8 w-8 flex justify-end">
+                <img class="object-fill h-6" src="{% static 'assets/menu.svg' %}" alt="menu">
+            </div>
 
-        <ul class="hidden md:flex md:flex-row bg-gray-800" id="mobileMenu">
+        <ul class="hidden md:flex md:flex-row bg-gray-800 border-l-2 border-white md:border-none" id="mobileMenu">
             {% include 'components/indexNavbarButton.html' %}
             {% include 'components/buildsNavbarButton.html' %}
             
