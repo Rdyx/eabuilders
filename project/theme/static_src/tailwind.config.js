@@ -11,7 +11,20 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'brown-50': '#f2be8a',
+        'brown-100': '#e5b483',
+        'brown-200': '#cca074',
+        'brown-300': '#b38c66',
+        'brown-400': '#997857',
+        'brown-500': '#806449',
+        'brown-600': '#66503a',
+        'brown-700': '#4d3c2c',
+        'brown-800': '#33281d',
+        'brown-900': '#1a140f',
+      },
+    },
   },
   variants: {
     extend: {

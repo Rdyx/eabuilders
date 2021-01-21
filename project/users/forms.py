@@ -22,8 +22,8 @@ class UserChangeForm(UserChangeForm):
 
 
 class SigninForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput())
+    username = forms.CharField(label="username")
+    password = forms.CharField(widget=forms.PasswordInput(), label="password")
 
     def signin_user(self):
         username = self.cleaned_data.get("username")

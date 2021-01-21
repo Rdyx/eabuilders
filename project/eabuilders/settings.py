@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "tailwind",
     "theme",
     "django_quill",
+    "widget_tweaks",
     "debug_toolbar",
 ]
 

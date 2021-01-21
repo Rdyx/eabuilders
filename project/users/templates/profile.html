@@ -2,19 +2,82 @@
 {% load static %}
 
 {% block content %}
-    {{ user }}
-    {{ user.bio.html | safe }}
+<div class="mt-5 w-11/12 px-3 pb-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+    <div class="flex flex-col md:flex-row justify-between mt-2">
+        <div class="md:w-9/12">
+            <p class="text-3xl font-bold {% if user_profile.bio.html %}mb-2{% endif %}">
+                {{ user_profile | title }}
+            </p>
+            {% if user_profile.bio.html %}
+                <!-- {{ user_profile.bio }} -->
+                <div class="flex flex-col">
+                    <p>Bio:</p>
+                    {{ user_profile.bio.html | safe }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="md:w-3/12 flex flex-col text-center">
+            {% if user_profile.ingame_name or user_profile.discord or user_profile.clan %}
+                <div class="flex flex-col px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                    {% if user_profile.ingame_name %}
+                        <p>
+                            Ingame: {{ user_profile.ingame_name }}
+                        </p>
+                    {% endif %}
+                    {% if user_profile.discord %}
+                        <p>
+                            Discord: {{ user_profile.discord }}
+                        </p>
+                    {% endif %}
+                    {% if user_profile.clan %}
+                        <p>
+                            Clan: {{ user_profile.clan }}
+                        </p>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if user_profile.username == user.username %}
+                <a href="{% url 'user_edit' %}" class="mt-3 focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                    Edit profile
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
-    {% for build in user_builds %}
-        {{ build.name }}
-        <img src="/media/{{ build.item_1.img }}" alt="{{ build.item_1.name }}"/>
-    {% endfor %}
+    <div class="mt-5 w-11/12 px-3 pb-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        {% for build in user_builds %}
+            <div class="flex flex-col md:flex-row justify-between">
 
-    User has {{ total_user_builds }} builds
-    {% if previous_page %}
-        <a href="{% url 'profile_page' user.username previous_page %}">Previous</a>
-    {% endif %}
-    {% if next_page %}
-        <a href="{% url 'profile_page' user.username next_page %}">Next</a>
-    {% endif %}
+                <p>
+                    {{ build.name }}
+                </p>
+                <div class="flex flex-row">
+                    {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_1 %}
+                    {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_2 %}
+                    {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_3 %}
+                    {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_4 %}
+                    {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_5 %}
+                    {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_6 %}
+                </div>
+                <div class="flex flex-row">
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 %}
+                    {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 %}
+                </div>
+        {% endfor %}
+
+        User has {{ total_user_builds }} builds
+        {% if previous_page %}
+            <a href="{% url 'user_profile' user.username previous_page %}">Previous</a>
+        {% endif %}
+        {% if next_page %}
+            <a href="{% url 'user_profile' user.username next_page %}">Next</a>
+        {% endif %}
+    </div>
 {% endblock %}

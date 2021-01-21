@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="text-white bg-gray-800 p-5 border-b-2 border-gray-900 sticky top-0 max-h-16 overflow-visible">
+<div class="font-bold text-shadow-outline bg-brown-900 p-5 border-b-2 border-gray-900 sticky top-0 max-h-16 overflow-visible">
     <nav class="flex md:flex-row justify-between">
         <div>
             <a href="{% url 'index' %}">EA-Builders</a>
@@ -10,26 +10,30 @@
                 <img class="object-fill h-6" src="{% static 'assets/menu.svg' %}" alt="menu">
             </div>
 
-        <ul class="hidden md:flex md:flex-row bg-gray-800 border-l-2 border-white md:border-none" id="mobileMenu">
+        <ul class="hidden md:flex md:flex-row bg-brown-900 border-l-2 border-white md:border-none" id="mobileMenu">
+            <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full md:w-auto">
+                <a href="{% url 'news_index' %}">News</a>
+            </li>
+
             {% include 'components/indexNavbarButton.html' %}
             {% include 'components/buildsNavbarButton.html' %}
             
-            <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-gray-600 w-full md:w-auto">
+            <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full md:w-auto">
                 <a href="{% url 'news' 'about' %}">About</a>
             </li>
 
             {% if user.is_authenticated %}
-                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-gray-600 w-full md:w-auto">
-                    <a href="{% url 'profile_page' user.username %}">{{ user | title }}</a>
+                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full md:w-auto">
+                    <a href="{% url 'user_profile' user.username %}">{{ user | title }}</a>
                 </li>
-                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 cursor-pointer focus:outline-none focus:bg-gray-600 w-full md:w-auto">
+                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full md:w-auto">
                     <a href="{% url 'logout' %}">Logout</a>
                 </li>
             {% else %}
-                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 cursor-pointer focus:outline-none focus:bg-gray-600 w-full md:w-auto">
+                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full md:w-auto">
                     <a href="{% url 'login' %}">Sign In</a>
                 </li>
-                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-gray-600 shadow-sm px-3 cursor-pointer  focus:outline-none focus:bg-gray-600 w-full md:w-auto">
+                <li class="inline-flex md:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 cursor-pointer  focus:outline-none focus:bg-brown-600 w-full md:w-auto">
                     <a href="{% url 'register' %}">Sign Up</a>
                 </li>
             {% endif %}

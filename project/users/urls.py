@@ -6,13 +6,13 @@ urlpatterns = [
     path("register/", views.user_signup_view, name="register"),
     path(
         "profile/<str:username>/",
-        views.user_profile_page,
-        name="profile_page",
+        views.user_profile_view,
+        name="user_profile",
     ),
     path(
         "profile/<str:username>/<int:page_number>/",
-        views.user_profile_page,
-        name="profile_page",
+        views.user_profile_view,
+        name="user_profile",
     ),
     path("edit-profile/", views.user_edit_view, name="user_edit"),
     path("login/", views.user_login_view, name="login"),

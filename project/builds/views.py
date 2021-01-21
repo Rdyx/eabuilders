@@ -8,19 +8,20 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from .models import BuildModel
+from eabuilders.utils import get_pagination
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
 from items.models import ItemModel
 
+from .models import BuildModel
 from .forms import BuildSelectionForm, SearchBuildForm
 from .utils import get_base_buildmodel_request, get_selected_skills, check_form_values
 
 
 def builds_index_view(request, page_number=1):
     pagination = 1
-    total_builds = BuildModel.objects.all().count()
-    previous_page = page_number - 1 if page_number > 1 else 0
-    next_page = page_number + 1 if (page_number * pagination) < total_builds else 0
+    total_builds, previous_page, next_page = get_pagination(
+        pagination, BuildModel.objects.all(), page_number
+    )
 
     builds = get_base_buildmodel_request().order_by("-id")[
         pagination * (page_number - 1) : page_number * pagination
@@ -121,6 +122,10 @@ def get_build_view(request, build_slug):
         build_creation_message = "Build has been created."
         request.session["build_created"] = ""
 
+    # Looks like empty quills fields are still generating something
+    if build.notes.html == "<p><br></p>":
+        user_profile.notes = {}
+
     context = {"build": build, "build_creation_message": build_creation_message}
 
     return render(request, "get_build.html", context)
@@ -197,10 +202,8 @@ def search_build_results_view(request, page_number=1):
             )
 
     pagination = 1
-    total_builds_found = builds_found.count()
-    previous_page = page_number - 1 if page_number > 1 else 0
-    next_page = (
-        page_number + 1 if (page_number * pagination) < total_builds_found else 0
+    total_builds_found, previous_page, next_page = get_pagination(
+        pagination, builds_found, page_number
     )
 
     builds_found = builds_found[

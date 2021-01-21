@@ -4,14 +4,18 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
 from django.template import loaders
 
-from .forms import SigninForm, EditUserForm, UserCreationForm, UserChangeForm
+from eabuilders.utils import get_pagination
 
+from .forms import SigninForm, EditUserForm, UserCreationForm, UserChangeForm
 from .utils import get_user_builds
+
 
 User = get_user_model()
 
 
 def user_login_view(request):
+    error_message = ""
+
     # If user is auth, get him to home
     if request.user.is_authenticated:
         return redirect("/")
@@ -26,11 +30,15 @@ def user_login_view(request):
 
                 if request.GET.get("next"):
                     return redirect(request.GET.get("next"))
+
+            if request.user.is_authenticated:
                 return redirect("/")
+            else:
+                error_message = "Wrong username and/or password.<br> Note that both fields may be case-sensitive."
         else:
             form = SigninForm()
 
-        context = {"user_form": form}
+        context = {"user_form": form, "error_message": error_message}
 
         return render(request, "login.html", context)
 
@@ -65,40 +73,28 @@ def user_signup_view(request):
         return render(request, "register.html", context)
 
 
-# def builds_index_view(request, page_number=1):
-#     pagination = 1
-#     total_builds = BuildModel.objects.all().count()
-#     previous_page = page_number - 1 if page_number > 1 else 0
-#     next_page = page_number + 1 if (page_number * pagination) < total_builds else 0
-
-#     context = {
-#         "builds": builds,
-#         "total_builds": total_builds,
-#         "previous_page": previous_page,
-#         "current_page": page_number,
-#         "next_page": next_page,
-#     }
-#     return render(request, "builds_index.html", context)
-
-
-def user_profile_page(request, username, page_number=1):
+def user_profile_view(request, username, page_number=1):
     # Try to get targeted user
     try:
-        user = User.objects.get(username=username)
+        user_profile = User.objects.get(username=username)
     except User.DoesNotExist:
         return redirect("oops")
 
     pagination = 1
-    total_user_builds = get_user_builds(user).count()
-    previous_page = page_number - 1 if page_number > 1 else 0
-    next_page = page_number + 1 if (page_number * pagination) < total_user_builds else 0
+    total_user_builds, previous_page, next_page = get_pagination(
+        pagination, get_user_builds(user_profile), page_number
+    )
 
-    user_builds = get_user_builds(user).order_by("-id")[
+    user_builds = get_user_builds(user_profile).order_by("-id")[
         pagination * (page_number - 1) : page_number * pagination
     ]
 
+    # Looks like empty quills fields are still generating something
+    if user_profile.bio.html == "<p><br></p>":
+        user_profile.bio = {}
+
     context = {
-        "user": user,
+        "user_profile": user_profile,
         "user_builds": user_builds,
         "total_user_builds": total_user_builds,
         "previous_page": previous_page,
