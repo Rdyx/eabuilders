@@ -152,3 +152,30 @@ TAILWIND_APP_NAME = "theme"
 LOGIN_URL = "/user/login/"
 
 AUTH_USER_MODEL = "users.User"
+
+QUILL_CONFIGS = {
+    "default": {
+        "theme": "snow",
+        "modules": {
+            "syntax": True,
+            "toolbar": [
+                [
+                    {"header": []},
+                    {"align": []},
+                ],
+                [
+                    # {"font": []},
+                    "bold",
+                    "italic",
+                    "underline",
+                    # "strike",
+                    # "blockquote",
+                    {"color": []},
+                    # {"background": []},
+                ],
+                ["code-block", "link"],
+                ["clean"],
+            ],
+        },
+    }
+}
