@@ -73,7 +73,7 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 
             if build_save != "This build name is already taken.":
                 request.session["build_created"] = True
-                return redirect("/build/view/{}".format(build_save))
+                return redirect("/builds/view/{}".format(build_save))
 
             error_message = build_save
 
@@ -118,7 +118,11 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 
 
 def get_build_view(request, build_slug):
-    build = BuildModel.objects.get(slug=build_slug)
+    try:
+        build = BuildModel.objects.get(slug=build_slug)
+    except BuildModel.DoesNotExist:
+        return redirect('oops')
+
     build_creation_message = ""
     build_created = request.session.get('build_created', None)
 

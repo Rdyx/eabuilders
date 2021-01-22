@@ -17,7 +17,7 @@ User = get_user_model()
 
 class BuildSelectionForm(forms.Form):
     name = forms.CharField(max_length=100)
-    notes = QuillFormField(max_length=500)
+    notes = QuillFormField(max_length=500, required=False)
     skill_1 = forms.ChoiceField(choices=[])
     skill_1 = forms.ChoiceField(choices=[])
     skill_2 = forms.ChoiceField(choices=[])

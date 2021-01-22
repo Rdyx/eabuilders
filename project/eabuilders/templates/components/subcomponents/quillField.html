@@ -1,0 +1,13 @@
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/quillField.css' %}">
+
+{% load widget_tweaks %}
+
+<div class="flex flex-col text-center mb-3">
+    <label for="id_{{ field.name }}" class="text-xl pb-1">
+        {{ field.label | title }}
+    </label>
+    {{ field }}
+</div>

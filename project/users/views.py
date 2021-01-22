@@ -80,7 +80,7 @@ def user_profile_view(request, username, page_number=1):
     except User.DoesNotExist:
         return redirect("oops")
 
-    pagination = 1
+    pagination = 2
     total_user_builds, previous_page, next_page = get_pagination(
         pagination, get_user_builds(user_profile), page_number
     )
