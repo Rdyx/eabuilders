@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <div class="text-center mb-5">
+            {{ error_message | safe }}
+        </div>
+        <div class="flex justify-center">
+            <form method="POST" class="text-center">
+                {% csrf_token %}
+                {% include 'components/subcomponents/quillField.html' with field=edit_user_form.bio %}
+                <div class="flex flex-col md:flex-row justify-between">
+                    <div class="md:w-1/4">
+                        {% include 'components/subcomponents/charfield.html' with field=edit_user_form.ingame_name %}
+                    </div>
+                    <div class="md:w-1/4">
+                        {% include 'components/subcomponents/charfield.html' with field=edit_user_form.discord %}
+                    </div>
+                    <div class="md:w-1/4">
+                        {% include 'components/subcomponents/charfield.html' with field=edit_user_form.clan %}
+                    </div>
+                </div>
+                <div class="flex mt-5 justify-between">
+                    <a href="{% url 'user_profile' user.get_username %}" class="w-5/12 cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                        <button class="">Cancel</button>
+                    </a>
+                    <input type="submit" value="Save" class="ml-3 w-5/12 cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
+                </div>
+            </form>
+        </div>
+        <div class="flex justify-center px-3 py-2 mt-8 w-11/12 m-auto">
+            <p id="delete-profile" onclick="deleteProfile(); return false;" class="text-red-500 text-center md:w-5/12 cursor-pointer hover:bg-brown-400 focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                <span>Delete my profile</span>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">const deleteUserUrl = "{% url 'user_delete' user.get_username %}"</script>
+    <script type="text/javascript" src="{% static 'js/deleteProfile.js' %}"></script>
+{% endblock %}

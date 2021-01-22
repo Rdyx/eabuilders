@@ -4,6 +4,7 @@ assets/
 .DS_Store/
 **/migrations/*.py
 !**/migrations/__init__.py
+!**/eabuilders/**/assets/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

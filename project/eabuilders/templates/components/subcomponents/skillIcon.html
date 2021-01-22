@@ -1,0 +1,27 @@
+{% comment %}
+    Watch out, stype color has to match tailwind color system!
+    https://tailwindcss.com/docs/background-color
+{% endcomment %}
+<div
+    class="h-12 w-12 rounded-full border-2 border-gray-900 overflow-hidden bg-cover mx-auto"
+    style="
+        background-image: url(/media/{{ skill.img }}),
+        radial-gradient(
+            {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %},
+            {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %},
+            black
+        );"
+></div>
+
+{% if show_stype %}
+    <div class="text-sm">{{ skill.stype.name }}</div>
+{% endif %}
+
+{% comment %}
+    Game skills colors
+    Basic Skill: goldenrod
+    Active Skill: darkorange
+    Passive Skill: darkturquoise
+    Active Ultimate: indianred
+    Passive Ultimate: steelblue
+{% endcomment %}

@@ -1,9 +1,10 @@
 from django import forms
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, get_user_model
 from django.conf import settings
 from django.utils.text import slugify
 from django.shortcuts import redirect
+
+from django_quill.fields import QuillFormField
 
 from .models import BuildModel
 
@@ -11,10 +12,12 @@ from characters.models import SkillModel, CharacterModel
 
 from .utils import get_selected_skills, check_form_values
 
+User = get_user_model()
+
 
 class BuildSelectionForm(forms.Form):
     name = forms.CharField(max_length=100)
-    notes = forms.CharField(widget=forms.Textarea())
+    notes = QuillFormField(max_length=500, required=False)
     skill_1 = forms.ChoiceField(choices=[])
     skill_1 = forms.ChoiceField(choices=[])
     skill_2 = forms.ChoiceField(choices=[])
@@ -30,6 +33,9 @@ class BuildSelectionForm(forms.Form):
     item_6 = forms.ChoiceField(choices=[])
     item_7 = forms.ChoiceField(choices=[])
     item_8 = forms.ChoiceField(choices=[])
+
+    class Meta:
+        fields = "__all__"
 
     def __init__(self, *args, char_slug="", skills=None, items=None, **kwargs):
         super(BuildSelectionForm, self).__init__(*args, **kwargs)
@@ -119,3 +125,50 @@ class BuildSelectionForm(forms.Form):
         build.save()
 
         return build.slug
+
+
+# Note there's js trick to make fields non required and avoid GET request to overload url
+class SearchBuildForm(forms.ModelForm):
+    creator = forms.CharField()
+
+    class Meta:
+        model = BuildModel
+        fields = "__all__"
+        exclude = [
+            "version",
+            "creation_date",
+            "slug",
+            "notes",
+            "skill_1",
+            "skill_2",
+            "skill_3",
+            "skill_4",
+            "skill_5",
+            "skill_6",
+            "item_1",
+            "item_2",
+            "item_3",
+            "item_4",
+            "item_5",
+            "item_6",
+            "item_7",
+            "item_8",
+        ]
+
+    def __init__(self, *args, items=[], **kwargs):
+        super(SearchBuildForm, self).__init__(*args, **kwargs)
+
+        self.fields["char"] = forms.ChoiceField(
+            choices=CharacterModel.objects.all().values_list("slug", "name")
+        )
+
+        self.items = items
+        if items:
+            self.items_values = list(self.items.values_list("slug", "name"))
+            self.items_values.insert(0, ("", ""))
+            self.fields["items"] = forms.MultipleChoiceField(
+                choices=self.items_values, label="Includes"
+            )
+            self.fields["exclude_items"] = forms.MultipleChoiceField(
+                choices=self.items_values, label="Excludes"
+            )

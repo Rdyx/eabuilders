@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <form id="search-build-form" action="{% url 'search_build_results' %}" method="get">
+        {{ search_build_form }}
+        <input id="search-build-form-submit" type="submit" value="submit">
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/searchBuildForm.js' %}"></script>
+{% endblock %}

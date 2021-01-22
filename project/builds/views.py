@@ -6,13 +6,36 @@ from django.forms.models import model_to_dict
 from django.shortcuts import render, redirect
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-from .models import BuildModel
+from eabuilders.utils import get_pagination
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
 from items.models import ItemModel
 
-from .forms import BuildSelectionForm
-from .utils import get_selected_skills, check_form_values
+from .models import BuildModel
+from .forms import BuildSelectionForm, SearchBuildForm
+from .utils import get_base_buildmodel_request, get_selected_skills, check_form_values
+
+
+def builds_index_view(request, page_number=1):
+    pagination = 1
+    total_builds, previous_page, next_page = get_pagination(
+        pagination, BuildModel.objects.all(), page_number
+    )
+
+    builds = get_base_buildmodel_request().order_by("-id")[
+        pagination * (page_number - 1) : page_number * pagination
+    ]
+
+    context = {
+        "builds": builds,
+        "total_builds": total_builds,
+        "pagination": pagination,
+        "previous_page": previous_page,
+        "current_page": page_number,
+        "next_page": next_page,
+    }
+    return render(request, "builds_index.html", context)
 
 
 @login_required
@@ -35,8 +58,10 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         except CharacterModel.DoesNotExist:
             return redirect("oops")
 
-        skills = SkillModel.objects.filter(owner__slug=char_slug).select_related(
-            "owner", "stype"
+        skills = (
+            SkillModel.objects.filter(owner__slug=char_slug, level__level="4 (Max)")
+            .select_related("owner", "stype", "level")
+            .exclude(deprecated=True)
         )
 
         build_form = BuildSelectionForm(
@@ -48,38 +73,13 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 
             if build_save != "This build name is already taken.":
                 request.session["build_created"] = True
-                return redirect("/build/view/{}".format(build_save))
+                return redirect("/builds/view/{}".format(build_save))
 
             error_message = build_save
 
     elif request.method == "GET":
         try:
-            build = BuildModel.objects.select_related(
-                "creator",
-                "char",
-                "skill_1",
-                "skill_2",
-                "skill_3",
-                "skill_4",
-                "skill_5",
-                "skill_6",
-                "item_1__race",
-                "item_1__material",
-                "item_2__race",
-                "item_2__material",
-                "item_3__race",
-                "item_3__material",
-                "item_4__race",
-                "item_4__material",
-                "item_5__race",
-                "item_5__material",
-                "item_6__race",
-                "item_6__material",
-                "item_7__race",
-                "item_7__material",
-                "item_8__race",
-                "item_8__material",
-            ).get(slug=build_slug)
+            build = get_base_buildmodel_request().get(slug=build_slug)
         except BuildModel.DoesNotExist:
             return redirect("oops")
 
@@ -118,12 +118,21 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 
 
 def get_build_view(request, build_slug):
-    build = BuildModel.objects.get(slug=build_slug)
-    build_creation_message = ""
+    try:
+        build = BuildModel.objects.get(slug=build_slug)
+    except BuildModel.DoesNotExist:
+        return redirect('oops')
 
-    if request.session["build_created"]:
+    build_creation_message = ""
+    build_created = request.session.get('build_created', None)
+
+    if build_created:
         build_creation_message = "Build has been created."
         request.session["build_created"] = ""
+
+    # Looks like empty quills fields are still generating something
+    if build.notes.html == "<p><br></p>":
+        user_profile.notes = {}
 
     context = {"build": build, "build_creation_message": build_creation_message}
 
@@ -146,3 +155,77 @@ def delete_build_view(request, build_slug):
         return render(request, "build_deleted.html")
 
     return redirect("oops")
+
+
+def search_build_view(request):
+    items = ItemModel.objects.all().select_related("race", "material")
+    search_build_form = SearchBuildForm(items=items)
+    context = {"search_build_form": search_build_form}
+    return render(request, "build_search.html", context)
+
+
+def search_build_results_view(request, page_number=1):
+
+    query_dict = request.GET
+
+    # Filter by char to manipulate lighter queryset
+    builds_found = get_base_buildmodel_request().filter(
+        Q(char__slug__exact=query_dict.get("char", ""))
+    )
+
+    # If we got filters, filter queryset
+    if len(query_dict) > 0:
+        selected_items = query_dict.getlist("items")
+        excluded_items = query_dict.getlist("exclude_items")
+        print(selected_items, excluded_items)
+        builds_found = builds_found.filter(
+            Q(creator__username__icontains=query_dict.get("creator", ""))
+            & Q(name__icontains=query_dict.get("name", ""))
+        )
+
+        # If items have been selected
+        if len(selected_items) > 0:
+            builds_found = builds_found.filter(
+                Q(item_1__slug__in=selected_items)
+                | Q(item_2__slug__in=selected_items)
+                | Q(item_3__slug__in=selected_items)
+                | Q(item_4__slug__in=selected_items)
+                | Q(item_5__slug__in=selected_items)
+                | Q(item_6__slug__in=selected_items)
+                | Q(item_7__slug__in=selected_items)
+                | Q(item_8__slug__in=selected_items)
+            )
+
+        # If items have been excluded
+        if len(excluded_items) > 0:
+            builds_found = builds_found.exclude(
+                Q(item_1__slug__in=excluded_items)
+                | Q(item_2__slug__in=excluded_items)
+                | Q(item_3__slug__in=excluded_items)
+                | Q(item_4__slug__in=excluded_items)
+                | Q(item_5__slug__in=excluded_items)
+                | Q(item_6__slug__in=excluded_items)
+                | Q(item_7__slug__in=excluded_items)
+                | Q(item_8__slug__in=excluded_items)
+            )
+
+    pagination = 1
+    total_builds_found, previous_page, next_page = get_pagination(
+        pagination, builds_found, page_number
+    )
+
+    builds_found = builds_found.order_by('-id')[
+        pagination * (page_number - 1) : page_number * pagination
+    ]
+
+    context = {
+        "search_params": query_dict.urlencode(),  # Transfer search params to pagination
+        "builds_found": builds_found,
+        "pagination": pagination,
+        "total_builds_found": total_builds_found,
+        "previous_page": previous_page,
+        "current_page": page_number,
+        "next_page": next_page,
+    }
+
+    return render(request, "build_search_results.html", context)

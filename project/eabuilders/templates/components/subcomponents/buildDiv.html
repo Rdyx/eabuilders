@@ -1,0 +1,59 @@
+<div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+    <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+        <a href="{% url 'get_build' build.slug %}" class="text-3xl">
+            {{ build.name }}
+        </a> by <a href="{% url 'user_profile' build.creator %}">
+            <span class="text-base">{{ build.creator | title }}</span>
+        </a>
+    </div>
+    <div class="flex flex-col md:flex-row justify-center pb-3">
+        <div class="flex self-center justify-center md:w-1/6 w-3/6">
+            <img src="/media/{{ build.char.img }}" alt="{{ build.char.name }}" class="max-h-28">
+        </div>
+        <div class="md:flex md:flex-col md:mx-3 hidden justify-center">
+            <div class="flex flex-row">
+                {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_1 %}
+                {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_2 %}
+                {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_3 %}
+            </div>
+            <div class="flex flex-row">
+                {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_4 %}
+                {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_5 %}
+                {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_6 %}
+            </div>
+        </div>
+        <div class="flex flex-row md:hidden justify-center my-2">
+            {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_1 %}
+            {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_2 %}
+            {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_3 %}
+            {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_4 %}
+            {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_5 %}
+            {% include 'components/subcomponents/skillIcon.html' with skill=build.skill_6 %}
+        </div>
+
+        <div class="hidden md:flex md:flex-row">
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 %}
+        </div>
+        <div class="flex flex-col md:hidden">
+            <div class="flex flex-row">
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 %}
+            </div>
+            <div class="flex flex-row mt-2">
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 %}
+            </div>
+        </div>
+    </div>
+</div>

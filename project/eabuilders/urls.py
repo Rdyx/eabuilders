@@ -21,10 +21,12 @@ from . import settings, views
 
 urlpatterns = (
     [
-        path("user/", include("users.urls")),
-        path("item/", include("items.urls")),
-        path("build/", include("builds.urls")),
-        path("character/", include("characters.urls")),
+        path("", views.index_view, name="index"),
+        path("users/", include("users.urls")),
+        path("items/", include("items.urls")),
+        path("builds/", include("builds.urls")),
+        path("characters/", include("characters.urls")),
+        path("news/", include("news.urls")),
         path("admin/", admin.site.urls),
         path("oops/", views.oops_view, name="oops"),
     ]

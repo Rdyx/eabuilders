@@ -1,7 +1,20 @@
-<form method="POST">
-    {% csrf_token %}
-    {{ user_form }}
-    <input type="submit">Sign in</button>
-</form>
-zeubi
-{{message}}
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="px-3 py-2 mt-5 w-3/5 m-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <div class="text-center mb-5">
+            {{ error_message | safe }}
+        </div>
+        <div class="flex justify-center">
+            <form method="POST" class="text-center">
+                {% csrf_token %}
+                {% include 'components/subcomponents/charfield.html' with field=user_form.username %}
+                {% include 'components/subcomponents/charfield.html' with field=user_form.password %}
+                <input type="submit" value="Sign In" class="w-5/12 my-5 cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
+            </form>
+        </div>
+        <div class="border-t-2 border-brown-800 px-2 pt-1 text-center ">
+            Don't have an account yet? <a href="{% url 'register' %}">Register here!</a>
+        </div>
+    </div>
+{% endblock %}

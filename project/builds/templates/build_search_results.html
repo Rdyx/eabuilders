@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if builds_found.count == 0 %}
+        <div class="flex flex-row justify-center mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <p class="mr-5">No build found.</p>
+            <a href="{% url 'search_build' %}"><p>Return to search.</p></a>
+        </div>
+    {% else %}
+        <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <p>Found {{ total_builds_found }} builds corresponding</p>
+        </div>
+        {% for build in builds_found %}
+            {% include 'components/subcomponents/buildDiv.html' with build=build %}
+        {% endfor %}
+
+        <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md text-sm">
+            {% if previous_page %}
+                <a href="{% url 'search_build_results' previous_page %}?{{ search_params }}">< Previous Page</a>
+            {% endif %}
+
+            <p>Page {{ current_page }} of {% widthratio total_builds_found pagination 1 %}</p>
+
+            {% if next_page %}
+                <a href="{% url 'search_build_results' next_page %}?{{ search_params }}">Next Page ></a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

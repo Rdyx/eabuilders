@@ -1,0 +1,25 @@
+body {
+  background: repeat;
+  background-image: url(../assets/bg-sword.png);
+  background-color: #000;
+  background-attachment: fixed;
+}
+
+.box-shadow-outline {
+  box-shadow: #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px;
+}
+
+.text-shadow-outline {
+  -webkit-font-smoothing: antialiased;
+  text-shadow: #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px, #000 0px 0px 2px,
+    #000 0px 0px 2px;
+}
+
+a,
+input[type='submit'] {
+  color: yellow;
+}
+
+a:hover {
+  color: #fff;
+}

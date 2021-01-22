@@ -1,1 +1,68 @@
-{{ username }}
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="mt-5 w-11/12 px-3 pb-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <div class="flex flex-col md:flex-row justify-between mt-2">
+            <div class="md:w-9/12">
+                <p class="text-3xl font-bold {% if user_profile.bio.html %}mb-2{% endif %}">
+                    {{ user_profile | title }}
+                    {% if total_user_builds > 0 %}<span class="text-sm font-normal italic"> User has {{ total_user_builds }} builds</span>{% endif %}
+                </p>
+
+                {% if user_profile.bio.html %}
+                <p>Bio:</p>
+                <div class="flex flex-col px-2 bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 rounded-md md:mr-2 md:mb-0 mb-2 box-shadow-outline">
+                    {{ user_profile.bio.html | safe }}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <div class="md:w-3/12 flex flex-col text-center">
+                {% if user_profile.ingame_name or user_profile.discord or user_profile.clan %}
+                    <div class="flex flex-col px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                        {% if user_profile.ingame_name %}
+                            <p>
+                                Ingame: {{ user_profile.ingame_name }}
+                            </p>
+                        {% endif %}
+                        {% if user_profile.discord %}
+                            <p>
+                                Discord: {{ user_profile.discord }}
+                            </p>
+                        {% endif %}
+                        {% if user_profile.clan %}
+                            <p>
+                                Clan: {{ user_profile.clan }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if user_profile.username == user.username %}
+                    <a href="{% url 'user_edit' %}" class="mt-3 focus:outline-none hover:bg-brown-600 focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                        Edit profile
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if total_user_builds > 0 %}
+        {% for build in user_builds %}
+            {% include 'components/subcomponents/buildDiv.html' with build=build %}
+        {% endfor %}
+
+        <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md text-sm">
+            {% if previous_page %}
+                <a href="{% url 'user_profile' user_profile.username previous_page %}">< Previous Page</a>
+            {% endif %}
+
+            <p>Page {{ current_page }} of {% widthratio total_user_builds pagination 1 %}</p>
+
+            {% if next_page %}
+                <a href="{% url 'user_profile' user_profile.username next_page %}">Next Page ></a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>{% block title %}EA-Builders{% endblock %}</title>
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="author" content="">
+
+		<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+		<link rel="stylesheet" href="{% static 'css/eabuilders.css' %}">
+		<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+		{% include 'django_quill/media.html' %}
+		{% block css %}{% endblock %}
+	</head>
+
+	<body class="bg-grey-lightest font-sans leading-normal tracking-normal mb-5">
+		{% include 'navbar.html' %}
+		<div class="container mx-auto">
+			{% block content %}{% endblock %}
+		</div>
+
+		<script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/alpine.js' %}"></script>
+		{% block js %}{% endblock %}
+	</body>
+
+</html>

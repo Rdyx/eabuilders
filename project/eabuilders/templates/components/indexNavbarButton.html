@@ -1,0 +1,10 @@
+{% extends 'components/subcomponents/navbarSubmenuButton.html' %}
+
+{% block buttonText %}Index{% endblock %}
+
+{% block subMenuLink %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="chars_index" linkText="Heroes" %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="items_index" linkText="Items" %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="races_index" linkText="Races" %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="materials_index" linkText="Materials" %}
+{% endblock %}

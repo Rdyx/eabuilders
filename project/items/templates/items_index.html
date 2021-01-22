@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    {% for item in items %}
+        <a href="{% url 'item' item.slug %}">{{ item.name }}</a>
+    {% endfor %}
+{{items}}
+{% endblock %}
