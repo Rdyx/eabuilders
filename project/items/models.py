@@ -32,7 +32,7 @@ class MaterialModel(models.Model):
 
 
 class ItemModel(models.Model):
-    tier = models.IntegerField(null=False)
+    tier = models.CharField(choices=[(str(i),str(i)) for i in range(1,6)], max_length=2, null=False)
     img = models.ImageField(upload_to="assets/item", null=False)
     buy_cost = models.IntegerField(null=False)
     sell_cost = models.IntegerField(blank=True, null=True)
