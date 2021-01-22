@@ -15,45 +15,8 @@
             </div>
         </div>
 
-    {% for skill in character_skills %}
-        <div class="flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
-            <div class="flex flex-col w-16 pl-2 md:pl-0 md:pr-2 md:w-1/12 justify-center text-center">
-                {% include 'components/subcomponents/skillIcon.html' with skill=skill show_stype=True %}
-            </div>
-            <div class="flex flex-col w-6/12 md:w-full text-sm px-2 border-l-2 border-brown-400 break-words">
-                <p class="text-2xl font-semibold border-b-2 border-brown-400 pb-2">
-                    {{ skill.name | title }}
-                </p>
-                <p class="pt-2">
-                    {{ skill.desc }}
-                </p>
-            </div>
-            <div class="flex flex-col text-sm w-3/12 md:w-1/12 pl-2 border-l-2 border-brown-400">
-                    {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/range.svg' info=skill.range %}
-                    {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/target.svg' info=skill.targets %}
-                    {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/cooldown.svg' info=skill.cd %}
-            </div>
-    </div>
+        {% for skill in character_skills %}
+            {% include 'components/skillDiv.html' with skill=skill %}
         {%endfor%}
-</div>
+    </div>
 {% endblock %}
-
-
-    {% comment %}
-
-    owner = models.ForeignKey("CharacterModel", on_delete=models.CASCADE, null=False)
-    img = models.ImageField(upload_to="assets/skills", null=False)
-    name = models.CharField(max_length=100, null=False)
-    desc = models.TextField(null=False)
-    stype = models.ForeignKey(
-        "SkillTypeModel",
-        on_delete=models.CASCADE,
-        null=False,
-    )
-    range = models.IntegerField(null=False)
-    targets = models.CharField(max_length=20, null=False)
-    cd = models.IntegerField(null=False)
-    level = models.ForeignKey("SkillLevelModel", on_delete=models.CASCADE, null=False)
-    deprecated = models.BooleanField(default=False)
-
-    {% endcomment %}
