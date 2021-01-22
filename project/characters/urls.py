@@ -10,7 +10,7 @@ urlpatterns = [
         name="get_char",
     ),
     path(
-        "<slug:char_slug>/<str:skill_level>/",
+        "<slug:char_slug>/<str:current_skill_level>/",
         views.get_char_view,
         name="get_char_with_skill_level",
     ),

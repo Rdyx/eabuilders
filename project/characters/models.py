@@ -31,7 +31,6 @@ class SkillModel(models.Model):
         "SkillTypeModel",
         on_delete=models.CASCADE,
         null=False,
-        related_name="type",
     )
     range = models.IntegerField(null=False)
     targets = models.CharField(max_length=20, null=False)
@@ -46,7 +45,7 @@ class SkillModel(models.Model):
         )
 
     def __str__(self):
-        return "{} (Level {})".format(self.name, self.level)
+        return "{} ({} (Level {}))".format(self.name, self.owner.name, self.level)
 
 
 class CharacterModel(models.Model):
