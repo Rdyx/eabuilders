@@ -150,7 +150,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # update: python manage.py tailwind update
 TAILWIND_APP_NAME = "theme"
 
-LOGIN_URL = "/user/login/"
+LOGIN_URL = "/users/login/"
 
 AUTH_USER_MODEL = "users.User"
 
