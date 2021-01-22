@@ -3,13 +3,18 @@
 
 {% block content %}
     {% for build in builds %}
-        {{ build }}
+        {% include 'components/subcomponents/buildDiv.html' with build=build %}
     {% endfor %}
 
-    {% if previous_page %}
-        <a href="{% url 'builds_index' previous_page %}">Previous</a>
-    {% endif %}
-    {% if next_page %}
-        <a href="{% url 'builds_index' next_page %}">Next</a>
-    {% endif %}
+    <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md text-sm">
+        {% if previous_page %}
+            <a href="{% url 'builds_index' previous_page %}">< Previous Page</a>
+        {% endif %}
+
+        <p>Page {{ current_page }} of {% widthratio total_builds pagination 1 %}</p>
+
+        {% if next_page %}
+            <a href="{% url 'builds_index' next_page %}">Next Page ></a>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -30,6 +30,7 @@ def builds_index_view(request, page_number=1):
     context = {
         "builds": builds,
         "total_builds": total_builds,
+        "pagination": pagination,
         "previous_page": previous_page,
         "current_page": page_number,
         "next_page": next_page,
@@ -119,8 +120,9 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 def get_build_view(request, build_slug):
     build = BuildModel.objects.get(slug=build_slug)
     build_creation_message = ""
+    build_created = request.session.get('build_created', None)
 
-    if request.session["build_created"]:
+    if build_created:
         build_creation_message = "Build has been created."
         request.session["build_created"] = ""
 
@@ -208,13 +210,14 @@ def search_build_results_view(request, page_number=1):
         pagination, builds_found, page_number
     )
 
-    builds_found = builds_found[
+    builds_found = builds_found.order_by('-id')[
         pagination * (page_number - 1) : page_number * pagination
     ]
 
     context = {
         "search_params": query_dict.urlencode(),  # Transfer search params to pagination
         "builds_found": builds_found,
+        "pagination": pagination,
         "total_builds_found": total_builds_found,
         "previous_page": previous_page,
         "current_page": page_number,

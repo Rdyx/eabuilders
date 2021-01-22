@@ -3,7 +3,7 @@
 {% block buttonText %}Builds{% endblock %}
 
 {% block subMenuLink %}
-    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="create_build_character_selection" linkText="Create a Build" %}
     {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="builds_index" linkText="Latest Builds" %}
     {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="search_build" linkText="Search Builds" %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="create_build_character_selection" linkText="Create a Build" %}
 {% endblock %}

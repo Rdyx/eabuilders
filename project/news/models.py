@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from django_quill.fields import QuillField
 
@@ -13,6 +14,6 @@ class NewsModel(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         null=False,
-        default=settings.AUTH_USER_MODEL,
+        default=1,
     )
     creation_date = models.DateField(null=False, default=timezone.now)
