@@ -3,7 +3,7 @@ tiers_colors = {
     "2": "green-400",
     "3": "blue-400",
     "4": "purple-400",
-    "5": "brown-400",
+    "5": "orange-300",
 }
 
 
