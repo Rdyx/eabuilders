@@ -1,3 +1,103 @@
-<body>
-    {{item}}
-</body>
+{% extends 'base.html' %}
+{% load static %} {% load custom_filters %}
+
+{% block content %}
+    <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-{{ tiers_colors|get_item:item.tier }} text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+            <p class="text-3xl text-{{ tiers_colors|get_item:item.tier }}">
+                {{ item.name }}
+            </p>
+        </div>
+        <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+            <img src="/media/{{ item.img }}" alt="{{ item.name }}" class="m-auto">
+        </div>
+        <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+            <p class="text-xl">
+                <span class="text-yellow-400">Buy</span>: {{ item.buy_cost }} - <span class="text-green-400">Sell</span>: {{ item.sell_cost }}
+            </p>
+            <div class="overflow-x-auto">
+            <table class="table-fixed">
+                <tr>
+                    <th>HP</th>
+                    <th>P.Atk</th>
+                    <th>M.Atk</th>
+                    <th>P.Def</th>
+                    <th>M.Def</th>
+                    <th>Acc.</th>
+                    <th>Res.</th>
+                    <th>P.Ign</th>
+                    <th>M.Ign</th>
+                    <th>Speed</th>
+                    <th>Crit Rate</th>
+                    <th>Crit Dmgs</th>
+                </tr>
+                <tr>
+                    <td>{{ item.hp }}</td>
+                    <td>{{ item.phys_atk }}</td>
+                    <td>{{ item.mag_atk }}</td>
+                    <td>{{ item.phys_def }}</td>
+                    <td>{{ item.mag_def }}</td>
+                    <td>{{ item.acc }}</td>
+                    <td>{{ item.res }}</td>
+                    <td>{{ item.ign_phys }}</td>
+                    <td>{{ item.ign_mag }}</td>
+                    <td>{{ item.speed }}</td>
+                    <td>{{ item.crit_rate }}</td>
+                    <td>{{ item.crit_dmg }}</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+        <div class="flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <div class="flex flex-col w-16 px-2 md:pl-0 md:pr-2 md:w-1/12 justify-center text-center">
+                <div class="h-12 w-12 bg-cover mx-auto">
+                    <img src="/media/{{ item.race.img }}" alt="{{ img.race.name }}">
+                </div>
+
+                {% comment %} {% if show_stype %} {% endcomment %}
+                {% comment %} {% if true %} {% endcomment %}
+                    <div class="text-sm">{{ item.race.name }}</div>
+                {% comment %} {% endif %} {% endcomment %}
+            </div>
+            <div class="flex flex-col w-full px-2 border-l-2 border-brown-400 break-words">
+                <p class="border-b-2 border-brown-400 pb-2">
+                    {{ item.race.bonus_1 }}
+                </p>
+                <p class="{% if item.race.bonus_3 %}border-b-2 border-brown-400{% endif %} py-2">
+                    {{ item.race.bonus_2 }}
+                </p>
+                {% if item.race.bonus_3 %}
+                    <p class="py-2">
+                        {{ item.race.bonus_3 }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <div class="flex flex-col w-16 px-2 md:pl-0 md:pr-2 md:w-1/12 justify-center text-center">
+                <div class="h-12 w-12 bg-cover mx-auto">
+                    <img src="/media/{{ item.material.img }}" alt="{{ img.material.name }}">
+                </div>
+
+                {% comment %} {% if show_stype %} {% endcomment %}
+                {% comment %} {% if true %} {% endcomment %}
+                    <div class="text-sm">{{ item.material.name }}</div>
+                {% comment %} {% endif %} {% endcomment %}
+            </div>
+            <div class="flex flex-col w-full px-2 border-l-2 border-brown-400 break-words">
+                <p class="border-b-2 border-brown-400 pb-2">
+                    {{ item.material.bonus_1 }}
+                </p>
+                <p class="{% if item.material.bonus_3 %}border-b-2 border-brown-400{% endif %} py-2">
+                    {{ item.material.bonus_2 }}
+                </p>
+                {% if item.material.bonus_3 %}
+                    <p class="py-2">
+                        {{ item.material.bonus_3 }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

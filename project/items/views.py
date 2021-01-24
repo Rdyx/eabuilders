@@ -48,5 +48,5 @@ def show_item_view(request, item_slug):
     except ItemModel.DoesNotExist:
         return redirect("oops")
 
-    context = {"item": item}
+    context = {"item": item, "tiers_colors": tiers_colors}
     return render(request, "item.html", context)

@@ -32,10 +32,12 @@ class MaterialModel(models.Model):
 
 
 class ItemModel(models.Model):
-    tier = models.CharField(choices=[(str(i),str(i)) for i in range(1,6)], max_length=2, null=False)
+    tier = models.CharField(
+        choices=[(str(i), str(i)) for i in range(1, 6)], max_length=2, null=False
+    )
     img = models.ImageField(upload_to="assets/item", null=False)
     buy_cost = models.IntegerField(null=False)
-    sell_cost = models.IntegerField(blank=True, null=True)
+    sell_cost = models.IntegerField(null=False)
     name = models.CharField(max_length=100, unique=True, null=False)
     slug = models.SlugField(max_length=100, unique=True, null=False)
     desc = models.CharField(max_length=1000, null=False)
