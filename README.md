@@ -9,6 +9,10 @@ Endless Arena "social" build sharing application based on django
 # TODO
 
 - Add votes system for builds
+- Add Teams system
+- Add builds' game type (arena/lab/...) field
+- Add hitcounter urls
+
 - Templates
 
   - Item Details Page
@@ -20,6 +24,3 @@ Endless Arena "social" build sharing application based on django
   - Create builds char select page (should be almost identical copy of chars index)
   - Create builds select skills/items page
   - Build Details Page
-
-- Misc
-  - Add Orange color support for tailwind
