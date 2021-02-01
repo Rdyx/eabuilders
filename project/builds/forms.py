@@ -129,7 +129,8 @@ class BuildSelectionForm(forms.Form):
 
 # Note there's js trick to make fields non required and avoid GET request to overload url
 class SearchBuildForm(forms.ModelForm):
-    creator = forms.CharField()
+    creator = forms.CharField(label="Build's creator name contains", required=False)
+    name = forms.CharField(label="Build's name contains", required=False)
 
     class Meta:
         model = BuildModel
@@ -159,16 +160,29 @@ class SearchBuildForm(forms.ModelForm):
         super(SearchBuildForm, self).__init__(*args, **kwargs)
 
         self.fields["char"] = forms.ChoiceField(
-            choices=CharacterModel.objects.all().values_list("slug", "name")
+            choices=CharacterModel.objects.all().values_list("slug", "name"),
+            label="Build's hero",
         )
 
-        self.items = items
+        self.items = items.values_list(
+            "slug", "name", "tier", "race__name", "material__name"
+        ).order_by("race", "tier", "name")
+
+        # Formatting items list for front-end field
+        items_list = []
+        for item in self.items:
+            items_list.append(
+                [item[0], "{} (T{}, {}, {})".format(item[1], item[2], item[3], item[4])]
+            )
+
         if items:
-            self.items_values = list(self.items.values_list("slug", "name"))
-            self.items_values.insert(0, ("", ""))
+            self.items_values = list(items_list)
+            self.items_values.insert(0, ("", "No selection"))
             self.fields["items"] = forms.MultipleChoiceField(
-                choices=self.items_values, label="Includes"
+                choices=self.items_values, label="Build must uses item(s)", initial=""
             )
             self.fields["exclude_items"] = forms.MultipleChoiceField(
-                choices=self.items_values, label="Excludes"
+                choices=self.items_values,
+                label="Build must not uses item(s)",
+                initial="",
             )
