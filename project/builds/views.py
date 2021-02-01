@@ -8,7 +8,7 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from eabuilders.utils import get_pagination
+from eabuilders.utils import get_pagination, tiers_colors
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
 from items.models import ItemModel
 
@@ -40,9 +40,9 @@ def builds_index_view(request, page_number=1):
 
 @login_required
 def create_build_character_selection_view(request):
-    characters = CharacterModel.objects.all().values("slug", "name", "img")
+    characters = CharacterModel.objects.all().values("slug", "name", "img", "rarity")
 
-    context = {"characters": characters}
+    context = {"characters": characters, "tiers_colors": tiers_colors}
     return render(request, "create_build_character_selection.html", context)
 
 
@@ -121,10 +121,10 @@ def get_build_view(request, build_slug):
     try:
         build = BuildModel.objects.get(slug=build_slug)
     except BuildModel.DoesNotExist:
-        return redirect('oops')
+        return redirect("oops")
 
     build_creation_message = ""
-    build_created = request.session.get('build_created', None)
+    build_created = request.session.get("build_created", None)
 
     if build_created:
         build_creation_message = "Build has been created."
@@ -214,7 +214,7 @@ def search_build_results_view(request, page_number=1):
         pagination, builds_found, page_number
     )
 
-    builds_found = builds_found.order_by('-id')[
+    builds_found = builds_found.order_by("-id")[
         pagination * (page_number - 1) : page_number * pagination
     ]
 
