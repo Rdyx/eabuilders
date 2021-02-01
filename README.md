@@ -15,7 +15,6 @@ Endless Arena "social" build sharing application based on django
 
 - Templates
 
-  - Item Details Page
   - Races Index
   - Race Details Page
   - Materials Index
