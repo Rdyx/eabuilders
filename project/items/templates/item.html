@@ -51,7 +51,7 @@
             </div>
 
         </div>
-        {% include 'components/subcomponents/raceMaterialInfoDiv.html' with raceMaterial=item.race %}
-        {% include 'components/subcomponents/raceMaterialInfoDiv.html' with raceMaterial=item.material %}
+        {% include 'components/subcomponents/raceMaterialInfoDiv.html' with show_icon=True raceMaterial=item.race %}
+        {% include 'components/subcomponents/raceMaterialInfoDiv.html' with show_icon=True raceMaterial=item.material %}
     </div>
 {% endblock %}
