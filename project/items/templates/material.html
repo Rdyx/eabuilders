@@ -1,1 +1,18 @@
-{{material}}
+{% extends 'base.html' %}
+{% load static %} {% load custom_filters %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+            <p class="text-3xl text-white">
+                {{ material.name }}
+            </p>
+        </div>
+        <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+            <img src="/media/{{ material.img }}" alt="{{ material.name }}" class="m-auto">
+        </div>
+        {% include 'components/subcomponents/raceMaterialInfoDiv.html' with raceMaterial=material %}
+    </div>
+{% endblock %}
