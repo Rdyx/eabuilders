@@ -15,8 +15,6 @@ Endless Arena "social" build sharing application based on django
 
 - Templates
 
-  - Materials Index
-  - Material Details Page
   - Search build form
   - Create builds char select page (should be almost identical copy of chars index)
   - Create builds select skills/items page
