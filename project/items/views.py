@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-
+from eabuilders.utils import tiers_colors
 from .models import RaceModel, MaterialModel, ItemModel
 
 
@@ -17,8 +17,8 @@ def materials_index_view(request):
 
 
 def items_index_view(request):
-    items = ItemModel.objects.all().select_related("race", "material")
-    context = {"items": items}
+    items = ItemModel.objects.all().select_related("race", "material").order_by("tier")
+    context = {"items": items, "tiers_colors": tiers_colors}
     return render(request, "items_index.html", context)
 
 
@@ -48,5 +48,5 @@ def show_item_view(request, item_slug):
     except ItemModel.DoesNotExist:
         return redirect("oops")
 
-    context = {"item": item}
+    context = {"item": item, "tiers_colors": tiers_colors}
     return render(request, "item.html", context)

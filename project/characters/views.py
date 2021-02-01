@@ -1,12 +1,14 @@
 from django.shortcuts import render
 
+from eabuilders.utils import tiers_colors
+
 from .models import SkillLevelModel, SkillModel, CharacterModel
 
 
 def chars_index_view(request):
     characters = CharacterModel.objects.all()
 
-    context = {"characters": characters}
+    context = {"characters": characters, "tiers_colors": tiers_colors}
     return render(request, "chars_index.html", context)
 
 
@@ -29,5 +31,6 @@ def get_char_view(request, char_slug, current_skill_level="4 (Max)"):
         "character_skills": character_skills,
         "skill_levels": skill_levels,
         "current_skill_level": current_skill_level,
+        "tiers_colors": tiers_colors,
     }
     return render(request, "character.html", context)

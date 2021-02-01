@@ -49,6 +49,7 @@ class SkillModel(models.Model):
 
 
 class CharacterModel(models.Model):
+    rarity = models.CharField(choices=[(str(i),str(i)) for i in range(1,6)], max_length=2, null=False)
     name = models.CharField(max_length=50, null=False, unique=True)
     slug = models.SlugField(max_length=50, null=False, unique=True)
     img = models.ImageField(upload_to="assets/characters", null=False)

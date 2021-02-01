@@ -1,3 +1,12 @@
+tiers_colors = {
+    "1": "gray-100",
+    "2": "green-400",
+    "3": "blue-400",
+    "4": "purple-400",
+    "5": "orange-300",
+}
+
+
 def get_pagination(pagination, queryset, page_number):
     """ Get pagination variables """
     total_builds_found = queryset.count()

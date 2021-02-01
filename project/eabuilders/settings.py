@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django_quill",
     "widget_tweaks",
     "debug_toolbar",
+    "eabuilders",
 ]
 
 MIDDLEWARE = [
