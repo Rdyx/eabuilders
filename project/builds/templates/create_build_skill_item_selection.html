@@ -2,19 +2,37 @@
 {% load static %}
 
 {% block content %}
-    {{error_message}}
-    <img src="/media/{{character.img}}" alt=""/>
-    <form method="POST">
-        {% csrf_token %}
-        {{build_form}}
-        <input type="submit" value="Submit">
-    </form>
-    <script type="text/javascript" >
+    {% if error_message %}
+        <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-red-500 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            {{error_message}}
+        </div>
+    {% endif %}
+    <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <form method="POST" class="w-full mt-2">
+            {% csrf_token %}
+            {% for field in build_form %}
+                {% if field.name == 'notes' %}
+                    {% include 'components/subcomponents/quillField.html' with field=field %}
+                {% else %}
+                    {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="test(this)" %}
+                {% endif %}
+
+                {% if 'skill' in field.name %}
+                    {% include 'components/skillDiv.html' with div_id=field.name hidden=True %}
+                {% endif %}
+
+            {% endfor %}
+            <input id="search-build-form-submit" type="submit" value="Submit" class="w-5/12 my-5 cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
+        </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+        <script type="text/javascript" >
         const skills = JSON.parse('{{ skills | safe }}');
         console.log(skills)
         const items = JSON.parse('{{ items | safe }}');
         console.log(items)
     </script>
     <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>
-
 {% endblock %}

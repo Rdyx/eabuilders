@@ -56,7 +56,8 @@ def check_form_values(form, field_name_to_check, fields_number_target):
     for k, v in form.items():
         if field_name_to_check in k:
             fields_number += 1
-        if not v in field_values:
+            print(v)
+        if not v in field_values and v != "No selection":
             field_values.append(v)
         else:
             wrong_field_values = True

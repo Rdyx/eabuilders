@@ -2,7 +2,7 @@
 
 <div class="flex justify-between">
     <img src="{% static asset %}" alt="cooldown" class="w-6 mr-2 my-1">
-    <p class="py-2">
+    <p {% if div_id %}id="{{ div_id }}"{% endif %} class="py-2">
         {{ info }}
     </p>
 </div>

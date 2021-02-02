@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.utils.text import slugify
 
 from eabuilders.utils import get_pagination, tiers_colors
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
@@ -71,9 +72,11 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         if build_form.is_valid():
             build_save = build_form.save(request=request, char_slug=char_slug)
 
-            if build_save != "This build name is already taken.":
+            if type(build_save) == object and (
+                build_save["name"] == slugify(request.POST["name"])
+            ):
                 request.session["build_created"] = True
-                return redirect("/builds/view/{}".format(build_save))
+                return redirect("/builds/view/{}".format(build_save["slug"]))
 
             error_message = build_save
 
