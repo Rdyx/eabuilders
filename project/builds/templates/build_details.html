@@ -64,17 +64,17 @@
         <p class="text-3xl border-b-2 border-brown-800 pb-2 mb-2 mx-auto text-center">Details</p>
 
         <div class="flex flex-col mb-5 ">
-        <p class="text-xl mx-auto">Skills</p>
+            <p class="text-xl mx-auto">Skills</p>
             {% include 'components/skillDiv.html' with skill=build.skill_1 %}
             {% include 'components/skillDiv.html' with skill=build.skill_2 %}
             {% include 'components/skillDiv.html' with skill=build.skill_3 %}
             {% include 'components/skillDiv.html' with skill=build.skill_4 %}
             {% include 'components/skillDiv.html' with skill=build.skill_5 %}
             {% include 'components/skillDiv.html' with skill=build.skill_6 %}
-            </div>
+        </div>
 
         <div class="flex flex-col">
-        <p class="text-xl mx-auto">Items</p>
+            <p class="text-xl mx-auto">Items</p>
             {% include 'components/itemDiv.html' with item=build.item_1 %}
             {% include 'components/itemDiv.html' with item=build.item_2 %}
             {% include 'components/itemDiv.html' with item=build.item_3 %}
@@ -84,7 +84,7 @@
             {% include 'components/itemDiv.html' with item=build.item_7 %}
             {% include 'components/itemDiv.html' with item=build.item_8 %}
         </div>
-            </div>
+    </div>
 
     </div>
 {% endblock %}
