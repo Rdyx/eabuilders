@@ -123,7 +123,7 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         "character": character,
         "skills": serializers.serialize("json", skills, use_natural_foreign_keys=True),
         "items": serializers.serialize("json", items, use_natural_foreign_keys=True),
-        "tiers_colors": json.dumps(tiers_colors),
+        "tiers_colors": json.dumps(tiers_colors),  # JS usage
         "error_message": error_message,
     }
 

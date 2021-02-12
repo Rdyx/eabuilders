@@ -20,12 +20,12 @@
                     {% include 'components/subcomponents/quillField.html' with field=field %}
                 {% elif 'skill' in field.name %}
                     <div class="mt-5">
-                        {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="test(this)" %}
+                        {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="updateSkillDiv(this)" %}
                         {% include 'components/skillDiv.html' with div_id=field.name hidden=True %}
                     </div>
                 {% elif 'item' in field.name %}
                     <div class="mt-5">
-                        {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="test2(this)" %}
+                        {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="updateItemDiv(this)" %}
                         {% include 'components/itemDiv.html' with div_id=field.name hidden=True %}
                     </div>
                 {% comment %} {% elif 'char_slug' in field.name %} {% endcomment %}
