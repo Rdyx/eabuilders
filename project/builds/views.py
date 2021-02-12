@@ -20,6 +20,7 @@ from .utils import (
     get_selected_skills,
     check_form_values,
     get_char_skills,
+    get_build_sets_bonus,
 )
 
 
@@ -131,8 +132,20 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 
 
 def get_build_view(request, build_slug):
+    prev_build_version = False
+    next_build_version = False
+    last_build_version = False
+
     try:
-        build = BuildModel.objects.get(slug=build_slug)
+        build = get_base_buildmodel_request().get(slug=build_slug)
+        build_versions_list = list(
+            BuildModel.objects.filter(name=build.name)
+            .all()
+            .order_by("version")
+            .values_list("slug", flat=True)
+        )
+        build_sets_bonus = get_build_sets_bonus(build)
+
     except BuildModel.DoesNotExist:
         return redirect("oops")
 
@@ -145,27 +158,70 @@ def get_build_view(request, build_slug):
 
     # Looks like empty quills fields are still generating something
     if build.notes.html == "<p><br></p>":
-        user_profile.notes = {}
+        build.notes = {}
 
-    context = {"build": build, "build_creation_message": build_creation_message}
+    # If build has multiple versions
+    if len(build_versions_list) > 1:
+        current_build_version_index = build_versions_list.index(build.slug)
+        # If current version is last
+        if current_build_version_index + 1 == len(build_versions_list):
+            next_build_version = False
+        else:
+            last_build_version = build_versions_list[len(build_versions_list) - 1]
+            next_build_version = build_versions_list[current_build_version_index + 1]
 
-    return render(request, "get_build.html", context)
+        if build.version > 1:
+            prev_build_version = build_versions_list[current_build_version_index - 1]
+
+    context = {
+        "build": build,
+        "build_creation_message": build_creation_message,
+        "prev_build_version": prev_build_version,
+        "next_build_version": next_build_version,
+        "last_build_version": last_build_version,
+        "build_sets_bonus": build_sets_bonus,
+    }
+
+    return render(request, "build_details.html", context)
 
 
 @login_required
-def delete_build_view(request, build_slug):
-    # Delete version number to get only build name
-    build_name = re.sub(r"-\d*", "", build_slug)
-
+def delete_build_version_view(request, build_slug):
     try:
-        builds = BuildModel.objects.filter(name=build_name)
+        build = BuildModel.objects.filter(slug=build_slug)
     except BuildModel.DoesNotExist:
         return redirect("oops")
 
     # Delete build only if the user is the owner
-    if builds[0].creator == request.user:
-        builds.delete()
-        return render(request, "build_deleted.html")
+    if len(build) > 0 and build[0].creator == request.user:
+        build.delete()
+        return render(
+            request,
+            "build_deleted.html",
+            {"delete_status": "This build's version have been deleted."},
+        )
+
+    return redirect("oops")
+
+
+@login_required
+def delete_all_build_versions_view(request, build_slug):
+    try:
+        build = BuildModel.objects.filter(slug=build_slug)
+        if build:
+            related_builds = BuildModel.objects.filter(name=build[0].name)
+
+    except BuildModel.DoesNotExist:
+        return redirect("oops")
+
+    # Delete related_builds only if the user is the owner
+    if len(build) > 0 and build[0].creator == request.user:
+        related_builds.delete()
+        return render(
+            request,
+            "build_deleted.html",
+            {"delete_status": "All build's versions have been deleted."},
+        )
 
     return redirect("oops")
 

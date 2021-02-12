@@ -30,7 +30,7 @@
             </form>
         </div>
         <div class="flex justify-center px-3 py-2 mt-8 w-11/12 m-auto">
-            <p id="delete-profile" onclick="deleteProfile(); return false;" class="text-red-500 text-center md:w-5/12 cursor-pointer hover:bg-brown-400 focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <p id="delete-profile" onclick="deleteProfile('{% url 'user_delete' user.get_username %}'); return false;" class="text-red-500 text-center md:w-5/12 cursor-pointer hover:bg-brown-400 focus:outline-none focus:ring-4 focus:ring-brown-900 mb-5 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
                 <span>Delete my profile</span>
             </p>
         </div>
@@ -38,6 +38,5 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript">const deleteUserUrl = "{% url 'user_delete' user.get_username %}"</script>
     <script type="text/javascript" src="{% static 'js/deleteProfile.js' %}"></script>
 {% endblock %}
