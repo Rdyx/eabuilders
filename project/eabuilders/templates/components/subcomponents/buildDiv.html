@@ -1,11 +1,21 @@
 <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
-    <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
+    <div class="w-full border-b-2 border-brown-800 text-center mb-2 pb-2">
         <a href="{% url 'get_build' build.slug %}" class="text-3xl">
             {{ build.name }} <span class="text-base">(v{{ build.version }})</span>
         </a> by <a href="{% url 'user_profile' build.creator %}">
             <span class="text-base">{{ build.creator | title }}</span>
         </a>
     </div>
+
+    {% if show_build_notes and build.notes.html %}
+        <div class="flex flex-col w-full border-b-2 border-brown-800 mb-4 pb-2">
+            <span class="mx-auto text-3xl mb-2">Notes</span>
+            <div class="flex flex-col px-2 bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 rounded-md md:mr-2 md:mb-0 mb-2 box-shadow-outline">
+                <span>{{ build.notes.html | safe }}</span>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="flex flex-col md:flex-row justify-center pb-3">
         <div class="flex self-center justify-center md:w-1/6 w-3/6">
             <img src="/media/{{ build.char.img }}" alt="{{ build.char.name }}" class="max-h-28">

@@ -5,8 +5,17 @@ class RaceModel(models.Model):
     img = models.ImageField(upload_to="assets/race", null=False)
     name = models.CharField(max_length=150, unique=True, null=False)
     slug = models.SlugField(max_length=150, unique=True, null=False)
+    bonus_1_min_nb_items_req = models.CharField(
+        choices=[(str(i), str(i)) for i in [2, 3]], max_length=1, null=False
+    )
     bonus_1 = models.CharField(max_length=1000, null=False)
+    bonus_2_min_nb_items_req = models.CharField(
+        choices=[(str(i), str(i)) for i in [4, 6]], max_length=1, null=False
+    )
     bonus_2 = models.CharField(max_length=1000, null=False)
+    bonus_3_min_nb_items_req = models.CharField(
+        choices=[(str(i), str(i)) for i in [6]], max_length=1, blank=True, null=True
+    )
     bonus_3 = models.CharField(max_length=1000, blank=True, null=True)
 
     def natural_key(self):
@@ -20,8 +29,17 @@ class MaterialModel(models.Model):
     img = models.ImageField(upload_to="assets/material", null=False)
     name = models.CharField(max_length=150, unique=True, null=False)
     slug = models.SlugField(max_length=150, unique=True, null=False)
+    bonus_1_min_nb_items_req = models.CharField(
+        choices=[(str(i), str(i)) for i in [2, 3]], max_length=1, null=False
+    )
     bonus_1 = models.CharField(max_length=1000, null=False)
+    bonus_2_min_nb_items_req = models.CharField(
+        choices=[(str(i), str(i)) for i in [4, 6]], max_length=1, null=False
+    )
     bonus_2 = models.CharField(max_length=1000, null=False)
+    bonus_3_min_nb_items_req = models.CharField(
+        choices=[(str(i), str(i)) for i in [6]], max_length=1, blank=True, null=True
+    )
     bonus_3 = models.CharField(max_length=1000, blank=True, null=True)
 
     def natural_key(self):

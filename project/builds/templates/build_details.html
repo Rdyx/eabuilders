@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if build_creation_message %}
+        <div class="text-center mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            {{build_creation_message}}
+        </div>
+    {% endif %}
+
+    {% if build.creator.username == user.username %}
+        <div class="flex text-center mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <a href="{% url 'create_build_skill_item_selection' build_slug=build.slug %}" class="flex flex-col justify-center w-4/12 focus:outline-none hover:bg-brown-600 focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                Edit build
+            </a>
+            <p id="delete-profile" onclick="deleteBuild('{% url 'delete_build' build_slug=build.slug %}'); return false;" class="mx-2 flex flex-col justify-center w-4/12 mx-2 px-2 border-l-2 border-r-2 border-brown-400 text-red-500 text-center md:w-5/12 cursor-pointer hover:bg-brown-400 focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                Delete this version
+            </p>
+            <p id="delete-profile" onclick="deleteAllBuilds('{% url 'delete_all_build' build_slug=build.slug %}'); return false;" class="flex flex-col justify-center w-4/12 text-red-500 text-center md:w-5/12 cursor-pointer hover:bg-brown-400 focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                Delete all versions
+            </p>
+        </div>
+    {% endif %}
+
+    {% if prev_build_version or next_build_version or last_build_version %}
+        <div class="flex text-center mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            {% if prev_build_version %}
+                <a href="{% url 'get_build' prev_build_version %}" class="w-4/12">< Previous version</a>
+            {% endif %}
+            {% if next_build_version %}
+                <a href="{% url 'get_build' next_build_version %}" class="w-4/12 mx-2 px-2 border-l-2 border-r-2 border-brown-400">Next version ></a>
+            {% endif %}
+            {% if last_build_version %}
+                <a href="{% url 'get_build' last_build_version %}" class="w-4/12">Last version >></a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% include 'components/subcomponents/buildDiv.html' with build=build show_build_notes=True %}
+
+    <div class="mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <p class="text-3xl border-b-2 border-brown-800 pb-2 mb-2 mx-auto text-center">Sets Bonus</p>
+            {% for sets_bonus in build_sets_bonus %}
+                {% for bonus in sets_bonus %}
+                    <div class="flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                            <div class="flex flex-col w-16 px-2 md:pl-0 md:pr-2 md:w-1/12 justify-center text-center border-r-2 border-brown-400">
+                                <div class="h-12 w-12 bg-cover mx-auto">
+                                    <img src="/media/{{ bonus.img }}" alt="{{ img.race.name }}">
+                                </div>
+                                <div class="text-sm">{{ bonus.name }}</div>
+                            </div>
+                        <div class="flex flex-col w-full px-2 break-words">
+                            <p>
+                                {{ bonus.selected_bonus }}
+                            </p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+    <div class="mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <p class="text-3xl border-b-2 border-brown-800 pb-2 mb-2 mx-auto text-center">Details</p>
+
+        <div class="flex flex-col mb-5 ">
+        <p class="text-xl mx-auto">Skills</p>
+            {% include 'components/skillDiv.html' with skill=build.skill_1 %}
+            {% include 'components/skillDiv.html' with skill=build.skill_2 %}
+            {% include 'components/skillDiv.html' with skill=build.skill_3 %}
+            {% include 'components/skillDiv.html' with skill=build.skill_4 %}
+            {% include 'components/skillDiv.html' with skill=build.skill_5 %}
+            {% include 'components/skillDiv.html' with skill=build.skill_6 %}
+            </div>
+
+        <div class="flex flex-col">
+        <p class="text-xl mx-auto">Items</p>
+            {% include 'components/itemDiv.html' with item=build.item_1 %}
+            {% include 'components/itemDiv.html' with item=build.item_2 %}
+            {% include 'components/itemDiv.html' with item=build.item_3 %}
+            {% include 'components/itemDiv.html' with item=build.item_4 %}
+            {% include 'components/itemDiv.html' with item=build.item_5 %}
+            {% include 'components/itemDiv.html' with item=build.item_6 %}
+            {% include 'components/itemDiv.html' with item=build.item_7 %}
+            {% include 'components/itemDiv.html' with item=build.item_8 %}
+        </div>
+            </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/deleteBuild.js' %}"></script>
+{% endblock %}

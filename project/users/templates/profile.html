@@ -10,10 +10,10 @@
                 </p>
 
                 {% if user_profile.bio.html %}
-                <p>Bio:</p>
-                <div class="flex flex-col px-2 bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 rounded-md md:mr-2 md:mb-0 mb-2 box-shadow-outline">
-                    {{ user_profile.bio.html | safe }}
-                </div>
+                    <p>Bio:</p>
+                    <div class="flex flex-col px-2 bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 rounded-md md:mr-2 md:mb-0 mb-2 box-shadow-outline">
+                        {{ user_profile.bio.html | safe }}
+                    </div>
                 {% endif %}
 
             </div>

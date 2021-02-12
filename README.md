@@ -4,7 +4,7 @@ Endless Arena "social" build sharing application based on django
 
 # Current status
 
-- 80% Done for v0.1
+- 90% Done for v0.1
 
 # TODO
 
@@ -15,5 +15,4 @@ Endless Arena "social" build sharing application based on django
 
 - Templates
 
-  - Build Details Page
   - Add Titles
