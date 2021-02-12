@@ -15,7 +15,12 @@ from items.models import ItemModel
 
 from .models import BuildModel
 from .forms import BuildSelectionForm, SearchBuildForm
-from .utils import get_base_buildmodel_request, get_selected_skills, check_form_values
+from .utils import (
+    get_base_buildmodel_request,
+    get_selected_skills,
+    check_form_values,
+    get_char_skills,
+)
 
 
 def builds_index_view(request, page_number=1):
@@ -51,6 +56,7 @@ def create_build_character_selection_view(request):
 def create_build_skill_item_selection_view(request, build_slug=""):
     items = ItemModel.objects.all().select_related("race", "material")
     error_message = ""
+    edit = False
 
     if request.method == "POST":
         try:
@@ -59,11 +65,7 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         except CharacterModel.DoesNotExist:
             return redirect("oops")
 
-        skills = (
-            SkillModel.objects.filter(owner__slug=char_slug, level__level="4 (Max)")
-            .select_related("owner", "stype", "level")
-            .exclude(deprecated=True)
-        )
+        skills = get_char_skills(char_slug)
 
         build_form = BuildSelectionForm(
             request.POST, char_slug=char_slug, skills=skills, items=items
@@ -72,8 +74,8 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         if build_form.is_valid():
             build_save = build_form.save(request=request, char_slug=char_slug)
 
-            if type(build_save) == object and (
-                build_save["name"] == slugify(request.POST["name"])
+            if type(build_save) == dict and (
+                build_save["name"] == request.POST["name"]
             ):
                 request.session["build_created"] = True
                 return redirect("/builds/view/{}".format(build_save["slug"]))
@@ -83,17 +85,17 @@ def create_build_skill_item_selection_view(request, build_slug=""):
     elif request.method == "GET":
         try:
             build = get_base_buildmodel_request().get(slug=build_slug)
+            edit = True
         except BuildModel.DoesNotExist:
             return redirect("oops")
 
-        character = CharacterModel.objects.get(slug=build.char)
-        skills = SkillModel.objects.filter(owner=character).select_related(
-            "owner", "stype"
-        )
-        skills_form_choices = skills.values_list("id", "name")
+        character = CharacterModel.objects.get(slug=build.char.slug)
+        skills = get_char_skills(character.slug)
+
+        skills_form_choices = list(skills.values_list("id", "name"))
         items_form_choices = items.values_list("id", "name")
         build_form = BuildSelectionForm()
-        build_form.fields["char_slug"].initial = build.char
+        build_form.fields["char_slug"].initial = build.char.slug
 
         for field in build._meta.get_fields():
             field_name = field.name
@@ -104,16 +106,24 @@ def create_build_skill_item_selection_view(request, build_slug=""):
 
             if "skill" in field_name:
                 build_form.fields[field_name].choices = skills_form_choices
+                build_form.fields[field_name].initial = build.__dict__[
+                    field_name + "_id"
+                ]
             if "item" in field_name:
                 build_form.fields[field_name].choices = items_form_choices
+                build_form.fields[field_name].initial = build.__dict__[
+                    field_name + "_id"
+                ]
     else:
         return redirect("oops")
 
     context = {
+        "edit": edit,
         "build_form": build_form,
         "character": character,
         "skills": serializers.serialize("json", skills, use_natural_foreign_keys=True),
         "items": serializers.serialize("json", items, use_natural_foreign_keys=True),
+        "tiers_colors": json.dumps(tiers_colors),
         "error_message": error_message,
     }
 
@@ -180,7 +190,7 @@ def search_build_results_view(request, page_number=1):
     if len(query_dict) > 0:
         selected_items = query_dict.getlist("items")
         excluded_items = query_dict.getlist("exclude_items")
-        print(selected_items, excluded_items)
+
         builds_found = builds_found.filter(
             Q(creator__username__icontains=query_dict.get("creator", ""))
             & Q(name__icontains=query_dict.get("name", ""))

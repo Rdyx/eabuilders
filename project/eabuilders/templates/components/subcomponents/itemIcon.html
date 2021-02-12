@@ -1,7 +1,10 @@
-<div class="bg-brown-900 bg-opacity-50 border-2 border-brown-400 rounded-md box-shadow-outline mx-1">
+<div
+    {% if div_id %}id="{{ div_id }}"{% endif %}
+    class="flex flex-col justify-around{% if bg_border %} bg-brown-900 bg-opacity-50 border-2 border-brown-400 rounded-md box-shadow-outline mx-1{% endif %}"
+>
     <img src="/media/{{ item.img }}" alt="{{ item.name }}" class="w-full"/>
     <div class="flex flex-row justify-between">
-        <img src="/media/{{ item.race.img }}" alt="{{ item.race }}" class="w-6/12 mb-1"/>
-        <img src="/media/{{ item.material.img }}" alt="{{ item.material }}" class="w-6/12 mb-1"/>
+        <img {% if div_id %}id="{{ div_id }}_race"{% endif %} src="/media/{{ item.race.img }}" alt="{{ item.race }}" class="w-6/12 mb-1"/>
+        <img {% if div_id %}id="{{ div_id }}_material"{% endif %} src="/media/{{ item.material.img }}" alt="{{ item.material }}" class="w-6/12 mb-1"/>
     </div>
 </div>

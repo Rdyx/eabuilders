@@ -36,6 +36,7 @@ class BuildSelectionForm(forms.Form):
 
     class Meta:
         fields = "__all__"
+        exclude = ["char_slug"]
 
     def __init__(self, *args, char_slug="", skills=None, items=None, **kwargs):
         super(BuildSelectionForm, self).__init__(*args, **kwargs)
@@ -95,7 +96,7 @@ class BuildSelectionForm(forms.Form):
             )
             build_version = builds.count() + 1
             selected_skill_are_valid = check_form_values(post_dict, "skill", 6)
-            selected_items_are_valid = check_form_values(post_dict, "items", 8)
+            selected_items_are_valid = check_form_values(post_dict, "item", 8)
 
         except CharacterModel.DoesNotExist:
             redirect("oops")

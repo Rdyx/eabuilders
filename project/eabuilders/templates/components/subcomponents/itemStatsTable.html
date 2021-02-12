@@ -1,0 +1,34 @@
+<div class="mt-2 overflow-x-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+    <table class="w-full mx-auto border-collapse">
+        <tbody class="">
+            <tr class="">
+                <th class="md:py-2 px-2 border-r border-brown-400">HP</th>
+                <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">P.Atk</th>
+                <th class="md:py-2 border-brown-400 border-r px-2">M.Atk</th>
+                <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">P.Def</th>
+                <th class="md:py-2 border-brown-400 border-r px-2">M.Def</th>
+                <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">Acc.</th>
+                <th class="md:py-2 border-brown-400 border-r px-2">Res.</th>
+                <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">P.Ign</th>
+                <th class="md:py-2 border-brown-400 border-r px-2">M.Ign</th>
+                <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">Speed</th>
+                <th class="md:py-2 border-brown-400 border-r px-2">Crit Rate</th>
+                <th class="md:py-2 bg-brown-900 bg-opacity-50 px-2">Crit Dmgs</th>
+            </tr>
+            <tr>
+                <td {% if div_id %}id="{{ div_id }}_hp"{% endif %} class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.hp }}</td>
+                <td {% if div_id %}id="{{ div_id }}_phys_atk"{% endif %} class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.phys_atk }}</td>
+                <td {% if div_id %}id="{{ div_id }}_mag_atk"{% endif %} class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.mag_atk }}</td>
+                <td {% if div_id %}id="{{ div_id }}_pyhs_def"{% endif %} class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.phys_def }}</td>
+                <td {% if div_id %}id="{{ div_id }}_mag_def"{% endif %} class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.mag_def }}</td>
+                <td {% if div_id %}id="{{ div_id }}_acc"{% endif %} class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.acc }}</td>
+                <td {% if div_id %}id="{{ div_id }}_res"{% endif %} class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.res }}</td>
+                <td {% if div_id %}id="{{ div_id }}_ign_phys"{% endif %} class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.ign_phys }}</td>
+                <td {% if div_id %}id="{{ div_id }}_ign_mag"{% endif %} class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.ign_mag }}</td>
+                <td {% if div_id %}id="{{ div_id }}_speed"{% endif %} class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.speed }}</td>
+                <td {% if div_id %}id="{{ div_id }}_crit_rate"{% endif %} class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.crit_rate }}</td>
+                <td {% if div_id %}id="{{ div_id }}_crit_dmg"{% endif %} class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 px-2">{{ item.crit_dmg }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

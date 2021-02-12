@@ -1,7 +1,7 @@
 <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
     <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
         <a href="{% url 'get_build' build.slug %}" class="text-3xl">
-            {{ build.name }}
+            {{ build.name }} <span class="text-base">(v{{ build.version }})</span>
         </a> by <a href="{% url 'user_profile' build.creator %}">
             <span class="text-base">{{ build.creator | title }}</span>
         </a>
@@ -32,27 +32,27 @@
         </div>
 
         <div class="hidden md:flex md:flex-row">
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 %}
-            {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 bg_border=True %}
+            {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 bg_border=True %}
         </div>
         <div class="flex flex-col md:hidden">
             <div class="flex flex-row">
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 %}
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 %}
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 %}
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_1 bg_border=True %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_2 bg_border=True %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_3 bg_border=True %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_4 bg_border=True %}
             </div>
             <div class="flex flex-row mt-2">
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 %}
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 %}
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 %}
-                {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_5 bg_border=True %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_6 bg_border=True %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_7 bg_border=True %}
+                {% include 'components/subcomponents/itemIcon.html' with item=build.item_8 bg_border=True %}
             </div>
         </div>
     </div>

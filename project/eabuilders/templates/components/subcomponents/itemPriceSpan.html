@@ -1,0 +1,6 @@
+<p class="text-xl">
+    <span class="text-yellow-400">Buy</span>
+    : <span {% if div_id %}id="{{ div_id }}_buy"{% endif %}>{{ item.buy_cost }}</span> -
+    <span class="text-green-400">Sell</span>
+    : <span {% if div_id %}id="{{ div_id }}_sell"{% endif %}>{{ item.sell_cost }}</span>
+</p>

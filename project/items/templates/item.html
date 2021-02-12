@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %} {% load custom_filters %}
+{% load custom_filters %}
 
 {% block content %}
     <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-{{ tiers_colors|get_item:item.tier }} text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
@@ -12,44 +12,8 @@
             <img src="/media/{{ item.img }}" alt="{{ item.name }}" class="m-auto">
         </div>
         <div class="w-full border-brown-800 text-center mb-2">
-            <p class="text-xl">
-                <span class="text-yellow-400">Buy</span>: {{ item.buy_cost }} - <span class="text-green-400">Sell</span>: {{ item.sell_cost }}
-            </p>
-            <div class="mt-2 overflow-x-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
-                <table class="w-full mx-auto border-collapse">
-                    <tbody class="">
-                        <tr class="">
-                            <th class="md:py-2 px-2 border-r border-brown-400">HP</th>
-                            <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">P.Atk</th>
-                            <th class="md:py-2 border-brown-400 border-r px-2">M.Atk</th>
-                            <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">P.Def</th>
-                            <th class="md:py-2 border-brown-400 border-r px-2">M.Def</th>
-                            <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">Acc.</th>
-                            <th class="md:py-2 border-brown-400 border-r px-2">Res.</th>
-                            <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">P.Ign</th>
-                            <th class="md:py-2 border-brown-400 border-r px-2">M.Ign</th>
-                            <th class="md:py-2 bg-brown-900 bg-opacity-50 border-brown-400 border-r px-2">Speed</th>
-                            <th class="md:py-2 border-brown-400 border-r px-2">Crit Rate</th>
-                            <th class="md:py-2 bg-brown-900 bg-opacity-50 px-2">Crit Dmgs</th>
-                        </tr>
-                        <tr>
-                            <td class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.hp }}</td>
-                            <td class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.phys_atk }}</td>
-                            <td class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.mag_atk }}</td>
-                            <td class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.phys_def }}</td>
-                            <td class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.mag_def }}</td>
-                            <td class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.acc }}</td>
-                            <td class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.res }}</td>
-                            <td class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.ign_phys }}</td>
-                            <td class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.ign_mag }}</td>
-                            <td class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 border-r border-brown-400 px-2">{{ item.speed }}</td>
-                            <td class="pb-3 md:py-2 border-r border-brown-400 px-2">{{ item.crit_rate }}</td>
-                            <td class="pb-3 md:py-2 bg-brown-900 bg-opacity-50 px-2">{{ item.crit_dmg }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
+            {% include 'components/subcomponents/itemPriceSpan.html' with item=item %}
+            {% include 'components/subcomponents/itemStatsTable.html' with item=item %}
         </div>
         {% include 'components/subcomponents/raceMaterialInfoDiv.html' with show_icon=True raceMaterial=item.race %}
         {% include 'components/subcomponents/raceMaterialInfoDiv.html' with show_icon=True raceMaterial=item.material %}
