@@ -1,20 +1,55 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static %}{% load widget_tweaks %}
 
 {% block content %}
-    {{error_message}}
-    <img src="/media/{{character.img}}" alt=""/>
-    <form method="POST">
-        {% csrf_token %}
-        {{build_form}}
-        <input type="submit" value="Submit">
-    </form>
-    <script type="text/javascript" >
+    {% if error_message %}
+        <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-red-500 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            {{error_message}}
+        </div>
+    {% endif %}
+    <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <form method="POST" class="w-full mt-2">
+            {% csrf_token %}
+            {% for field in build_form %}
+
+                {% if field.name == 'name' and edit %}
+                    {% render_field field type+="hidden" %}
+                {% elif field.name == 'char_slug' %}
+                    {% render_field field type+="hidden" %}
+                {% elif field.name == 'notes' %}
+                    {% include 'components/subcomponents/quillField.html' with field=field %}
+                {% elif 'skill' in field.name %}
+                    <div class="mt-5">
+                        {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="updateSkillDiv(this)" %}
+                        {% include 'components/skillDiv.html' with div_id=field.name hidden=True %}
+                    </div>
+                {% elif 'item' in field.name %}
+                    <div class="mt-5">
+                        {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="updateItemDiv(this)" %}
+                        {% include 'components/itemDiv.html' with div_id=field.name hidden=True %}
+                    </div>
+                {% comment %} {% elif 'char_slug' in field.name %} {% endcomment %}
+                    {% comment %} Nothing {% endcomment %}
+                {% else %}
+                    {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" %}
+                {% endif %}
+
+            {% endfor %}
+            <div class="flex flex-col">
+            <input id="search-build-form-submit" type="submit" value="Submit" class="text-2xl w-5/12 mt-5 mb-2 mx-auto cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
+            {% if edit %}
+            <span class="italic text-sm">Note that editing will create a new version of your build.</span>
+            {% endif %}
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+        <script type="text/javascript" >
         const skills = JSON.parse('{{ skills | safe }}');
-        console.log(skills)
         const items = JSON.parse('{{ items | safe }}');
-        console.log(items)
+        const tiers_colors = JSON.parse('{{ tiers_colors | safe }}');
     </script>
     <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>
-
 {% endblock %}

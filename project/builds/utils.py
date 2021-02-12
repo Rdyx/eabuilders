@@ -56,10 +56,18 @@ def check_form_values(form, field_name_to_check, fields_number_target):
     for k, v in form.items():
         if field_name_to_check in k:
             fields_number += 1
-        if not v in field_values:
-            field_values.append(v)
-        else:
-            wrong_field_values = True
-            break
+            if not v in field_values and v != "No selection":
+                field_values.append(v)
+            else:
+                wrong_field_values = True
+                break
 
     return fields_number == fields_number_target and not wrong_field_values
+
+
+def get_char_skills(char_slug):
+    return (
+        SkillModel.objects.filter(owner__slug=char_slug, level__level="4 (Max)")
+        .select_related("owner", "stype", "level")
+        .exclude(deprecated=True)
+    )

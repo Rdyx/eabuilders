@@ -36,6 +36,7 @@ class BuildSelectionForm(forms.Form):
 
     class Meta:
         fields = "__all__"
+        exclude = ["char_slug"]
 
     def __init__(self, *args, char_slug="", skills=None, items=None, **kwargs):
         super(BuildSelectionForm, self).__init__(*args, **kwargs)
@@ -43,7 +44,8 @@ class BuildSelectionForm(forms.Form):
         self.items = items
 
         if skills:
-            self.skills_values = self.skills.values_list("id", "name")
+            self.skills_values = list(self.skills.values_list("id", "name"))
+            self.skills_values.insert(0, ("", "No selection"))
             self.fields["skill_1"] = forms.ChoiceField(choices=self.skills_values)
             self.fields["skill_1"] = forms.ChoiceField(choices=self.skills_values)
             self.fields["skill_2"] = forms.ChoiceField(choices=self.skills_values)
@@ -52,7 +54,8 @@ class BuildSelectionForm(forms.Form):
             self.fields["skill_5"] = forms.ChoiceField(choices=self.skills_values)
             self.fields["skill_6"] = forms.ChoiceField(choices=self.skills_values)
         if items:
-            self.items_values = self.items.values_list("id", "name")
+            self.items_values = list(self.items.values_list("id", "name"))
+            self.items_values.insert(0, ("", "No selection"))
             self.fields["item_1"] = forms.ChoiceField(choices=self.items_values)
             self.fields["item_2"] = forms.ChoiceField(choices=self.items_values)
             self.fields["item_3"] = forms.ChoiceField(choices=self.items_values)
@@ -70,6 +73,7 @@ class BuildSelectionForm(forms.Form):
         # Verify data integrity
         post_dict = dict(request.POST)
         build_name = self.cleaned_data["name"]
+
         try:
             character = CharacterModel.objects.get(slug=char_slug)
             builds = BuildModel.objects.filter(name=build_name).select_related(
@@ -92,9 +96,13 @@ class BuildSelectionForm(forms.Form):
             )
             build_version = builds.count() + 1
             selected_skill_are_valid = check_form_values(post_dict, "skill", 6)
-            selected_items_are_valid = check_form_values(post_dict, "items", 8)
-        except CharacterModel.DoesNotExist or selected_skill_are_valid or selected_items_are_valid:
+            selected_items_are_valid = check_form_values(post_dict, "item", 8)
+
+        except CharacterModel.DoesNotExist:
             redirect("oops")
+
+        if not selected_skill_are_valid or not selected_items_are_valid:
+            return "A skill or an item has been selected twice."
 
         if build_version > 1 and builds[0].creator != request.user:
             return "This build name is already taken."
@@ -124,7 +132,7 @@ class BuildSelectionForm(forms.Form):
 
         build.save()
 
-        return build.slug
+        return {"name": build.name, "slug": build.slug}
 
 
 # Note there's js trick to make fields non required and avoid GET request to overload url
