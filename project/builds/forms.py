@@ -18,6 +18,7 @@ User = get_user_model()
 class BuildSelectionForm(forms.Form):
     name = forms.CharField(max_length=100)
     notes = QuillFormField(max_length=500, required=False)
+    game_mode = forms.ChoiceField(choices=[(i, i) for i in ["Lab", "Arena"]])
     skill_1 = forms.ChoiceField(choices=[])
     skill_1 = forms.ChoiceField(choices=[])
     skill_2 = forms.ChoiceField(choices=[])
@@ -115,6 +116,7 @@ class BuildSelectionForm(forms.Form):
         build.slug = slugify("{}-{}".format(build_name, build_version))
         build.notes = self.cleaned_data["notes"]
         build.char = character
+        build.game_mode = self.cleaned_data["game_mode"]
         build.skill_1 = self.skills.filter(id=self.cleaned_data["skill_1"]).first()
         build.skill_2 = self.skills.filter(id=self.cleaned_data["skill_2"]).first()
         build.skill_3 = self.skills.filter(id=self.cleaned_data["skill_3"]).first()

@@ -19,6 +19,9 @@ class BuildModel(models.Model):
     char = models.ForeignKey(
         "characters.CharacterModel", on_delete=models.CASCADE, null=False
     )
+    game_mode = models.CharField(
+        choices=[(i, i) for i in ["Lab", "Arena"]], max_length=15, null=False
+    )
     skill_1 = models.ForeignKey(
         "characters.SkillModel",
         on_delete=models.CASCADE,

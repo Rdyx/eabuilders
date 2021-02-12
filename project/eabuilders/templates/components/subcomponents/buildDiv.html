@@ -1,10 +1,11 @@
 <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
     <div class="w-full border-b-2 border-brown-800 text-center mb-2 pb-2">
         <a href="{% url 'get_build' build.slug %}" class="text-3xl">
-            {{ build.name }} <span class="text-base">(v{{ build.version }})</span>
+            {{ build.name }} <span class="text-base">(v{{ build.version }} - {{ build.game_mode }})</span>
         </a> by <a href="{% url 'user_profile' build.creator %}">
             <span class="text-base">{{ build.creator | title }}</span>
         </a>
+        - {{ build.creation_date }}
     </div>
 
     {% if show_build_notes and build.notes.html %}
