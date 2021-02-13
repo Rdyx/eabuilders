@@ -10,7 +10,6 @@ Endless Arena "social" build sharing application based on django
 
 - Add votes system for builds
 - Add Teams system
-- Add builds' game type (arena/lab/...) field
 - Add hitcounter urls
 
 - Templates

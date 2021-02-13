@@ -26,6 +26,11 @@ select[multiple] {
   min-height: 10.5rem;
 }
 
+select[multiple][name="game_mode"] {
+  min-height: auto;
+  max-height: 4.5rem;
+}
+
 select[multiple] option {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;

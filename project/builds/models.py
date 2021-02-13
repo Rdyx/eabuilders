@@ -84,4 +84,31 @@ class BuildModel(models.Model):
     )
 
     def __str__(self):
-        return "{} {} ({})".format(self.name, self.version, self.creator)
+        return "{} (v{}) by {}".format(self.name, self.version, self.creator)
+
+
+class TeamModel(models.Model):
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=False,
+    )
+    creation_date = models.DateField(null=False, default=timezone.now)
+    name = models.CharField(max_length=100, null=False, unique=True)
+    slug = models.SlugField(max_length=120, null=False, unique=True)
+    notes = QuillField(max_length=500, blank=True, null=True)
+    game_mode = models.CharField(
+        choices=[(i, i) for i in ["Lab", "Arena"]], max_length=15, null=False
+    )
+    build_1 = models.ForeignKey(
+        "BuildModel", on_delete=models.CASCADE, null=False, related_name="build_1"
+    )
+    build_2 = models.ForeignKey(
+        "BuildModel", on_delete=models.CASCADE, null=False, related_name="build_2"
+    )
+    build_3 = models.ForeignKey(
+        "BuildModel", on_delete=models.CASCADE, null=False, related_name="build_3"
+    )
+
+    def __str__(self):
+        return "{} by {}".format(self.name, self.creator)

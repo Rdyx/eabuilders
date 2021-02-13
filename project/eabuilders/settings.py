@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "builds.apps.BuildsConfig",
     "characters.apps.CharactersConfig",
     "news.apps.NewsConfig",
+    "dal",
+    "dal_select2",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

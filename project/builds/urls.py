@@ -11,6 +11,11 @@ urlpatterns = [
         name="create_build_character_selection",
     ),
     path(
+        "t/create/",
+        views.create_team_view,
+        name="create_team",
+    ),
+    path(
         "create/skill-selection/",
         views.create_build_skill_item_selection_view,
         name="create_build_skill_item_selection",
@@ -39,5 +44,10 @@ urlpatterns = [
         "search/results/<int:page_number>/",
         views.search_build_results_view,
         name="search_build_results",
+    ),
+    path(
+        "builds-autocomplete/",
+        views.BuildAutocomplete.as_view(),
+        name="build-autocomplete",
     ),
 ]

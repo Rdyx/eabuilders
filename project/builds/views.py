@@ -9,12 +9,14 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils.text import slugify
 
+from dal import autocomplete
+
 from eabuilders.utils import get_pagination, tiers_colors
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
 from items.models import ItemModel
 
 from .models import BuildModel
-from .forms import BuildSelectionForm, SearchBuildForm
+from .forms import BuildSelectionForm, SearchBuildForm, TeamCreateForm
 from .utils import (
     get_base_buildmodel_request,
     get_selected_skills,
@@ -234,7 +236,6 @@ def search_build_view(request):
 
 
 def search_build_results_view(request, page_number=1):
-
     query_dict = request.GET
 
     # Filter by char to manipulate lighter queryset
@@ -250,6 +251,7 @@ def search_build_results_view(request, page_number=1):
         builds_found = builds_found.filter(
             Q(creator__username__icontains=query_dict.get("creator", ""))
             & Q(name__icontains=query_dict.get("name", ""))
+            & Q(game_mode__in=query_dict.getlist("game_mode"))
         )
 
         # If items have been selected
@@ -298,3 +300,47 @@ def search_build_results_view(request, page_number=1):
     }
 
     return render(request, "build_search_results.html", context)
+
+
+@login_required
+def create_team_view(request):
+    error_message = ""
+
+    if request.method == "POST":
+        team_form = TeamCreateForm(request.POST)
+        print(request.POST)
+
+        if team_form.is_valid():
+            team_save = team_form.save(request=request)
+
+            if type(team_save) == dict and (team_save["name"] == request.POST["name"]):
+                request.session["team_created"] = True
+                return redirect("/builds/view/t/{}".format(team_save["slug"]))
+
+            error_message = team_save
+
+    if request.method == "GET":
+        team_form = TeamCreateForm()
+
+    print(error_message)
+    context = {"team_form": team_form, "error_message": error_message}
+    return render(request, "team_create.html", context)
+
+
+class BuildAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return redirect("oops")
+
+        qs = (
+            BuildModel.objects.all()
+            .select_related("creator")
+            .order_by("name", "version")
+        )
+
+        if self.q:
+            qs = qs.filter(
+                Q(name__icontains=self.q) | Q(creator__username__icontains=self.q)
+            )
+
+        return qs
