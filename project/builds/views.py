@@ -9,14 +9,16 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils.text import slugify
 
+from dal import autocomplete
+
 from eabuilders.utils import get_pagination, tiers_colors
 from characters.models import SkillTypeModel, SkillModel, CharacterModel
 from items.models import ItemModel
 
-from .models import BuildModel
-from .forms import BuildSelectionForm, SearchBuildForm
+from .models import BuildModel, TeamModel
+from .forms import BuildSelectionForm, SearchBuildForm, TeamCreateForm, SearchTeamForm
+from .big_queries import get_base_buildmodel_request, get_team_builds_request
 from .utils import (
-    get_base_buildmodel_request,
     get_selected_skills,
     check_form_values,
     get_char_skills,
@@ -30,9 +32,11 @@ def builds_index_view(request, page_number=1):
         pagination, BuildModel.objects.all(), page_number
     )
 
-    builds = get_base_buildmodel_request().order_by("-id")[
-        pagination * (page_number - 1) : page_number * pagination
-    ]
+    builds = (
+        get_base_buildmodel_request()
+        .all()
+        .order_by("-id")[pagination * (page_number - 1) : page_number * pagination]
+    )
 
     context = {
         "builds": builds,
@@ -234,7 +238,6 @@ def search_build_view(request):
 
 
 def search_build_results_view(request, page_number=1):
-
     query_dict = request.GET
 
     # Filter by char to manipulate lighter queryset
@@ -244,13 +247,26 @@ def search_build_results_view(request, page_number=1):
 
     # If we got filters, filter queryset
     if len(query_dict) > 0:
+        creator = query_dict.get("creator", "")
+        name = query_dict.get("name", "")
+        game_mode = query_dict.getlist("game_mode", "")
         selected_items = query_dict.getlist("items")
         excluded_items = query_dict.getlist("exclude_items")
 
-        builds_found = builds_found.filter(
-            Q(creator__username__icontains=query_dict.get("creator", ""))
-            & Q(name__icontains=query_dict.get("name", ""))
-        )
+        if creator:
+            builds_found = builds_found.filter(
+                Q(creator__username__icontains=query_dict.get("creator", ""))
+            )
+
+        if name:
+            builds_found = builds_found.filter(
+                Q(name__icontains=query_dict.get("name", ""))
+            )
+
+        if len(game_mode) > 0:
+            builds_found = builds_found.filter(
+                Q(game_mode__in=query_dict.getlist("game_mode"))
+            )
 
         # If items have been selected
         if len(selected_items) > 0:
@@ -298,3 +314,216 @@ def search_build_results_view(request, page_number=1):
     }
 
     return render(request, "build_search_results.html", context)
+
+
+class BuildAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return redirect("oops")
+
+        qs = (
+            BuildModel.objects.all()
+            .select_related("creator")
+            .order_by("name", "version")
+        )
+
+        if self.q:
+            qs = qs.filter(
+                Q(name__icontains=self.q) | Q(creator__username__icontains=self.q)
+            )
+
+        return qs
+
+
+@login_required
+def create_team_view(request, team_slug=""):
+    error_message = ""
+
+    if request.method == "POST":
+        team_form = TeamCreateForm(request.POST)
+
+        if team_form.is_valid():
+            # If we got a slug, it means we are editing.
+            if team_slug:
+                team_save = team_form.update(request=request, team_slug=team_slug)
+                request.session["team_created"] = "Team has been edited."
+            else:
+                team_save = team_form.save(request=request)
+                request.session["team_created"] = "Team has been created."
+
+            if type(team_save) == dict and (team_save["name"] == request.POST["name"]):
+                return redirect("/builds/t/view/{}".format(team_save["slug"]))
+
+            error_message = team_save
+
+    # Edit mode
+    elif request.method == "GET" and team_slug:
+        try:
+            team = TeamModel.objects.get(slug=team_slug)
+        except TeamModel.DoesNotExist:
+            return redirect("oops")
+
+        team_form = TeamCreateForm()
+
+        for field in team._meta.get_fields():
+            field_name = field.name
+            field_value = getattr(team, field_name)
+
+            if field_name in team_form.fields:
+                team_form.fields[field_name].initial = field_value
+                team_form.fields[field_name].widget.attrs["readonly"] = True
+
+    else:
+        team_form = TeamCreateForm()
+
+    context = {"team_form": team_form, "error_message": error_message}
+    return render(request, "team_create.html", context)
+
+
+def get_team_view(request, team_slug):
+    try:
+        team = TeamModel.objects.get(slug=team_slug)
+
+        # Reducing queries time by getting each build from 3 different queries instead of 1 big
+        build_1 = get_base_buildmodel_request().get(id=team.__dict__["build_1_id"])
+        build_2 = get_base_buildmodel_request().get(id=team.__dict__["build_2_id"])
+        build_3 = get_base_buildmodel_request().get(id=team.__dict__["build_3_id"])
+    except TeamModel.DoesNotExist:
+        return redirect("oops")
+
+    team_creation_message = request.session.get("team_created", None)
+
+    if team_creation_message:
+        request.session["team_created"] = ""
+
+    # Looks like empty quills fields are still generating something
+    if team.notes.html == "<p><br></p>":
+        team.notes = {}
+
+    context = {
+        "team": team,
+        "build_1": build_1,
+        "build_2": build_2,
+        "build_3": build_3,
+        "team_creation_message": team_creation_message,
+    }
+
+    return render(request, "team_details.html", context)
+
+
+def teams_index_view(request, page_number=1):
+    pagination = 1
+    total_teams, previous_page, next_page = get_pagination(
+        pagination, TeamModel.objects.all(), page_number
+    )
+
+    teams = (
+        get_team_builds_request()
+        .all()
+        .order_by("-id")[pagination * (page_number - 1) : page_number * pagination]
+    )
+
+    context = {
+        "teams": teams,
+        "total_teams": total_teams,
+        "pagination": pagination,
+        "previous_page": previous_page,
+        "current_page": page_number,
+        "next_page": next_page,
+    }
+    return render(request, "teams_index.html", context)
+
+
+def search_team_view(request):
+    chars = CharacterModel.objects.all()
+    search_team_form = SearchTeamForm(chars=chars)
+    context = {"search_team_form": search_team_form}
+    return render(request, "team_search.html", context)
+
+
+def search_team_results_view(request, page_number=1):
+    query_dict = request.GET
+
+    # Filter by char to manipulate lighter queryset
+    teams_found = get_team_builds_request().all()
+
+    # If we got filters, filter queryset
+    if len(query_dict) > 0:
+        creator = query_dict.get("creator", "")
+        name = query_dict.get("name", "")
+        game_mode = query_dict.getlist("game_mode", "")
+        selected_chars = query_dict.getlist("chars")
+        excluded_chars = query_dict.getlist("exclude_chars")
+
+        if creator:
+            teams_found = teams_found.filter(
+                Q(creator__username__icontains=query_dict.get("creator", ""))
+            )
+
+        if name:
+            teams_found = teams_found.filter(
+                Q(name__icontains=query_dict.get("name", ""))
+            )
+
+        if len(game_mode) > 0:
+            teams_found = teams_found.filter(
+                Q(game_mode__in=query_dict.getlist("game_mode"))
+            )
+
+        # If chars have been selected
+        if len(selected_chars) > 0:
+            teams_found = teams_found.filter(
+                Q(build_1__char__slug__in=selected_chars)
+                | Q(build_2__char__slug__in=selected_chars)
+                | Q(build_3__char__slug__in=selected_chars)
+            )
+
+        # If chars have been excluded
+        if len(excluded_chars) > 0:
+            teams_found = teams_found.exclude(
+                Q(build_1__char__slug__in=excluded_chars)
+                | Q(build_2__char__slug__in=excluded_chars)
+                | Q(build_3__char__slug__in=excluded_chars)
+            )
+
+    pagination = 1
+    total_teams_found, previous_page, next_page = get_pagination(
+        pagination, teams_found, page_number
+    )
+
+    teams_found = teams_found.order_by("-id")[
+        pagination * (page_number - 1) : page_number * pagination
+    ]
+
+    print(teams_found)
+
+    context = {
+        "search_params": query_dict.urlencode(),  # Transfer search params to pagination
+        "teams_found": teams_found,
+        "pagination": pagination,
+        "total_teams_found": total_teams_found,
+        "previous_page": previous_page,
+        "current_page": page_number,
+        "next_page": next_page,
+    }
+
+    return render(request, "team_search_results.html", context)
+
+
+@login_required
+def delete_team_view(request, team_slug):
+    try:
+        team = TeamModel.objects.filter(slug=team_slug)
+    except TeamModel.DoesNotExist:
+        return redirect("oops")
+
+    # Delete related_teams only if the user is the owner
+    if len(team) > 0 and team[0].creator == request.user:
+        team.delete()
+        return render(
+            request,
+            "team_deleted.html",
+            {"delete_status": "Team has been deleted."},
+        )
+
+    return redirect("oops")

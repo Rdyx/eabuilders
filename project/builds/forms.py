@@ -4,9 +4,10 @@ from django.conf import settings
 from django.utils.text import slugify
 from django.shortcuts import redirect
 
+from dal import autocomplete
 from django_quill.fields import QuillFormField
 
-from .models import BuildModel
+from .models import BuildModel, TeamModel
 
 from characters.models import SkillModel, CharacterModel
 
@@ -111,7 +112,7 @@ class BuildSelectionForm(forms.Form):
         build = BuildModel()
 
         build.creator = request.user
-        build.name = build_name
+        build.name = self.cleaned_data["build_name"]
         build.version = build_version
         build.slug = slugify("{}-{}".format(build_name, build_version))
         build.notes = self.cleaned_data["notes"]
@@ -141,6 +142,9 @@ class BuildSelectionForm(forms.Form):
 class SearchBuildForm(forms.ModelForm):
     creator = forms.CharField(label="Build's creator name contains", required=False)
     name = forms.CharField(label="Build's name contains", required=False)
+    game_mode = forms.MultipleChoiceField(
+        choices=[(i, i) for i in ["Lab", "Arena"]], required=False
+    )
 
     class Meta:
         model = BuildModel
@@ -194,5 +198,114 @@ class SearchBuildForm(forms.ModelForm):
             self.fields["exclude_items"] = forms.MultipleChoiceField(
                 choices=self.items_values,
                 label="Build must not uses item(s)",
+                initial="",
+            )
+
+
+class TeamCreateForm(forms.Form):
+    def _get_autocomplete_field(qs, url, min_input_len):
+        return forms.ModelChoiceField(
+            queryset=qs,
+            widget=autocomplete.ModelSelect2(
+                url=url,
+                attrs={
+                    # Only trigger autocompletion after N characters have been typed
+                    "data-minimum-input-length": min_input_len,
+                },
+            ),
+        )
+
+    qs = BuildModel.objects.all().select_related("creator", "char")
+
+    name = forms.CharField(max_length=100)
+    notes = QuillFormField(max_length=500, required=False)
+    game_mode = forms.ChoiceField(choices=[(i, i) for i in ["Lab", "Arena"]])
+
+    build_1 = _get_autocomplete_field(qs, "build-autocomplete", 3)
+    build_2 = _get_autocomplete_field(qs, "build-autocomplete", 3)
+    build_3 = _get_autocomplete_field(qs, "build-autocomplete", 3)
+
+    def update(self, *args, request, team_slug, **kwargs):
+        team = TeamModel.objects.get(slug=team_slug)
+        team.notes = self.cleaned_data["notes"]
+        if team.creator == request.user:
+            team.save()
+            return {"name": team.name, "slug": team.slug}
+
+    def save(self, *args, request, **kwargs):
+        team_name = self.cleaned_data["name"]
+        team_exists = TeamModel.objects.filter(name=team_name).count()
+
+        build_1 = self.cleaned_data["build_1"]
+        build_2 = self.cleaned_data["build_2"]
+        build_3 = self.cleaned_data["build_3"]
+
+        # If a build has been selected twice (no matter which versions)
+        if build_1.name in [build_2.name, build_3.name] or build_2.name == build_3.name:
+            return "A build has been selected twice (maybe with different versions?)."
+
+        # If a hero from build is appearing twice
+        if build_1.char in [build_2.char, build_3.char] or build_2.char == build_3.char:
+            return "A hero from builds has been selected twice."
+
+        if team_exists > 0:
+            return "This team name is already taken."
+
+        team = TeamModel()
+
+        team.creator = request.user
+        team.name = team_name
+        team.slug = slugify(team_name)
+        team.notes = self.cleaned_data["notes"]
+        team.game_mode = self.cleaned_data["game_mode"]
+
+        team.build_1 = self.cleaned_data["build_1"]
+        team.build_2 = self.cleaned_data["build_2"]
+        team.build_3 = self.cleaned_data["build_3"]
+
+        team.save()
+
+        return {"name": team.name, "slug": team.slug}
+
+
+# Note there's js trick to make fields non required and avoid GET request to overload url
+class SearchTeamForm(forms.ModelForm):
+    creator = forms.CharField(label="Team's creator name contains", required=False)
+    name = forms.CharField(label="Team's name contains", required=False)
+    game_mode = forms.MultipleChoiceField(
+        choices=[(i, i) for i in ["Lab", "Arena"]], required=False
+    )
+
+    class Meta:
+        model = TeamModel
+        fields = "__all__"
+        exclude = [
+            "creation_date",
+            "slug",
+            "notes",
+            "build_1",
+            "build_2",
+            "build_3",
+        ]
+
+    def __init__(self, *args, chars=[], **kwargs):
+        super(SearchTeamForm, self).__init__(*args, **kwargs)
+
+        self.chars = chars.values_list("slug", "name").order_by("name")
+
+        # Formatting items list for front-end field
+        chars_list = []
+        for char in self.chars:
+            chars_list.append([char[0], char[1]])
+
+        if chars:
+            self.chars_values = list(chars_list)
+            self.chars_values.insert(0, ("", "No selection"))
+            self.fields["chars"] = forms.MultipleChoiceField(
+                choices=self.chars_values, label="Build must uses hero(s)", initial=""
+            )
+            self.fields["exclude_chars"] = forms.MultipleChoiceField(
+                choices=self.chars_values,
+                label="Build must not uses hero(s)",
                 initial="",
             )

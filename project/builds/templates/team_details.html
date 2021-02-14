@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if team_creation_message %}
+        <div class="text-center mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            {{ team_creation_message }}
+        </div>
+    {% endif %}
+
+    {% if team.creator.username == user.username %}
+        <div class="flex justify-around text-center mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            <a href="{% url 'create_team' team_slug=team.slug %}" class="flex flex-col justify-center w-6/12 focus:outline-none hover:bg-brown-600 focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                Edit team (notes edition only)
+            </a>
+            <p id="delete-profile" onclick="deleteTeam('{% url 'delete_team' team_slug=team.slug %}'); return false;" class="mx-2 flex flex-col justify-center w-6/12 mx-2 px-2 border-l-2 border-r-2 border-brown-400 text-red-500 text-center md:w-5/12 cursor-pointer hover:bg-brown-400 focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+                Delete this team
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <div class="w-full border-b-2 border-brown-800 text-center mb-2 pb-2">
+            <a href="{% url 'get_team' team.slug %}" class="text-3xl">
+                {{ team.name }} <span class="text-base"> ({{ team.game_mode }})</span>
+            </a> by <a href="{% url 'user_profile' team.creator %}">
+                <span class="text-base">{{ team.creator | title }}</span>
+            </a>
+            - {{ team.creation_date }}
+        </div>
+
+        {% if team.notes.html %}
+            <div class="flex flex-col w-full border-b-2 border-brown-800 mb-4 pb-2">
+                <span class="mx-auto text-3xl mb-2">Notes</span>
+                <div class="flex flex-col px-2 bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 rounded-md md:mr-2 md:mb-0 mb-2 box-shadow-outline">
+                    <span>{{ team.notes.html | safe }}</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% include 'components/subcomponents/buildDiv.html' with build=build_1 %}
+        {% include 'components/subcomponents/buildDiv.html' with build=build_2 %}
+        {% include 'components/subcomponents/buildDiv.html' with build=build_3 %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/deleteBuild.js' %}"></script>
+{% endblock %}

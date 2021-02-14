@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/autocomplete.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if error_message %}
+        <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-red-500 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <div class="text-center text-white px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <form method="POST" class="w-full mt-2">
+            {% csrf_token %}
+            {% for field in team_form %}
+
+                {% if field.name == 'notes' %}
+                    {% include 'components/subcomponents/quillField.html' with field=field no_media=True %}
+                {% else %}
+                    {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" %}
+                {% endif %}
+            {% endfor %}
+
+            <input id="search-build-form-submit" type="submit" value="Submit" class="text-2xl w-5/12 mt-5 mb-2 mx-auto cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ team_form.media }}
+    <script>
+    (function($) {
+        $('#add-form').click(function() {
+            var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+            var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+            newTable.find(':input').each(function() {
+                for (attr of ['name', 'id'])
+                    $(this).attr(
+                        attr,
+                        $(this).attr(attr).replace('__prefix__', index)
+                    )
+            })
+            newTable.insertBefore($(this))
+            $('#id_inline_test_models-TOTAL_FORMS').val(
+                parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+            )
+            newTable.slideDown()
+        })
+    })($)
+    </script>
+{% endblock %}
