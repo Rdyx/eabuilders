@@ -24,44 +24,33 @@
                 {% endif %}
             {% endfor %}
 
-        {% comment %} <table style="display: none"> {% endcomment %}
-            {% comment %} {{ view.formset.empty_form }} {% endcomment %}
-        {% comment %} </table> {% endcomment %}
+            <input id="search-build-form-submit" type="submit" value="Submit" class="text-2xl w-5/12 mt-5 mb-2 mx-auto cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
+        </form>
+    </div>
 
-        {% comment %} <table> {% endcomment %}
-            {% comment %} {{ view.formset }} {% endcomment %}
-        {% comment %} </table> {% endcomment %}
+{% endblock %}
 
-        {% comment %} <span id="add-form" class="button">Add form</span> {% endcomment %}
-
-        <input id="search-build-form-submit" type="submit" value="Submit" class="text-2xl w-5/12 mt-5 mb-2 mx-auto cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
-    </form>
-</div>
-
-
-
-<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
-
-{{ team_form.media }}
-
-<script>
-(function($) {
-    $('#add-form').click(function() {
-        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
-        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
-        newTable.find(':input').each(function() {
-            for (attr of ['name', 'id'])
-                $(this).attr(
-                    attr,
-                    $(this).attr(attr).replace('__prefix__', index)
-                )
+{% block js %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ team_form.media }}
+    <script>
+    (function($) {
+        $('#add-form').click(function() {
+            var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+            var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+            newTable.find(':input').each(function() {
+                for (attr of ['name', 'id'])
+                    $(this).attr(
+                        attr,
+                        $(this).attr(attr).replace('__prefix__', index)
+                    )
+            })
+            newTable.insertBefore($(this))
+            $('#id_inline_test_models-TOTAL_FORMS').val(
+                parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+            )
+            newTable.slideDown()
         })
-        newTable.insertBefore($(this))
-        $('#id_inline_test_models-TOTAL_FORMS').val(
-            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
-        )
-        newTable.slideDown()
-    })
-})($)
-</script>
+    })($)
+    </script>
 {% endblock %}
