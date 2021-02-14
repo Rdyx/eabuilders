@@ -84,7 +84,9 @@ class BuildModel(models.Model):
     )
 
     def __str__(self):
-        return "{} (v{}) by {}".format(self.name, self.version, self.creator)
+        return "{} - {} (v{}) by {}".format(
+            self.char, self.name, self.version, self.creator
+        )
 
 
 class TeamModel(models.Model):

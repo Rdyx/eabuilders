@@ -1,0 +1,9 @@
+{% extends 'components/subcomponents/navbarSubmenuButton.html' %}
+
+{% block buttonText %}Teams{% endblock %}
+
+{% block subMenuLink %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="teams_index" linkText="Latest Teams" %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="search_team" linkText="Search Teams" %}
+    {% include 'components/subcomponents/navbarSubmenuLink.html' with view_url="create_team" linkText="Create a Team" %}
+{% endblock %}

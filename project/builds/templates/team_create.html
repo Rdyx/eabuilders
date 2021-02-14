@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/autocomplete.css' %}">
+{% endblock %}
+
 {% block content %}
     {% if error_message %}
         <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-red-500 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
@@ -8,7 +12,7 @@
         </div>
     {% endif %}
 
-    <div class="text-center px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 text-red-500 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+    <div class="text-center text-white px-3 py-2 mt-5 w-11/12 m-auto bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
         <form method="POST" class="w-full mt-2">
             {% csrf_token %}
             {% for field in team_form %}
@@ -30,7 +34,7 @@
 
         {% comment %} <span id="add-form" class="button">Add form</span> {% endcomment %}
 
-        <input type="submit" />
+        <input id="search-build-form-submit" type="submit" value="Submit" class="text-2xl w-5/12 mt-5 mb-2 mx-auto cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md"/>
     </form>
 </div>
 

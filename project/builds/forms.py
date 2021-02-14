@@ -215,7 +215,7 @@ class TeamCreateForm(forms.Form):
             ),
         )
 
-    qs = BuildModel.objects.all().select_related("creator")
+    qs = BuildModel.objects.all().select_related("creator", "char")
 
     name = forms.CharField(max_length=100)
     notes = QuillFormField(max_length=500, required=False)
@@ -225,14 +225,14 @@ class TeamCreateForm(forms.Form):
     build_2 = _get_autocomplete_field(qs, "build-autocomplete", 3)
     build_3 = _get_autocomplete_field(qs, "build-autocomplete", 3)
 
-    # class Meta:
-    #     model = TeamModel
-    #     fields = ["name", "game_mode"]
+    def update(self, *args, request, team_slug, **kwargs):
+        team = TeamModel.objects.get(slug=team_slug)
+        team.notes = self.cleaned_data["notes"]
+        if team.creator == request.user:
+            team.save()
+            return {"name": team.name, "slug": team.slug}
 
     def save(self, *args, request, **kwargs):
-        # Verify data integrity
-        post_dict = dict(request.POST)
-        print(post_dict)
         team_name = self.cleaned_data["name"]
         team_exists = TeamModel.objects.filter(name=team_name).count()
 
@@ -241,11 +241,15 @@ class TeamCreateForm(forms.Form):
         build_3 = self.cleaned_data["build_3"]
 
         # If a build has been selected twice (no matter which versions)
-        if build_1.name in [build_2.name, build_3.name]:
+        if build_1.name in [build_2.name, build_3.name] or build_2.name == build_3.name:
             return "A build has been selected twice (maybe with different versions?)."
 
+        # If a hero from build is appearing twice
+        if build_1.char in [build_2.char, build_3.char] or build_2.char == build_3.char:
+            return "A hero from builds has been selected twice."
+
         if team_exists > 0:
-            return "This build name is already taken."
+            return "This team name is already taken."
 
         team = TeamModel()
 
@@ -262,3 +266,46 @@ class TeamCreateForm(forms.Form):
         team.save()
 
         return {"name": team.name, "slug": team.slug}
+
+
+# Note there's js trick to make fields non required and avoid GET request to overload url
+class SearchTeamForm(forms.ModelForm):
+    creator = forms.CharField(label="Team's creator name contains", required=False)
+    name = forms.CharField(label="Team's name contains", required=False)
+    game_mode = forms.MultipleChoiceField(
+        choices=[(i, i) for i in ["Lab", "Arena"]], required=False
+    )
+
+    class Meta:
+        model = TeamModel
+        fields = "__all__"
+        exclude = [
+            "creation_date",
+            "slug",
+            "notes",
+            "build_1",
+            "build_2",
+            "build_3",
+        ]
+
+    def __init__(self, *args, chars=[], **kwargs):
+        super(SearchTeamForm, self).__init__(*args, **kwargs)
+
+        self.chars = chars.values_list("slug", "name").order_by("name")
+
+        # Formatting items list for front-end field
+        chars_list = []
+        for char in self.chars:
+            chars_list.append([char[0], char[1]])
+
+        if chars:
+            self.chars_values = list(chars_list)
+            self.chars_values.insert(0, ("", "No selection"))
+            self.fields["chars"] = forms.MultipleChoiceField(
+                choices=self.chars_values, label="Build must uses hero(s)", initial=""
+            )
+            self.fields["exclude_chars"] = forms.MultipleChoiceField(
+                choices=self.chars_values,
+                label="Build must not uses hero(s)",
+                initial="",
+            )

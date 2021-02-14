@@ -6,7 +6,7 @@ function removeEmptyInputs(querySelector) {
   });
 }
 
-document.getElementById('search-build-form-submit').onclick = () => {
+document.getElementById('search-form-submit').onclick = () => {
   removeEmptyInputs('input[type=text]');
   removeEmptyInputs('select');
 };
