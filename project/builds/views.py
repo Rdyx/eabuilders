@@ -396,12 +396,13 @@ def create_team_view(request, team_slug=""):
 
 def get_team_view(request, team_slug):
     try:
-        team = TeamModel.objects.filter(slug=team_slug)
+        team = TeamModel.objects.get(slug=team_slug)
+        team_qs = TeamModel.objects.filter(slug=team_slug)
 
         # Reducing queries time by getting each build from 3 different queries instead of 1 big
-        build_1 = get_base_buildmodel_request().get(id=team[0].__dict__["build_1_id"])
-        build_2 = get_base_buildmodel_request().get(id=team[0].__dict__["build_2_id"])
-        build_3 = get_base_buildmodel_request().get(id=team[0].__dict__["build_3_id"])
+        build_1 = get_base_buildmodel_request().get(id=team.__dict__["build_1_id"])
+        build_2 = get_base_buildmodel_request().get(id=team.__dict__["build_2_id"])
+        build_3 = get_base_buildmodel_request().get(id=team.__dict__["build_3_id"])
     except TeamModel.DoesNotExist:
         return redirect("oops")
 
@@ -411,16 +412,16 @@ def get_team_view(request, team_slug):
         request.session["team_created"] = ""
 
     # Looks like empty quills fields are still generating something
-    if team[0].notes.html == "<p><br></p>":
-        team[0].notes = {}
+    if team.notes.html == "<p><br></p>":
+        team.notes = {}
 
     if request.user.is_authenticated:
-        update_model_votes(request, team)
+        update_model_votes(request, team_qs)
     else:
         redirect("login")
 
     context = {
-        "team": team[0],
+        "team": team_qs[0],
         "build_1": build_1,
         "build_2": build_2,
         "build_3": build_3,
