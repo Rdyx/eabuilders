@@ -12,5 +12,4 @@ Endless Arena "social" build sharing application based on django
 - Add hitcounter urls
 
 - Templates
-  - Oopsi page
   - Add teams on profile page

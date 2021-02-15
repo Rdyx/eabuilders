@@ -4,4 +4,11 @@
 {% block title %}Oops{% endblock %}
 
 {% block content %}
+    <div class="text-center mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+        <p class="text-9xl mb-5">Oops!</p>
+        <p class="my-5">Something wrong happened...</p>
+        <a href="{% url 'index' %}" class="cursor-pointer hover:bg-brown-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-brown-900 px-3 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+            Get back to home
+        </a>
+    </div>
 {% endblock %}
