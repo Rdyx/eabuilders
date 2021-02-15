@@ -16,6 +16,8 @@
 		<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 		{% include 'django_quill/media.html' %}
 		{% block css %}{% endblock %}
+		<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/hitcounter.js' %}"></script>
 	</head>
 
 	<body class="bg-grey-lightest font-sans leading-normal tracking-normal mb-5">
@@ -26,6 +28,10 @@
 
 		<script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/alpine.js' %}"></script>
+		<script type="text/javascript">
+			const baseUrl = window.origin;
+			updateHitCounterText(baseUrl, 'main-hitcounter', true);
+		</script>
 		{% block js %}{% endblock %}
 	</body>
 

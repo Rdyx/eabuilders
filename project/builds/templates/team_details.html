@@ -31,11 +31,21 @@
                 </a>
                 - {{ team.creation_date }}
             </div>
-            {% if team_votes %}
-                {% include 'components/subcomponents/votesDiv.html' with model=team %}
-            {% else %}
-                {% include 'components/subcomponents/votesShowOnly.html' with model=team %}
-            {% endif %}
+            <div class="flex flex-col md:flex-row ml-2">
+                <div class="flex text-2xl w-full md:w-auto justify-center px-3 mx-auto mb-2 mb:mb-auto bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md h-full">
+                    <span class="fill-current w-6 object-fill stroke-2 mr-2 my-auto">
+                        {% include 'assets/eye.svg' %}
+                    </span>
+                    <span id="{{ team.slug }}-hitcounter" class="my-auto">
+                        ...
+                    </span>
+                </div>
+                {% if team_votes %}
+                    {% include 'components/subcomponents/votesDiv.html' with model=team %}
+                {% else %}
+                    {% include 'components/subcomponents/votesShowOnly.html' with model=team %}
+                {% endif %}
+            </div>
         </div>
 
         {% if team.notes.html %}
@@ -55,4 +65,9 @@
 
 {% block js %}
     <script type="text/javascript" src="{% static 'js/deleteBuild.js' %}"></script>
+    <script type="text/javascript">
+        var url = '{% url 'get_team' team.slug %}';
+        var teamDivHitcounterId = '{{ team.slug | safe }}-hitcounter';
+        updateHitCounterText(url, teamDivHitcounterId, true);
+    </script>
 {% endblock %}

@@ -258,29 +258,21 @@ def search_build_results_view(request, page_number=1):
         creator = query_dict.get("creator", "")
         name = query_dict.get("name", "")
         game_mode = query_dict.getlist("game_mode", "")
-        votes = query_dict.getlist("votes", "")
+        votes = query_dict.get("votes", "")
         selected_items = query_dict.getlist("items")
         excluded_items = query_dict.getlist("exclude_items")
 
         if creator:
-            builds_found = builds_found.filter(
-                Q(creator__username__icontains=query_dict.get("creator", ""))
-            )
+            builds_found = builds_found.filter(Q(creator__username__icontains=creator))
 
         if name:
-            builds_found = builds_found.filter(
-                Q(name__icontains=query_dict.get("name", ""))
-            )
+            builds_found = builds_found.filter(Q(name__icontains=name))
 
         if len(game_mode) > 0:
-            builds_found = builds_found.filter(
-                Q(game_mode__in=query_dict.getlist("game_mode"))
-            )
+            builds_found = builds_found.filter(Q(game_mode__in=game_mode))
 
         if votes:
-            builds_found = builds_found.filter(
-                Q(votes__gte=query_dict.get("votes", ""))
-            )
+            builds_found = builds_found.filter(Q(votes__gte=votes))
 
         # If items have been selected
         if len(selected_items) > 0:
@@ -478,22 +470,16 @@ def search_team_results_view(request, page_number=1):
         excluded_chars = query_dict.getlist("exclude_chars")
 
         if creator:
-            teams_found = teams_found.filter(
-                Q(creator__username__icontains=query_dict.get("creator", ""))
-            )
+            teams_found = teams_found.filter(Q(creator__username__icontains=creator))
 
         if name:
-            teams_found = teams_found.filter(
-                Q(name__icontains=query_dict.get("name", ""))
-            )
+            teams_found = teams_found.filter(Q(name__icontains=name))
 
         if len(game_mode) > 0:
-            teams_found = teams_found.filter(
-                Q(game_mode__in=query_dict.getlist("game_mode"))
-            )
+            teams_found = teams_found.filter(Q(game_mode__in=game_mode))
 
         if votes:
-            teams_found = teams_found.filter(Q(votes__gte=query_dict.get("votes", "")))
+            teams_found = teams_found.filter(Q(votes__gte=votes))
 
         # If chars have been selected
         if len(selected_chars) > 0:

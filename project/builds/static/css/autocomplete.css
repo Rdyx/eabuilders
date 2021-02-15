@@ -1,5 +1,9 @@
 /* Override autocomplete default css */
 
+.select2 {
+    min-width: auto !important;
+}
+
 .select2-selection__rendered {
     color: #FFF !important;
 }
