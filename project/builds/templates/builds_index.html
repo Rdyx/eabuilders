@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Latest Builds{% endblock %}
+
 {% block content %}
     {% for build in builds %}
         {% include 'components/subcomponents/buildDiv.html' with build=build %}

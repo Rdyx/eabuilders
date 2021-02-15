@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}{{ news.title }}{% endblock %}
+
 {% block content %}
     <div class="mt-5 w-11/12 px-3 pb-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
         <div class="font-bold border-b-2 border-brown-800 px-2 pb-1">
             <p class="text-3xl">{{ news.title}}</p>
-        </div>    
+        </div>
         <div class="px-8 py-2">
             <p>{{ news.content.html | safe }}</p>
         </div>
         <div class="border-t-2 border-brown-800 px-2 pt-1 text-right">
             <p>
-                Published on <span class="font-semibold">{{ news.creation_date }}</span> by 
+                Published on <span class="font-semibold">{{ news.creation_date }}</span> by
                 <a href="{% url 'user_profile' news.author %}">
                     <span class="font-semibold">{{ news.author | title }}</span>
                 </a>
