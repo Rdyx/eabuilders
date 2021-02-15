@@ -115,7 +115,6 @@ def update_model_votes(request, qs):
     if request.method == "POST":
         votes_qs = VotesModel.objects.filter(user=request.user, target=qs[0].id)
 
-        print(request.POST)
         new_vote = VotesModel()
         new_vote.user = request.user
         new_vote.target = qs[0].id
