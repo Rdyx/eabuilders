@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Latest Teams{% endblock %}
+
 {% block content %}
     {% for team in teams %}
         {% include 'components/subcomponents/teamDiv.html' with team=team %}

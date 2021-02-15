@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}News{% endblock %}
+
 {% block content %}
     {% for news in all_news %}
         <div class="flex justify-between px-3 py-2 mt-5 w-11/12 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
@@ -10,7 +12,7 @@
                 </a>
                 </p>
             <p class="text-right w-2/5">
-                <span class="font-semibold">{{ news.creation_date }}</span> by 
+                <span class="font-semibold">{{ news.creation_date }}</span> by
                 <a href="{% url 'user_profile' news.author %}">
                     <span class="font-semibold">{{ news.author | title }}</span>
                 </a>

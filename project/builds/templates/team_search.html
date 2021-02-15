@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Teams Search{% endblock %}
+
 {% block content %}
     <div class="text-center px-3 py-2 mt-5 w-11/12 md:w-3/5 m-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
         <form id="search-team-form" action="{% url 'search_team_results' %}" method="GET" class="w-full mt-2">

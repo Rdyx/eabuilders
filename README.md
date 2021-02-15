@@ -8,8 +8,9 @@ Endless Arena "social" build sharing application based on django
 
 # TODO
 
+- Populate database
 - Add hitcounter urls
 
 - Templates
   - Oopsi page
-  - Add Titles
+  - Add teams on profile page

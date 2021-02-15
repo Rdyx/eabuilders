@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Team {{ team.name }}{% endblock %}
+
 {% block content %}
     {% if team_creation_message %}
         <div class="text-center mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
