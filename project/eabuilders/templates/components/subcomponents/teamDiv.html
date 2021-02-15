@@ -45,11 +45,6 @@
 
 <script type="text/javascript">
     var url = '{% url 'get_team' team.slug %}';
-    var teamDivHitcounterId = '{{ team.slug | safe }}-hitcounter'
-
-    if ('{{ hitcount }}') {
-        updateHitCounterText(url, teamDivHitcounterId, true);
-    } else {
-        updateHitCounterText(url, teamDivHitcounterId, false);
-    }
+    var teamDivHitcounterId = '{{ team.slug | safe }}-hitcounter';
+    updateHitCounterText(url, teamDivHitcounterId, false);
 </script>
