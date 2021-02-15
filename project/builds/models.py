@@ -22,6 +22,7 @@ class BuildModel(models.Model):
     game_mode = models.CharField(
         choices=[(i, i) for i in ["Lab", "Arena"]], max_length=15, null=False
     )
+    votes = models.IntegerField(null=False, default=0)
     skill_1 = models.ForeignKey(
         "characters.SkillModel",
         on_delete=models.CASCADE,
@@ -102,6 +103,7 @@ class TeamModel(models.Model):
     game_mode = models.CharField(
         choices=[(i, i) for i in ["Lab", "Arena"]], max_length=15, null=False
     )
+    votes = models.IntegerField(null=False, default=0)
     build_1 = models.ForeignKey(
         "BuildModel", on_delete=models.CASCADE, null=False, related_name="build_1"
     )
@@ -114,3 +116,14 @@ class TeamModel(models.Model):
 
     def __str__(self):
         return "{} by {}".format(self.name, self.creator)
+
+
+class VotesModel(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=False,
+    )
+    # Foreign Key ID from Build AND team (common field)
+    target = models.IntegerField()
+    value = models.IntegerField()

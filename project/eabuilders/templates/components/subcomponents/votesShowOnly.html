@@ -1,0 +1,5 @@
+<div class="my-auto ml-2 bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+    <span class="text-2xl mx-3 text-{% if model.votes > 0 %}green-400{% elif model.votes < 0 %}red-500{% else %}white{% endif %}">
+        {% if model.votes > 0 %}+{% endif %}{{ model.votes }}
+    </span>
+</div>
