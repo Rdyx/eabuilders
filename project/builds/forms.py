@@ -97,22 +97,22 @@ class BuildSelectionForm(forms.Form):
                 "item_8",
             )
             build_version = builds.count() + 1
-            selected_skill_are_valid = check_form_values(post_dict, "skill", 6)
-            selected_items_are_valid = check_form_values(post_dict, "item", 8)
 
         except CharacterModel.DoesNotExist:
             redirect("oops")
 
-        if not selected_skill_are_valid or not selected_items_are_valid:
-            return "A skill or an item has been selected twice."
-
         if build_version > 1 and builds[0].creator != request.user:
             return "This build name is already taken."
+
+        selected_skill_are_valid = check_form_values(post_dict, "skill", 6)
+        selected_items_are_valid = check_form_values(post_dict, "item", 8)
+        if not selected_skill_are_valid or not selected_items_are_valid:
+            return "A skill or an item has been selected twice."
 
         build = BuildModel()
 
         build.creator = request.user
-        build.name = self.cleaned_data["build_name"]
+        build.name = build_name
         build.version = build_version
         build.slug = slugify("{}-{}".format(build_name, build_version))
         build.notes = self.cleaned_data["notes"]
@@ -145,6 +145,7 @@ class SearchBuildForm(forms.ModelForm):
     game_mode = forms.MultipleChoiceField(
         choices=[(i, i) for i in ["Lab", "Arena"]], required=False
     )
+    votes = forms.IntegerField(label="Minimum number of positive votes", required=False)
 
     class Meta:
         model = BuildModel
@@ -240,6 +241,9 @@ class TeamCreateForm(forms.Form):
         build_2 = self.cleaned_data["build_2"]
         build_3 = self.cleaned_data["build_3"]
 
+        if team_exists > 0:
+            return "This team name is already taken."
+
         # If a build has been selected twice (no matter which versions)
         if build_1.name in [build_2.name, build_3.name] or build_2.name == build_3.name:
             return "A build has been selected twice (maybe with different versions?)."
@@ -247,9 +251,6 @@ class TeamCreateForm(forms.Form):
         # If a hero from build is appearing twice
         if build_1.char in [build_2.char, build_3.char] or build_2.char == build_3.char:
             return "A hero from builds has been selected twice."
-
-        if team_exists > 0:
-            return "This team name is already taken."
 
         team = TeamModel()
 
@@ -275,6 +276,7 @@ class SearchTeamForm(forms.ModelForm):
     game_mode = forms.MultipleChoiceField(
         choices=[(i, i) for i in ["Lab", "Arena"]], required=False
     )
+    votes = forms.IntegerField(label="Minimum number of positive votes", required=False)
 
     class Meta:
         model = TeamModel

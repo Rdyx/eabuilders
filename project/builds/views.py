@@ -23,6 +23,7 @@ from .utils import (
     check_form_values,
     get_char_skills,
     get_build_sets_bonus,
+    update_model_votes,
 )
 
 
@@ -142,6 +143,7 @@ def get_build_view(request, build_slug):
 
     try:
         build = get_base_buildmodel_request().get(slug=build_slug)
+        build_qs = get_base_buildmodel_request().filter(slug=build_slug)
         build_versions_list = list(
             BuildModel.objects.filter(name=build.name)
             .all()
@@ -177,13 +179,19 @@ def get_build_view(request, build_slug):
         if build.version > 1:
             prev_build_version = build_versions_list[current_build_version_index - 1]
 
+    if request.user.is_authenticated:
+        update_model_votes(request, build_qs)
+    else:
+        redirect("login")
+
     context = {
-        "build": build,
+        "build": build_qs[0],
         "build_creation_message": build_creation_message,
         "prev_build_version": prev_build_version,
         "next_build_version": next_build_version,
         "last_build_version": last_build_version,
         "build_sets_bonus": build_sets_bonus,
+        "build_votes": True,
     }
 
     return render(request, "build_details.html", context)
@@ -250,6 +258,7 @@ def search_build_results_view(request, page_number=1):
         creator = query_dict.get("creator", "")
         name = query_dict.get("name", "")
         game_mode = query_dict.getlist("game_mode", "")
+        votes = query_dict.getlist("votes", "")
         selected_items = query_dict.getlist("items")
         excluded_items = query_dict.getlist("exclude_items")
 
@@ -266,6 +275,11 @@ def search_build_results_view(request, page_number=1):
         if len(game_mode) > 0:
             builds_found = builds_found.filter(
                 Q(game_mode__in=query_dict.getlist("game_mode"))
+            )
+
+        if votes:
+            builds_found = builds_found.filter(
+                Q(votes__gte=query_dict.get("votes", ""))
             )
 
         # If items have been selected
@@ -382,12 +396,12 @@ def create_team_view(request, team_slug=""):
 
 def get_team_view(request, team_slug):
     try:
-        team = TeamModel.objects.get(slug=team_slug)
+        team = TeamModel.objects.filter(slug=team_slug)
 
         # Reducing queries time by getting each build from 3 different queries instead of 1 big
-        build_1 = get_base_buildmodel_request().get(id=team.__dict__["build_1_id"])
-        build_2 = get_base_buildmodel_request().get(id=team.__dict__["build_2_id"])
-        build_3 = get_base_buildmodel_request().get(id=team.__dict__["build_3_id"])
+        build_1 = get_base_buildmodel_request().get(id=team[0].__dict__["build_1_id"])
+        build_2 = get_base_buildmodel_request().get(id=team[0].__dict__["build_2_id"])
+        build_3 = get_base_buildmodel_request().get(id=team[0].__dict__["build_3_id"])
     except TeamModel.DoesNotExist:
         return redirect("oops")
 
@@ -397,15 +411,21 @@ def get_team_view(request, team_slug):
         request.session["team_created"] = ""
 
     # Looks like empty quills fields are still generating something
-    if team.notes.html == "<p><br></p>":
-        team.notes = {}
+    if team[0].notes.html == "<p><br></p>":
+        team[0].notes = {}
+
+    if request.user.is_authenticated:
+        update_model_votes(request, team)
+    else:
+        redirect("login")
 
     context = {
-        "team": team,
+        "team": team[0],
         "build_1": build_1,
         "build_2": build_2,
         "build_3": build_3,
         "team_creation_message": team_creation_message,
+        "team_votes": True,
     }
 
     return render(request, "team_details.html", context)
@@ -452,6 +472,7 @@ def search_team_results_view(request, page_number=1):
         creator = query_dict.get("creator", "")
         name = query_dict.get("name", "")
         game_mode = query_dict.getlist("game_mode", "")
+        votes = query_dict.get("votes", "")
         selected_chars = query_dict.getlist("chars")
         excluded_chars = query_dict.getlist("exclude_chars")
 
@@ -469,6 +490,9 @@ def search_team_results_view(request, page_number=1):
             teams_found = teams_found.filter(
                 Q(game_mode__in=query_dict.getlist("game_mode"))
             )
+
+        if votes:
+            teams_found = teams_found.filter(Q(votes__gte=query_dict.get("votes", "")))
 
         # If chars have been selected
         if len(selected_chars) > 0:
@@ -494,8 +518,6 @@ def search_team_results_view(request, page_number=1):
     teams_found = teams_found.order_by("-id")[
         pagination * (page_number - 1) : page_number * pagination
     ]
-
-    print(teams_found)
 
     context = {
         "search_params": query_dict.urlencode(),  # Transfer search params to pagination

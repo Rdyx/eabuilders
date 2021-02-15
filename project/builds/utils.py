@@ -1,7 +1,9 @@
+from django.db.models import F
+
 from characters.models import SkillModel
 from items.models import ItemModel, RaceModel, MaterialModel
 
-from .models import BuildModel
+from .models import BuildModel, VotesModel
 
 
 def get_selected_skills(request):
@@ -107,3 +109,28 @@ def get_build_sets_bonus(build):
         _get_sets_bonus(RaceModel, races_counter_dict),
         _get_sets_bonus(MaterialModel, materials_counter_dict),
     )
+
+
+def update_model_votes(request, qs):
+    if request.method == "POST":
+        votes_qs = VotesModel.objects.filter(user=request.user, target=qs[0].id)
+
+        print(request.POST)
+        new_vote = VotesModel()
+        new_vote.user = request.user
+        new_vote.target = qs[0].id
+
+        if request.POST.get("upvote", None):
+            new_vote.value = 1
+        elif request.POST.get("downvote", None):
+            new_vote.value = -1
+
+        if not votes_qs:
+            new_vote.save()
+            qs.update(votes=F("votes") + new_vote.value)
+        else:
+            # If vote value is different than previous one, update vote value and double qs vote value
+            # i.e: -1 into 1 = 2
+            if votes_qs[0].value != new_vote.value:
+                votes_qs.update(value=new_vote.value)
+                qs.update(votes=F("votes") + new_vote.value * 2)

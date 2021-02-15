@@ -8,10 +8,8 @@ Endless Arena "social" build sharing application based on django
 
 # TODO
 
-- Add votes system for builds
-- Add Teams system
 - Add hitcounter urls
 
 - Templates
-
+  - Oopsi page
   - Add Titles
