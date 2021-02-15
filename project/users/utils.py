@@ -1,4 +1,4 @@
-from builds.models import BuildModel
+from builds.models import BuildModel, TeamModel
 
 
 def get_user_builds(user):
@@ -28,4 +28,12 @@ def get_user_builds(user):
         "item_7__material",
         "item_8__race",
         "item_8__material",
+    )
+
+
+def get_user_teams(user):
+    return TeamModel.objects.filter(creator=user).select_related(
+        "build_1__char",
+        "build_2__char",
+        "build_3__char",
     )

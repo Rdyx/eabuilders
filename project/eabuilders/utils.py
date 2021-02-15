@@ -9,7 +9,7 @@ tiers_colors = {
 
 def get_pagination(pagination, queryset, page_number):
     """ Get pagination variables """
-    total_builds_found = queryset.count()
+    total_builds_found = len(queryset)
     previous_page = page_number - 1 if page_number > 1 else 0
     next_page = (
         page_number + 1 if (page_number * pagination) < total_builds_found else 0

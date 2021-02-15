@@ -1,3 +1,6 @@
+from itertools import chain
+from operator import attrgetter
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.hashers import check_password, make_password
@@ -7,7 +10,7 @@ from django.template import loaders
 from eabuilders.utils import get_pagination
 
 from .forms import SigninForm, EditUserForm, UserCreationForm, UserChangeForm
-from .utils import get_user_builds
+from .utils import get_user_builds, get_user_teams
 
 
 User = get_user_model()
@@ -80,12 +83,20 @@ def user_profile_view(request, username, page_number=1):
     except User.DoesNotExist:
         return redirect("oops")
 
-    pagination = 2
-    total_user_builds, previous_page, next_page = get_pagination(
-        pagination, get_user_builds(user_profile), page_number
+    user_builds = get_user_builds(user_profile)
+    user_team = get_user_teams(user_profile)
+
+    # join builds and teams and reverse order based on creation date (DateTime)
+    user_builds_and_teams = sorted(
+        chain(user_builds, user_team), key=attrgetter("creation_date"), reverse=True
     )
 
-    user_builds = get_user_builds(user_profile).order_by("-id")[
+    pagination = 10
+    total_user_builds_and_teams, previous_page, next_page = get_pagination(
+        pagination, user_builds_and_teams, page_number
+    )
+
+    user_builds_and_teams = user_builds_and_teams[
         pagination * (page_number - 1) : page_number * pagination
     ]
 
@@ -95,8 +106,8 @@ def user_profile_view(request, username, page_number=1):
 
     context = {
         "user_profile": user_profile,
-        "user_builds": user_builds,
-        "total_user_builds": total_user_builds,
+        "user_builds_and_teams": user_builds_and_teams,
+        "total_user_builds_and_teams": total_user_builds_and_teams,
         "pagination": pagination,
         "previous_page": previous_page,
         "current_page": page_number,
