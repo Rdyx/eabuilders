@@ -124,9 +124,6 @@ class VotesModel(models.Model):
         on_delete=models.CASCADE,
         null=False,
     )
-    # target = models.ForeignKey(
-    #     "BuildModel", on_delete=models.CASCADE, null=False, related_name="build"
-    # )
     # Foreign Key ID from Build AND team (common field)
     target = models.IntegerField()
     value = models.IntegerField()
