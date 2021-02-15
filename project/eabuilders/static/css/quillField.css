@@ -70,3 +70,7 @@
 .ql-formats:last-child {
     border: none;
 }
+
+.ql-editor.ql-blank {
+    min-height: 8rem;
+}

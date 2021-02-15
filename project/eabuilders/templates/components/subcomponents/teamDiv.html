@@ -8,7 +8,17 @@
             </a>
             - {{ team.creation_date }}
         </div>
-        {% include 'components/subcomponents/votesShowOnly.html' with model=team %}
+        <div class="flex flex-col md:flex-row ml-2">
+            <div class="flex text-2xl w-full md:w-auto px-3 mx-auto mb-2 md:mb-auto bg-brown-900 border-2 border-brown-400 bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md h-full">
+                <span class="fill-current w-6 object-fill stroke-2 mr-2 my-auto">
+                    {% include 'assets/eye.svg' %}
+                </span>
+                <span id="{{ team.slug }}-hitcounter" class="my-auto">
+                    ...
+                </span>
+            </div>
+            {% include 'components/subcomponents/votesShowOnly.html' with model=team %}
+        </div>
     </div>
 
     <div class="flex flex-row justify-around py-2">
@@ -32,3 +42,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var url = '{% url 'get_team' team.slug %}';
+    var teamDivHitcounterId = '{{ team.slug | safe }}-hitcounter'
+
+    if ('{{ hitcount }}') {
+        updateHitCounterText(url, teamDivHitcounterId, true);
+    } else {
+        updateHitCounterText(url, teamDivHitcounterId, false);
+    }
+</script>
