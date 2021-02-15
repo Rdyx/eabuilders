@@ -50,9 +50,14 @@
         </div>
     </div>
 
-    {% if total_user_builds > 0 %}
-        {% for build in user_builds %}
-            {% include 'components/subcomponents/buildDiv.html' with build=build %}
+    {% if total_user_builds_and_teams > 0 %}
+        {% for item in user_builds_and_teams %}
+            {% comment %} Only builds have versions {% endcomment %}
+            {% if item.version %}
+                {% include 'components/subcomponents/buildDiv.html' with build=item %}
+            {% else %}
+                {% include 'components/subcomponents/teamDiv.html' with team=item %}
+            {% endif %}
         {% endfor %}
 
         <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md text-sm">
@@ -60,7 +65,7 @@
                 <a href="{% url 'user_profile' user_profile.username previous_page %}">< Previous Page</a>
             {% endif %}
 
-            <p>Page {{ current_page }} of {% widthratio total_user_builds pagination 1 %}</p>
+            <p>Page {{ current_page }} of {% widthratio total_user_builds_and_teams pagination 1 %}</p>
 
             {% if next_page %}
                 <a href="{% url 'user_profile' user_profile.username next_page %}">Next Page ></a>

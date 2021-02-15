@@ -12,7 +12,7 @@ class BuildModel(models.Model):
         null=False,
     )
     version = models.IntegerField(null=False)
-    creation_date = models.DateField(null=False, default=timezone.now)
+    creation_date = models.DateTimeField(null=False, default=timezone.now)
     name = models.CharField(max_length=100, null=False)
     slug = models.SlugField(max_length=120, null=False, unique=True)
     notes = QuillField(max_length=500, blank=True, null=True)
@@ -96,7 +96,7 @@ class TeamModel(models.Model):
         on_delete=models.CASCADE,
         null=False,
     )
-    creation_date = models.DateField(null=False, default=timezone.now)
+    creation_date = models.DateTimeField(null=False, default=timezone.now)
     name = models.CharField(max_length=100, null=False, unique=True)
     slug = models.SlugField(max_length=120, null=False, unique=True)
     notes = QuillField(max_length=500, blank=True, null=True)

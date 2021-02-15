@@ -28,7 +28,7 @@ from .utils import (
 
 
 def builds_index_view(request, page_number=1):
-    pagination = 1
+    pagination = 10
     total_builds, previous_page, next_page = get_pagination(
         pagination, BuildModel.objects.all(), page_number
     )
@@ -308,7 +308,7 @@ def search_build_results_view(request, page_number=1):
                 | Q(item_8__slug__in=excluded_items)
             )
 
-    pagination = 1
+    pagination = 10
     total_builds_found, previous_page, next_page = get_pagination(
         pagination, builds_found, page_number
     )
@@ -433,7 +433,7 @@ def get_team_view(request, team_slug):
 
 
 def teams_index_view(request, page_number=1):
-    pagination = 1
+    pagination = 10
     total_teams, previous_page, next_page = get_pagination(
         pagination, TeamModel.objects.all(), page_number
     )
@@ -511,7 +511,7 @@ def search_team_results_view(request, page_number=1):
                 | Q(build_3__char__slug__in=excluded_chars)
             )
 
-    pagination = 1
+    pagination = 10
     total_teams_found, previous_page, next_page = get_pagination(
         pagination, teams_found, page_number
     )
