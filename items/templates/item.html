@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load custom_filters %}
+{% load static %} {% load custom_filters %}
 
 {% block title %}{{ item.name }}{% endblock %}
 
@@ -11,7 +11,7 @@
             </p>
         </div>
         <div class="w-full border-b-2 border-brown-800 text-center mb-4 pb-2">
-            <img src="/media/{{ item.img }}" alt="{{ item.name }}" class="m-auto">
+            <img src="{% get_media_prefix %}{{ item.img }}" alt="{{ item.name }}" class="m-auto">
         </div>
         <div class="w-full border-brown-800 text-center mb-2">
             {% include 'components/subcomponents/itemPriceSpan.html' with item=item %}

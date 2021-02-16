@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
     <div class="flex justify-between w-full border-b-2 border-brown-800 text-center mb-2 pb-2">
         <div class="my-auto">
@@ -23,19 +25,19 @@
 
     <div class="flex flex-row justify-around py-2">
         <div class="flex flex-col self-center justify-center md:w-1/6 w-2/6">
-            <img src="/media/{{ team.build_1.char.img }}" alt="{{ team.build_1.char.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-cover">
+            <img src="{% get_media_prefix %}{{ team.build_1.char.img }}" alt="{{ team.build_1.char.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-cover">
             <a href="{% url 'get_build' team.build_1.slug %}" class="text-center pt-2">
                 <span>{{ team.build_1.name }} (v{{ team.build_1.version }})</span>
             </a>
         </div>
         <div class="flex flex-col self-center justify-center md:w-1/6 w-2/6 mx-3">
-            <img src="/media/{{ team.build_2.char.img }}" alt="{{ team.build_2.char.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-cover">
+            <img src="{% get_media_prefix %}{{ team.build_2.char.img }}" alt="{{ team.build_2.char.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-cover">
             <a href="{% url 'get_build' team.build_2.slug %}" class="text-center pt-2">
                 <span>{{ team.build_2.name }} (v{{ team.build_2.version }})</span>
             </a>
         </div>
         <div class="flex flex-col self-center justify-center md:w-1/6 w-2/6">
-            <img src="/media/{{ team.build_3.char.img }}" alt="{{ team.build_3.char.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-cover">
+            <img src="{% get_media_prefix %}{{ team.build_3.char.img }}" alt="{{ team.build_3.char.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-cover">
             <a href="{% url 'get_build' team.build_3.slug %}" class="text-center pt-2">
                 <span>{{ team.build_3.name }} (v{{ team.build_3.version }})</span>
             </a>

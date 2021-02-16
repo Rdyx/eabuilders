@@ -24,7 +24,7 @@ function updateSkillDiv(e) {
         if (skill_fields) {
             skill_color = skill_fields.deprecated ? 'black' : skill_fields.stype[1];
 
-            target_img.style.backgroundImage = "url(/media/"+skill_fields.img+"), radial-gradient("+skill_color+","+skill_color+",black)";
+            target_img.style.backgroundImage = "url("+media_url+skill_fields.img+"), radial-gradient("+skill_color+","+skill_color+",black)";
             target_name.innerHTML = skill_fields.name;
             target_name.style.color = skill_color;
 
@@ -57,7 +57,7 @@ function updateItemDiv(e) {
     hp = document.getElementById(e.name+'_hp');
     phys_atk = document.getElementById(e.name+'_phys_atk');
     mag_atk = document.getElementById(e.name+'_mag_atk');
-    pyhs_def = document.getElementById(e.name+'_pyhs_def');
+    phys_def = document.getElementById(e.name+'_phys_def');
     mag_def = document.getElementById(e.name+'_mag_def');
     acc = document.getElementById(e.name+'_acc');
     res = document.getElementById(e.name+'_res');
@@ -75,9 +75,9 @@ function updateItemDiv(e) {
         if (item_fields) {
             item_color = "text-" + tiers_colors[item_fields.tier];
 
-            target_img.src = "/media/"+item_fields.img;
-            race_img.src = "/media/"+item_fields.race[0];
-            material_img.src = "/media/"+item_fields.material[0];
+            target_img.src = media_url+item_fields.img;
+            race_img.src = media_url+item_fields.race[0];
+            material_img.src = media_url+item_fields.material[0];
 
             target_name.innerHTML = item_fields.name;
             target_name.classList.add(item_color);
@@ -88,17 +88,17 @@ function updateItemDiv(e) {
             sell.innerHTML = item_fields.sell_cost
 
             hp.innerHTML = item_fields.hp
-            phys_atk.innerHTML = item_fields.hp
-            mag_atk.innerHTML = item_fields.hp
-            pyhs_def.innerHTML = item_fields.hp
-            mag_def.innerHTML = item_fields.hp
-            acc.innerHTML = item_fields.hp
-            res.innerHTML = item_fields.hp
-            ign_phys.innerHTML = item_fields.hp
-            ign_mag.innerHTML = item_fields.hp
-            speed.innerHTML = item_fields.hp
-            crit_rate.innerHTML = item_fields.hp
-            crit_dmg.innerHTML = item_fields.hp
+            phys_atk.innerHTML = item_fields.phys_atk
+            mag_atk.innerHTML = item_fields.mag_atk
+            phys_def.innerHTML = item_fields.phys_def
+            mag_def.innerHTML = item_fields.mag_def
+            acc.innerHTML = item_fields.acc
+            res.innerHTML = item_fields.res
+            ign_phys.innerHTML = item_fields.ign_phys
+            ign_mag.innerHTML = item_fields.ign_mag
+            speed.innerHTML = item_fields.speed
+            crit_rate.innerHTML = item_fields.crit_rate
+            crit_dmg.innerHTML = item_fields.crit_dmg
 
             target_div.classList.remove('hidden');
         } else {

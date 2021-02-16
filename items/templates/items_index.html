@@ -7,18 +7,18 @@
     {% comment %} Desktop {% endcomment %}
     <div class="hidden md:flex md:flex-col w-11/12 justify-around mt-5 px-3 mx-auto">
         {% for item in items %}
-            {% if forloop.counter0|divisibleby:12 %}
+            {% if forloop.counter0|divisibleby:6 %}
                 </div>
             {% endif %}
 
-            {% if forloop.first or forloop.counter0|divisibleby:12 %}
+            {% if forloop.first or forloop.counter0|divisibleby:6 %}
                 <div class="hidden md:flex md:flex-row justify-center mb-2">
             {% endif %}
 
-                <a href="{% url 'item' item.slug %}" class="max-w-xs w-1/12 mx-1 break-all">
+                <a href="{% url 'item' item.slug %}" class="max-w-xs w-1/6 mx-1">
                     <div class="hidden md:flex md:flex-col px-3 py-2 h-full text-center justify-between bg-brown-900 border-2 border-{{ tiers_colors|get_item:item.tier }} bg-opacity-50 hover:bg-opacity-70 box-shadow-outline text-shadow-outline rounded-md">
                         <p class="text-sm border-b-2 border-brown-800 pb-2 mb-2">{{ item.name }}</p>
-                        <img src="/media/{{ item.img }}" alt="{{ item.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-contain">
+                        <img src="{% get_media_prefix %}{{ item.img }}" alt="{{ item.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-contain">
                     </div>
                 </a>
 
@@ -40,10 +40,10 @@
                 <div class="md:hidden flex flex-row justify-center mb-2">
             {% endif %}
 
-                <a href="{% url 'item' item.slug %}" class="max-w-xs w-1/4 mx-1 break-all">
+                <a href="{% url 'item' item.slug %}" class="max-w-xs w-1/4 mx-1">
                     <div class="md:hidden flex flex-col px-3 py-2 h-full text-center justify-between bg-brown-900 border-2 border-{{ tiers_colors|get_item:item.tier }} bg-opacity-50 hover:bg-opacity-70 box-shadow-outline text-shadow-outline rounded-md">
                         <p class="text-sm border-b-2 border-brown-800 pb-2 mb-2">{{ item.name }}</p>
-                        <img src="/media/{{ item.img }}" alt="{{ item.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-contain">
+                        <img src="{% get_media_prefix %}{{ item.img }}" alt="{{ item.name }}" class="self-center w-20 md:w-full h-20 object-contain md:object-contain">
                     </div>
                 </a>
 

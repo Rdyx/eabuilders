@@ -30,8 +30,6 @@
                         {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" onchange_listener="updateItemDiv(this)" %}
                         {% include 'components/itemDiv.html' with div_id=field.name hidden=True %}
                     </div>
-                {% comment %} {% elif 'char_slug' in field.name %} {% endcomment %}
-                    {% comment %} Nothing {% endcomment %}
                 {% else %}
                     {% include 'components/subcomponents/charfield.html' with field=field autocomplete="off" %}
                 {% endif %}
@@ -52,6 +50,7 @@
         const skills = JSON.parse('{{ skills | safe }}');
         const items = JSON.parse('{{ items | safe }}');
         const tiers_colors = JSON.parse('{{ tiers_colors | safe }}');
+        const media_url = '{% get_media_prefix %}';
     </script>
     <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>
 {% endblock %}

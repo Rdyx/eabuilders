@@ -6,7 +6,7 @@
 {% block content %}
     <div class="mt-5 w-11/12 px-2 md:px-3 py-2 mx-auto bg-brown-900 border-2 border-{{ tiers_colors|get_item:character.rarity }} text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
         <p class="text-2xl border-b-2 border-brown-800 pb-2 mb-2 mx-auto text-center text-{{ tiers_colors|get_item:character.rarity }}">{{ character.name }}</p>
-        <img src="/media/{{ character.img }}" alt="{{ character.name }}" class="w-full max-h-48 object-contain">
+        <img src="{% get_media_prefix %}{{ character.img }}" alt="{{ character.name }}" class="w-full max-h-48 object-contain">
 
         <div class="flex justify-center mx-auto mt-2 pt-2 border-t-2 border-brown-800">
             <div class="flex w-full px-2 md:px-0 md:w-4/12 justify-between">

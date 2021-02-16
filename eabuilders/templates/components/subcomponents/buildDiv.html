@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
     <div class="flex justify-between w-full border-b-2 border-brown-800 text-center mb-2 pb-2">
         <div class="my-auto">
@@ -36,7 +38,7 @@
 
     <div class="flex flex-col md:flex-row justify-center pb-3">
         <div class="flex self-center justify-center md:w-1/6 w-3/6">
-            <img src="/media/{{ build.char.img }}" alt="{{ build.char.name }}" class="max-h-28">
+            <img src="{% get_media_prefix %}{{ build.char.img }}" alt="{{ build.char.name }}" class="max-h-28">
         </div>
         <div class="md:flex md:flex-col md:mx-3 hidden justify-center">
             <div class="flex flex-row">

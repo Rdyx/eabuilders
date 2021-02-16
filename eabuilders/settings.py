@@ -93,8 +93,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "eabuilders.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "eabuilders/static")]
 
 if os.getenv("GAE_APPLICATION", None):
     # Running on production App Engine, so connect to Google Cloud SQL using
@@ -102,7 +106,7 @@ if os.getenv("GAE_APPLICATION", None):
     ALLOWED_HOSTS = [
         "micro-elysium-304914.ew.r.appspot.com",
     ]
-    DEBUG = False
+    # DEBUG = False
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -113,13 +117,31 @@ if os.getenv("GAE_APPLICATION", None):
             "PORT": os.getenv("DB_PORT"),
         }
     }
+
+    DEFAULT_FILE_STORAGE = "gcloud.GoogleCloudMediaFileStorage"
+    GS_MEDIA_BUCKET_NAME = os.getenv("BUCKET_NAME")
+
+    MEDIA_URL = "https://storage.googleapis.com/{}/".format(GS_MEDIA_BUCKET_NAME)
+    MEDIA_ROOT = "media/"
+
+    UPLOAD_ROOT = "media/uploads/"
+
+    PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
+    DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
+    DOWNLOAD_URL = STATIC_URL + "media/downloads"
+
 else:
+    # Database
+    # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -153,17 +175,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "eabuilders/static")]
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Tailwind CSS
 # Start: python manage.py tailwind start
