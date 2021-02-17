@@ -76,6 +76,9 @@ class BuildSelectionForm(forms.Form):
         post_dict = dict(request.POST)
         build_name = self.cleaned_data["name"]
 
+        if len(build_name) < 3:
+            return "Your build name is too short."
+
         try:
             character = CharacterModel.objects.get(slug=char_slug)
             builds = BuildModel.objects.filter(name=build_name).select_related(
@@ -235,6 +238,10 @@ class TeamCreateForm(forms.Form):
 
     def save(self, *args, request, **kwargs):
         team_name = self.cleaned_data["name"]
+
+        if len(team_name) < 3:
+            return "Your team name is too short."
+
         team_exists = TeamModel.objects.filter(name=team_name).count()
 
         build_1 = self.cleaned_data["build_1"]

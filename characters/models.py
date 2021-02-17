@@ -24,7 +24,7 @@ class SkillTypeModel(models.Model):
 
 class SkillModel(models.Model):
     owner = models.ForeignKey("CharacterModel", on_delete=models.CASCADE, null=False)
-    img = models.ImageField(upload_to="assets/skills", null=False)
+    img = models.ImageField(upload_to="assets/skills", null=True, blank=True)
     name = models.CharField(max_length=100, null=False)
     desc = models.TextField(null=False)
     stype = models.ForeignKey(
@@ -49,7 +49,9 @@ class SkillModel(models.Model):
 
 
 class CharacterModel(models.Model):
-    rarity = models.CharField(choices=[(str(i),str(i)) for i in range(1,6)], max_length=2, null=False)
+    rarity = models.CharField(
+        choices=[(str(i), str(i)) for i in range(1, 6)], max_length=2, null=False
+    )
     name = models.CharField(max_length=50, null=False, unique=True)
     slug = models.SlugField(max_length=50, null=False, unique=True)
     img = models.ImageField(upload_to="assets/characters", null=False)

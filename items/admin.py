@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import RaceModel, MaterialModel, ItemModel
+from .models import ItemModel, MaterialModel, RaceModel
 
 
 class RaceAdmin(admin.ModelAdmin):
@@ -13,6 +13,7 @@ class MaterialAdmin(admin.ModelAdmin):
 
 class ItemAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
+    list_select_related = ("race", "material")
 
 
 admin.site.register(RaceModel, RaceAdmin)

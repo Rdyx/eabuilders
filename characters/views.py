@@ -6,7 +6,7 @@ from .models import SkillLevelModel, SkillModel, CharacterModel
 
 
 def chars_index_view(request):
-    characters = CharacterModel.objects.all()
+    characters = CharacterModel.objects.all().order_by("rarity", "name")
 
     context = {"characters": characters, "tiers_colors": tiers_colors}
     return render(request, "chars_index.html", context)

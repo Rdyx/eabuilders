@@ -8,7 +8,10 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 class SkillAdmin(admin.ModelAdmin):
+    ordering = ["owner", "name", "level"]
     list_select_related = ["owner", "stype", "level"]
+    save_as = True
+    search_fields = ["owner__name", "name"]
 
 
 admin.site.register(SkillLevelModel)

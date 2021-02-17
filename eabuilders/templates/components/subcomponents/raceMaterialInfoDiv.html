@@ -11,14 +11,14 @@
     {% endif %}
     <div class="flex flex-col w-full px-2 break-words">
         <p class="border-b-2 border-brown-400 pb-2">
-            {{ raceMaterial.bonus_1 }}
+            {{ raceMaterial.bonus_1_min_nb_items_req }} Set - {{ raceMaterial.bonus_1 }}
         </p>
         <p class="{% if raceMaterial.bonus_3 %}border-b-2 border-brown-400{% endif %} py-2">
-            {{ raceMaterial.bonus_2 }}
+            {{ raceMaterial.bonus_2_min_nb_items_req }} Set - {{ raceMaterial.bonus_2 }}
         </p>
         {% if raceMaterial.bonus_3 %}
             <p class="py-2">
-                {{ raceMaterial.bonus_3 }}
+                {{ raceMaterial.bonus_3_min_nb_items_req }} Set - {{ raceMaterial.bonus_3 }}
             </p>
         {% endif %}
     </div>

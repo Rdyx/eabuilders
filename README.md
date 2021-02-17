@@ -9,3 +9,9 @@ Endless Arena "social" build sharing application based on django
 # TODO
 
 - Populate database
+
+  - Skills
+
+- Add favicon
+- Add cloudbuild (TBD)
+- Add daily DB backup script

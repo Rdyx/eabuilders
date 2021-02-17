@@ -5,19 +5,23 @@ from .models import RaceModel, MaterialModel, ItemModel
 
 
 def races_index_view(request):
-    races = RaceModel.objects.all()
+    races = RaceModel.objects.all().order_by("name")
     context = {"races": races}
     return render(request, "races_index.html", context)
 
 
 def materials_index_view(request):
-    materials = MaterialModel.objects.all()
+    materials = MaterialModel.objects.all().order_by("name")
     context = {"materials": materials}
     return render(request, "materials_index.html", context)
 
 
 def items_index_view(request):
-    items = ItemModel.objects.all().select_related("race", "material").order_by("tier")
+    items = (
+        ItemModel.objects.all()
+        .select_related("race", "material")
+        .order_by("tier", "name")
+    )
     context = {"items": items, "tiers_colors": tiers_colors}
     return render(request, "items_index.html", context)
 
