@@ -40,6 +40,7 @@ class SkillModel(models.Model):
 
     class Meta:
         unique_together = (
+            "owner",
             "name",
             "level",
         )
