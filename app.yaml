@@ -1,9 +1,9 @@
 runtime: python39
 
 handlers:
-# - url: /static
-#   static_dir: static/
-#   secure: always
+- url: /static
+  static_dir: static/
+  secure: always
 - url: /.*
   script: auto
   # http_headers:

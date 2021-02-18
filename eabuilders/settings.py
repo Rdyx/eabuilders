@@ -29,11 +29,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", "not_really_secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 # Application definition
-
 INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "items.apps.ItemsConfig",
@@ -105,8 +103,9 @@ if os.getenv("GAE_APPLICATION", None):
     # the unix socket at /cloudsql/<your-cloudsql-connection string>
     ALLOWED_HOSTS = [
         "micro-elysium-304914.ew.r.appspot.com",
+        "builders.efab.ovh",
     ]
-    # DEBUG = False
+    DEBUG = False
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -142,16 +141,18 @@ else:
 
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
-            "HOST": os.getenv("DB_HOST"),  # 1 Shared .614Mo 7$
-            "PORT": os.getenv("DB_PORT"),
-        }
-    }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.postgresql",
+    #         "NAME": os.getenv("DB_NAME"),
+    #         "USER": os.getenv("DB_USER"),
+    #         "PASSWORD": os.getenv("DB_PASSWORD"),
+    #         "HOST": os.getenv("DB_HOST"),  # 1 Shared .614Mo 7$
+    #         "PORT": os.getenv("DB_PORT"),
+    #     }
+    # }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
