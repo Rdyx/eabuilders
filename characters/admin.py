@@ -8,6 +8,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 class SkillAdmin(admin.ModelAdmin):
+    list_filter = ["owner"]
     ordering = ["owner", "name", "level"]
     list_select_related = ["owner", "stype", "level"]
     save_as = True
