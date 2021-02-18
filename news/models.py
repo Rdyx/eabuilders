@@ -17,3 +17,6 @@ class NewsModel(models.Model):
         default=1,
     )
     creation_date = models.DateField(null=False, default=timezone.now)
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.author)
