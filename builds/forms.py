@@ -56,7 +56,15 @@ class BuildSelectionForm(forms.Form):
             self.fields["skill_5"] = forms.ChoiceField(choices=self.skills_values)
             self.fields["skill_6"] = forms.ChoiceField(choices=self.skills_values)
         if items:
-            self.items_values = list(self.items.values_list("id", "name"))
+            self.items_values = list(
+                self.items.values_list("id", "name", "race__name", "material__name")
+            )
+
+            # Formatting for more human reading in front-end select list
+            for index, item in enumerate(self.items_values):
+                formated_item_name = "{} ({}, {})".format(item[1], item[2], item[3])
+                self.items_values[index] = (item[0], formated_item_name)
+
             self.items_values.insert(0, ("", "No selection"))
             self.fields["item_1"] = forms.ChoiceField(choices=self.items_values)
             self.fields["item_2"] = forms.ChoiceField(choices=self.items_values)

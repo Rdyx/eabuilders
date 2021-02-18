@@ -46,10 +46,10 @@
 {% endblock %}
 
 {% block js %}
-        <script type="text/javascript" >
-        const skills = JSON.parse('{{ skills | safe }}');
-        const items = JSON.parse('{{ items | safe }}');
-        const tiers_colors = JSON.parse('{{ tiers_colors | safe }}');
+    <script type="text/javascript" >
+        const skills = {{ skills | safe }};
+        const items = {{ items | safe }};
+        const tiers_colors = {{ tiers_colors | safe }};
         const media_url = '{% get_media_prefix %}';
     </script>
     <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>

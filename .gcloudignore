@@ -13,6 +13,9 @@
 .git
 .gitignore
 .github
+*.sh
+*.md
+LICENSE
 
 # Python pycache:
 __pycache__/
