@@ -4,7 +4,7 @@
     <div class="flex flex-col w-3/12 lg:pl-0 pr-2 md:w-1/12 justify-center text-center">
         {% include 'components/subcomponents/itemIcon.html' with div_id=div_id|add:'_img' item=item %}
     </div>
-    <div {% if div_id %}id="{{ div_id }}_content"{% endif %} class="flex flex-col w-9/12 md:w-11/12 text-sm px-2 border-l-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %} break-words">
+    <div {% if div_id %}id="{{ div_id }}_content"{% endif %} class="flex flex-col w-9/12 md:w-11/12 text-sm pl-2 border-l-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %} break-words">
         <p {% if div_id %}id="{{ div_id }}_name"{% endif %} class="text-left text-2xl font-semibold border-b-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %} pb-2 text-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}white{% endif %}">
             {{ item.name | title }}
         </p>

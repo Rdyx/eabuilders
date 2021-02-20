@@ -10,7 +10,7 @@
             {{ skill.desc }}
         </p>
     </div>
-    <div class="flex flex-col text-sm w-4/12 lg:w-1/12 pl-2">
+    <div class="flex flex-col justify-center text-sm w-4/12 lg:w-1/12 pl-2">
         {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/range.svg' div_id=div_id|add:'_range' info=skill.range %}
         {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/target.svg' div_id=div_id|add:'_targets' info=skill.targets %}
         {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/cooldown.svg' div_id=div_id|add:'_cd' info=skill.cd %}
