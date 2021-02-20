@@ -2,7 +2,7 @@
 
 <div
     {% if div_id %}id="{{ div_id }}"{% endif %}
-    class="flex flex-col justify-around{% if bg_border %} bg-brown-900 bg-opacity-50 border-2 border-{{ tiers_colors|get_item:item.tier }} rounded-md box-shadow-outline mx-1{% endif %}"
+    class="flex flex-col justify-around{% if bg_border %} bg-brown-900 bg-opacity-50 border-2 border-{{ tiers_colors|get_item:item.tier }} rounded-md box-shadow-outline ml-2{% endif %}"
 >
     <img src="{% get_media_prefix %}{{ item.img }}" alt="{{ item.name }}" class="w-full max-h-16 object-contain"/>
     <div class="flex flex-row justify-around">
