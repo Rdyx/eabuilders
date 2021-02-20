@@ -29,20 +29,32 @@ def items_index_view(request):
 def show_race_view(request, race_slug):
     try:
         race = RaceModel.objects.get(slug=race_slug)
+        related_items = ItemModel.objects.filter(race=race).order_by("tier", "name")
     except RaceModel.DoesNotExist:
         return redirect("oops")
 
-    context = {"race": race}
+    context = {
+        "race": race,
+        "related_items": related_items,
+        "tiers_colors": tiers_colors,
+    }
     return render(request, "race.html", context)
 
 
 def show_material_view(request, material_slug):
     try:
         material = MaterialModel.objects.get(slug=material_slug)
+        related_items = ItemModel.objects.filter(material=material).order_by(
+            "tier", "name"
+        )
     except MaterialModel.DoesNotExist:
         return redirect("oops")
 
-    context = {"material": material}
+    context = {
+        "material": material,
+        "related_items": related_items,
+        "tiers_colors": tiers_colors,
+    }
     return render(request, "material.html", context)
 
 

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %} {% load custom_filters %}
+{% load static %}
 
 {% block title %}{{ material.name }}{% endblock %}
 
@@ -14,5 +14,8 @@
             <img src="{% get_media_prefix %}{{ material.img }}" alt="{{ material.name }}" class="m-auto">
         </div>
         {% include 'components/subcomponents/raceMaterialInfoDiv.html' with raceMaterial=material %}
+        {% for item in related_items %}
+            {% include 'components/itemDiv.html' with item=item %}
+        {% endfor %}
     </div>
 {% endblock %}
