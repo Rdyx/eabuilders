@@ -13,9 +13,13 @@
 .git
 .gitignore
 .github
+
+# Gcloud specific personnal ignores
 *.sh
 *.md
 LICENSE
+/*/static/
+!static/
 
 # Python pycache:
 __pycache__/

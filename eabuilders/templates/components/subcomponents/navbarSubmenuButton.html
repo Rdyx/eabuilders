@@ -1,7 +1,6 @@
-<div x-data="{ isOpen: false }" class="mr-3 my-auto w-full lg:w-auto lg:relative lg:inline-block lg:py-0 py-3 rounded-md shadow-sm px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
-    <a @click="isOpen = !isOpen" type="button"
-        id="options-menu" aria-haspopup="true" aria-expanded="true"
-        class="flex justify-center"
+<div x-data="{ isOpen: false }" class="mr-3 my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
+    <a @click="isOpen = !isOpen" type="button" id="options-menu" aria-haspopup="true" aria-expanded="true"
+        class="flex justify-center md:px-3 py-3 lg:py-0"
         >
         {% block buttonText %}Button{% endblock %}
 </a>
@@ -13,7 +12,7 @@
         x-transition:leave="transition ease-in duration-75 transform"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="origin-top absolute right-5 lg:right-0 mt-4 lg:mt-1 w-44 rounded-md bg-brown-800 border-2 border-brown-500">
+        class="origin-top absolute right-5 lg:right-0 mt-2 lg:mt-1 w-44 rounded-md bg-brown-800 border-2 border-brown-500">
         <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             {% block subMenuLink %}{% endblock %}
         </div>

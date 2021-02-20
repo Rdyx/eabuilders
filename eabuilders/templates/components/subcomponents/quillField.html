@@ -1,5 +1,10 @@
 {% load static %}
+
+{% if debug %}
 <link rel="stylesheet" href="{% static 'css/quillField.css' %}">
+{% else %}
+    <link rel="stylesheet" href="{% static 'css/quillField.min.css' %}">
+{% endif %}
 
 <div class="flex flex-col text-center mb-3">
     <label for="id_{{ field.name }}" class="text-xl pb-1">

@@ -52,5 +52,9 @@
         const tiers_colors = {{ tiers_colors | safe }};
         const media_url = '{% get_media_prefix %}';
     </script>
-    <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>
+    {% if debug %}
+        <script type="text/javascript" src="{% static 'js/buildSelectionForm.js'%}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static 'js/buildSelectionForm.min.js'%}"></script>
+    {% endif %}
 {% endblock %}

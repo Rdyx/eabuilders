@@ -1,0 +1,1 @@
+.spin{animation:spin-animation 1s infinite;display:inline-block}@keyframes spin-animation{0%{transform:rotate(0)}100%{transform:rotate(359deg)}}

@@ -15,6 +15,9 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'js/searchForm.js' %}"></script>
-    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    {% if debug %}
+        <script type="text/javascript" src="{% static 'js/searchForm.js' %}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static 'js/searchForm.min.js' %}"></script>
+    {% endif %}
 {% endblock %}

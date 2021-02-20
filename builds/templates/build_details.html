@@ -92,5 +92,9 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'js/deleteBuild.js' %}"></script>
+    {% if debug %}
+        <script type="text/javascript" src="{% static 'js/deleteBuild.js' %}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static 'js/deleteBuild.min.js' %}"></script>
+    {% endif %}
 {% endblock %}

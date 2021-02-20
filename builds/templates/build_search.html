@@ -3,6 +3,10 @@
 
 {% block title %}Builds Search{% endblock %}
 
+{% block head_js %}
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="text-center px-3 py-2 mt-5 w-11/12 md:w-3/5 m-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
         <form id="search-build-form" action="{% url 'search_build_results' %}" method="GET" class="w-full mt-2">
@@ -15,6 +19,11 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'js/searchForm.js' %}"></script>
-    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    {% if debug %}
+        <script type="text/javascript" src="{% static 'js/searchForm.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/RelatedObjectLookups.js' %}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static 'js/searchForm.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/RelatedObjectLookups.min.js' %}"></script>
+    {% endif %}
 {% endblock %}

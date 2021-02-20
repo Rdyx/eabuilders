@@ -15,34 +15,34 @@
                 </span>
             </div>
         </div>
-        <div class="w-6/12 md:w-auto flex justify-end">
+        <div class="w-6/12 lg:w-auto flex justify-end">
             <div id="hamburgerbtn" class="lg:hidden h-8 w-8 flex justify-end">
-                <img class="object-fill h-6" src="{% static 'assets/menu.svg' %}" alt="menu">
+                <img class="object-fill h-6 cursor-pointer" src="{% static 'assets/menu.svg' %}" alt="menu">
             </div>
 
-        <ul class="hidden lg:flex lg:flex-row bg-brown-900 border-l-2 border-white lg:border-none" id="mobileMenu">
-            <li class="inline-flex lg:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full lg:w-auto my-auto">
-                <a href="{% url 'news_index' %}">News</a>
+        <ul class="hidden w-full lg:flex lg:flex-row bg-brown-900 border-l-2 border-white lg:border-none my-auto rounded-md" id="mobileMenu">
+            <li class="mr-3 my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
+                <a href="{% url 'news_index' %}" class="flex justify-center md:px-3 py-3 lg:py-0">News</a>
             </li>
 
             {% include 'components/indexNavbarButton.html' %}
             {% include 'components/buildsNavbarButton.html' %}
             {% include 'components/teamsNavbarButton.html' %}
 
-            <li class="inline-flex lg:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full lg:w-auto my-auto">
-                <a href="{% url 'news' 'about' %}">About</a>
+            <li class="mr-3 my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
+                <a href="{% url 'news' 'about' %}" class="flex justify-center md:px-3 py-3 lg:py-0">About</a>
             </li>
 
             {% if user.is_authenticated %}
-                <li class="inline-flex lg:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 mr-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full lg:w-auto my-auto">
-                    <a href="{% url 'user_profile' user.username %}">{{ user | title }}</a>
+                <li class="mr-3 my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
+                    <a href="{% url 'user_profile' user.username %}" class="flex justify-center md:px-3 py-3 lg:py-0">{{ user | title }}</a>
                 </li>
-                <li class="inline-flex lg:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full lg:w-auto my-auto">
-                    <a href="{% url 'logout' %}">Logout</a>
+                <li class="my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
+                    <a href="{% url 'logout' %}" class="flex justify-center md:px-3 py-3 lg:py-0">Logout</a>
                 </li>
             {% else %}
-                <li class="inline-flex lg:py-0 py-3 justify-center rounded-md hover:bg-brown-600 shadow-sm px-3 cursor-pointer focus:outline-none focus:bg-brown-600 w-full lg:w-auto my-auto">
-                    <a href="{% url 'login' %}">Sign In</a>
+                <li class="my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
+                    <a href="{% url 'login' %}" class="flex justify-center md:px-3 py-3 lg:py-0">Sign In</a>
                 </li>
             {% endif %}
 

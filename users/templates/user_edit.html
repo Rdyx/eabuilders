@@ -40,5 +40,9 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'js/deleteProfile.js' %}"></script>
+    {% if debug %}
+        <script type="text/javascript" src="{% static 'js/deleteProfile.js' %}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static 'js/deleteProfile.min.js' %}"></script>
+    {% endif %}
 {% endblock %}

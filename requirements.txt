@@ -11,7 +11,7 @@ django-autocomplete-light==3.8.1
 django-debug-toolbar==3.2
 django-quill-editor==0.1.16
 django-storages==1.11.1
-django-tailwind==1.1.0
+django-tailwind==1.1.1
 django-widget-tweaks==1.4.8
 google-api-core==1.26.0
 google-auth==1.26.1
