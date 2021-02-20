@@ -17,7 +17,7 @@ def get_selected_skills(request):
     )
 
 
-def check_form_values(form, field_name_to_check, fields_number_target):
+def check_form_values(form, field_name_to_check, fields_number_target, unique_values):
     """
     Form field values checker.
     Count if we get required number of fields and no double value before saving
@@ -29,7 +29,9 @@ def check_form_values(form, field_name_to_check, fields_number_target):
     for k, v in form.items():
         if field_name_to_check in k:
             fields_number += 1
-            if not v in field_values and v != "No selection":
+            if unique_values and not v in field_values and v != "No selection":
+                field_values.append(v)
+            elif not unique_values and v != "No selection":
                 field_values.append(v)
             else:
                 wrong_field_values = True

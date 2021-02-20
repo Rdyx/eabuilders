@@ -11,14 +11,14 @@ from .models import BuildModel, TeamModel
 
 from characters.models import SkillModel, CharacterModel
 
-from .utils import get_selected_skills, check_form_values
+from .utils import check_form_values
 
 User = get_user_model()
 
 
 class BuildSelectionForm(forms.Form):
     name = forms.CharField(max_length=100)
-    notes = QuillFormField(max_length=500, required=False)
+    notes = QuillFormField(max_length=2000, required=False)
     game_mode = forms.ChoiceField(choices=[(i, i) for i in ["Lab", "Arena"]])
     skill_1 = forms.ChoiceField(choices=[])
     skill_1 = forms.ChoiceField(choices=[])
@@ -115,8 +115,8 @@ class BuildSelectionForm(forms.Form):
         if build_version > 1 and builds[0].creator != request.user:
             return "This build name is already taken."
 
-        selected_skill_are_valid = check_form_values(post_dict, "skill", 6)
-        selected_items_are_valid = check_form_values(post_dict, "item", 8)
+        selected_skill_are_valid = check_form_values(post_dict, "skill", 6, True)
+        selected_items_are_valid = check_form_values(post_dict, "item", 8, False)
         if not selected_skill_are_valid or not selected_items_are_valid:
             return "A skill or an item has been selected twice."
 
@@ -230,7 +230,7 @@ class TeamCreateForm(forms.Form):
     qs = BuildModel.objects.all().select_related("creator", "char")
 
     name = forms.CharField(max_length=100)
-    notes = QuillFormField(max_length=500, required=False)
+    notes = QuillFormField(max_length=2000, required=False)
     game_mode = forms.ChoiceField(choices=[(i, i) for i in ["Lab", "Arena"]])
 
     build_1 = _get_autocomplete_field(qs, "build-autocomplete", 3)

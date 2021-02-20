@@ -105,9 +105,10 @@ function updateItemDiv(e) {
 			Object.values(tiers_colors).forEach((color) => {
 				let border_color = 'border-' + color;
 				if (target_div.classList.contains(border_color)) {
+					target_name.classList.remove('text-' + color);
+					target_name.classList.remove(border_color);
 					target_div.classList.remove(border_color);
 					target_content.classList.remove(border_color);
-					target_name.classList.remove(border_color);
 					target_desc.classList.remove(border_color);
 				}
 			});

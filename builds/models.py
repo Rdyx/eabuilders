@@ -15,7 +15,7 @@ class BuildModel(models.Model):
     creation_date = models.DateTimeField(null=False, default=timezone.now)
     name = models.CharField(max_length=100, null=False)
     slug = models.SlugField(max_length=120, null=False, unique=True)
-    notes = QuillField(max_length=500, blank=True, null=True)
+    notes = QuillField(max_length=2000, blank=True, null=True)
     char = models.ForeignKey(
         "characters.CharacterModel", on_delete=models.CASCADE, null=False
     )
@@ -99,7 +99,7 @@ class TeamModel(models.Model):
     creation_date = models.DateTimeField(null=False, default=timezone.now)
     name = models.CharField(max_length=100, null=False, unique=True)
     slug = models.SlugField(max_length=120, null=False, unique=True)
-    notes = QuillField(max_length=500, blank=True, null=True)
+    notes = QuillField(max_length=2000, blank=True, null=True)
     game_mode = models.CharField(
         choices=[(i, i) for i in ["Lab", "Arena"]], max_length=15, null=False
     )
