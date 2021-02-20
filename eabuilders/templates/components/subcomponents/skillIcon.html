@@ -17,7 +17,7 @@
 ></div>
 
 {% if show_stype %}
-    <div class="text-sm">{{ skill.stype.name }}</div>
+    <div {% if div_id %}id="{{ div_id }}_type"{% endif %} class="text-sm">{{ skill.stype.name }}</div>
 {% endif %}
 
 {% comment %}

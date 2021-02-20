@@ -49,7 +49,7 @@
     <script type="text/javascript" >
         const skills = {{ skills | safe }};
         const items = {{ items | safe }};
-        const tiers_colors = {{ tiers_colors | safe }};
+        const tiers_colors = {{ json_tiers_colors | safe }};
         const media_url = '{% get_media_prefix %}';
     </script>
     {% if debug %}

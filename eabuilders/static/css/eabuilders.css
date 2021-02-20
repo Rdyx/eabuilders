@@ -1,3 +1,9 @@
+input, button, select, img {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
 body {
   background: repeat;
   background-image: url(../assets/bg-sword.png);

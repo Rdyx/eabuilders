@@ -1,16 +1,16 @@
-<div {% if div_id %}id="{{ div_id }}"{% endif %} class="{% if hidden %}hidden {% endif %}flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
-    <div class="flex flex-col w-16 md:pl-0 md:pr-2 md:w-1/12 justify-center text-center">
+<div {% if div_id %}id="{{ div_id }}"{% endif %} class="{% if hidden %}hidden {% endif %}flex justify-between text-left mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md" style="border-color: {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %};">
+    <div class="flex flex-col w-3/12 lg:pl-0 pr-2 lg:w-1/12 justify-center text-center">
         {% include 'components/subcomponents/skillIcon.html' with div_id=div_id|add:'_img' skill=skill show_stype=True %}
     </div>
-    <div class="flex flex-col w-6/12 md:w-full text-sm px-2 border-l-2 border-brown-400 break-words">
-        <p {% if div_id %}id="{{ div_id|add:'_name' }}"{% endif %} class="text-2xl font-semibold border-b-2 border-brown-400 pb-2" style="color: {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %};">
+    <div {% if div_id %}id="{{ div_id }}_content"{% endif %} class="flex flex-col w-full text-sm px-2 border-l-2 border-r-2 border-brown-400 break-words" style="border-color: {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %};">
+        <p {% if div_id %}id="{{ div_id }}_name"{% endif %} class="text-2xl font-semibold border-b-2 border-brown-400 pb-2" style="color: {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %}; border-color: {% if not skill.deprecated %}{{ skill.stype.color }}{% else %}black{% endif %};">
             {{ skill.name | title }}
         </p>
-        <p {% if div_id %}id="{{ div_id|add:'_desc' }}"{% endif %}class="pt-2">
+        <p {% if div_id %}id="{{ div_id }}_desc"{% endif %}class="pt-2">
             {{ skill.desc }}
         </p>
     </div>
-    <div class="flex flex-col text-sm w-3/12 md:w-1/12 pl-2 border-l-2 border-brown-400">
+    <div class="flex flex-col text-sm w-4/12 lg:w-1/12 pl-2">
         {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/range.svg' div_id=div_id|add:'_range' info=skill.range %}
         {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/target.svg' div_id=div_id|add:'_targets' info=skill.targets %}
         {% include 'components/subcomponents/skillMiscInfo.html' with asset='/assets/cooldown.svg' div_id=div_id|add:'_cd' info=skill.cd %}

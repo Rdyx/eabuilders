@@ -1,5 +1,5 @@
 <div x-data="{ isOpen: false }" class="mr-3 my-auto w-full lg:w-auto lg:relative lg:inline-block rounded-md shadow-sm lg:px-3 cursor-pointer font-bold text-shadow-outline hover:bg-brown-600 focus:outline-none focus:bg-brown-600">
-    <a @click="isOpen = !isOpen" type="button" id="options-menu" aria-haspopup="true" aria-expanded="true"
+    <a @click="isOpen = !isOpen" id="options-menu" aria-haspopup="true" aria-expanded="true"
         class="flex justify-center md:px-3 py-3 lg:py-0"
         >
         {% block buttonText %}Button{% endblock %}

@@ -46,6 +46,7 @@ def builds_index_view(request, page_number=1):
         "previous_page": previous_page,
         "current_page": page_number,
         "next_page": next_page,
+        "tiers_colors": tiers_colors,
     }
     return render(request, "builds_index.html", context)
 
@@ -129,7 +130,8 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         "character": character,
         "skills": serializers.serialize("json", skills, use_natural_foreign_keys=True),
         "items": serializers.serialize("json", items, use_natural_foreign_keys=True),
-        "tiers_colors": json.dumps(tiers_colors),  # JS usage
+        "json_tiers_colors": json.dumps(tiers_colors),  # JS usage
+        "tiers_colors": tiers_colors,
         "error_message": error_message,
     }
 
@@ -192,6 +194,7 @@ def get_build_view(request, build_slug):
         "last_build_version": last_build_version,
         "build_sets_bonus": build_sets_bonus,
         "build_votes": True,
+        "tiers_colors": tiers_colors,
     }
 
     return render(request, "build_details.html", context)

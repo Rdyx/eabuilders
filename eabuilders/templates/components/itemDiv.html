@@ -1,12 +1,14 @@
-<div {% if div_id %}id="{{ div_id }}"{% endif %} class="{% if hidden %}hidden {% endif %}flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
-    <div class="flex flex-col w-16 md:pl-0 md:pr-2 md:w-1/12 justify-center text-center">
+{% load custom_filters %}
+
+<div {% if div_id %}id="{{ div_id }}"{% endif %} class="{% if hidden %}hidden {% endif %}flex justify-between mt-2 w-full px-2 py-2 mx-auto bg-brown-900 border-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %} text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md">
+    <div class="flex flex-col w-3/12 lg:pl-0 pr-2 md:w-1/12 justify-center text-center">
         {% include 'components/subcomponents/itemIcon.html' with div_id=div_id|add:'_img' item=item %}
     </div>
-    <div class="flex flex-col w-9/12 md:w-11/12 text-sm pl-2 border-l-2 border-brown-400 break-words">
-        <p {% if div_id %}id="{{ div_id|add:'_name' }}"{% endif %} class="text-2xl font-semibold border-b-2 border-brown-400 pb-2">
+    <div {% if div_id %}id="{{ div_id }}_content"{% endif %} class="flex flex-col w-9/12 md:w-11/12 text-sm px-2 border-l-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %} break-words">
+        <p {% if div_id %}id="{{ div_id }}_name"{% endif %} class="text-left text-2xl font-semibold border-b-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %} pb-2 text-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}white{% endif %}">
             {{ item.name | title }}
         </p>
-        <p {% if div_id %}id="{{ div_id|add:'_desc' }}"{% endif %}class="py-2 mb-2 border-b-2 border-brown-400">
+        <p {% if div_id %}id="{{ div_id }}_desc"{% endif %}class="text-left py-2 mb-2 border-b-2 border-{% if item.tier %}{{ tiers_colors|get_item:item.tier }}{% else %}brown-400{% endif %}">
             {{ item.desc }}
         </p>
         {% include 'components/subcomponents/itemPriceSpan.html' with item=item %}
