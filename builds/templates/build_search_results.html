@@ -17,16 +17,6 @@
             {% include 'components/subcomponents/buildDiv.html' with build=build %}
         {% endfor %}
 
-        <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md text-sm">
-            {% if previous_page %}
-                <a href="{% url 'search_build_results' previous_page %}?{{ search_params }}">< Previous Page</a>
-            {% endif %}
-
-            <p>Page {{ current_page }} of {% widthratio total_builds_found pagination 1 %}</p>
-
-            {% if next_page %}
-                <a href="{% url 'search_build_results' next_page %}?{{ search_params }}">Next Page ></a>
-            {% endif %}
-        </div>
+    {% include 'components/subcomponents/pagination.html' with total_objects=total_builds_found %}
     {% endif %}
 {% endblock %}

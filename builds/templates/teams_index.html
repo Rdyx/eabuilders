@@ -8,15 +8,5 @@
         {% include 'components/subcomponents/teamDiv.html' with team=team %}
     {% endfor %}
 
-    <div class="flex flex-row justify-around mt-5 w-11/12 px-3 py-2 mx-auto bg-brown-900 border-2 border-brown-400 text-white bg-opacity-50 box-shadow-outline text-shadow-outline rounded-md text-sm">
-        {% if previous_page %}
-            <a href="{% url 'teams_index' previous_page %}">< Previous Page</a>
-        {% endif %}
-
-        <p>Page {{ current_page }} of {% widthratio total_teams pagination 1 %}</p>
-
-        {% if next_page %}
-            <a href="{% url 'teams_index' next_page %}">Next Page ></a>
-        {% endif %}
-    </div>
+    {% include 'components/subcomponents/pagination.html' with total_objects=total_teams %}
 {% endblock %}
