@@ -24,6 +24,7 @@ from .utils import (
     get_char_skills,
     get_build_sets_bonus,
     update_model_votes,
+    format_select_items_list,
 )
 
 
@@ -100,7 +101,8 @@ def create_build_skill_item_selection_view(request, build_slug=""):
         skills = get_char_skills(character.slug)
 
         skills_form_choices = list(skills.values_list("id", "name"))
-        items_form_choices = items.values_list("id", "name")
+        items_form_choices = format_select_items_list(items)
+
         build_form = BuildSelectionForm()
         build_form.fields["char_slug"].initial = build.char.slug
 

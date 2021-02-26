@@ -11,7 +11,7 @@ from .models import BuildModel, TeamModel
 
 from characters.models import SkillModel, CharacterModel
 
-from .utils import check_form_values
+from .utils import check_form_values, format_select_items_list
 
 User = get_user_model()
 
@@ -56,14 +56,7 @@ class BuildSelectionForm(forms.Form):
             self.fields["skill_5"] = forms.ChoiceField(choices=self.skills_values)
             self.fields["skill_6"] = forms.ChoiceField(choices=self.skills_values)
         if items:
-            self.items_values = list(
-                self.items.values_list("id", "name", "race__name", "material__name")
-            )
-
-            # Formatting for more human reading in front-end select list
-            for index, item in enumerate(self.items_values):
-                formated_item_name = "{} ({}, {})".format(item[1], item[2], item[3])
-                self.items_values[index] = (item[0], formated_item_name)
+            self.items_values = format_select_items_list(self.items)
 
             self.items_values.insert(0, ("", "No selection"))
             self.fields["item_1"] = forms.ChoiceField(choices=self.items_values)

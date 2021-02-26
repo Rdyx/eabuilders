@@ -135,3 +135,13 @@ def update_model_votes(request, qs):
             if votes_qs[0].value != new_vote.value:
                 votes_qs.update(value=new_vote.value)
                 qs.update(votes=F("votes") + new_vote.value * 2)
+
+
+def format_select_items_list(items):
+    items = list(items.values_list("id", "name", "race__name", "material__name"))
+    # Formatting for more human reading in front-end select list
+    for index, item in enumerate(items):
+        formated_item_name = "{} ({}, {})".format(item[1], item[2], item[3])
+        items[index] = (item[0], formated_item_name)
+
+    return items
