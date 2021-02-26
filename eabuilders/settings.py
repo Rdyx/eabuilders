@@ -104,6 +104,7 @@ if os.getenv("GAE_APPLICATION", None):
     ALLOWED_HOSTS = [
         "micro-elysium-304914.ew.r.appspot.com",
         "builders.efab.ovh",
+        "www.builders.efab.ovh",
     ]
     DEBUG = False
     DATABASES = {

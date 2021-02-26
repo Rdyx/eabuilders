@@ -422,6 +422,7 @@ def get_team_view(request, team_slug):
         "build_3": build_3,
         "team_creation_message": team_creation_message,
         "team_votes": True,
+        "tiers_colors": tiers_colors,
     }
 
     return render(request, "team_details.html", context)
