@@ -100,7 +100,7 @@ class BuildSelectionForm(forms.Form):
                 "item_7",
                 "item_8",
             )
-            build_version = builds.count() + 1
+            build_version = builds.order_by("-version").first().version + 1
 
         except CharacterModel.DoesNotExist:
             redirect("oops")
@@ -138,7 +138,6 @@ class BuildSelectionForm(forms.Form):
         build.item_8 = self.items.filter(id=self.cleaned_data["item_8"]).first()
 
         build.save()
-
         return {"name": build.name, "slug": build.slug}
 
 
