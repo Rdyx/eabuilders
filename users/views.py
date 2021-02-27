@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.decorators import login_required
 from django.template import loaders
 
-from eabuilders.utils import get_pagination
+from eabuilders.utils import get_pagination, tiers_colors
 
 from .forms import SigninForm, EditUserForm, UserCreationForm, UserChangeForm
 from .utils import get_user_builds, get_user_teams
@@ -112,6 +112,7 @@ def user_profile_view(request, username, page_number=1):
         "previous_page": previous_page,
         "current_page": page_number,
         "next_page": next_page,
+        "tiers_colors": tiers_colors,
     }
     return render(request, "profile.html", context)
 
