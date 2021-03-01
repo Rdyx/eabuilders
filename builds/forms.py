@@ -100,7 +100,11 @@ class BuildSelectionForm(forms.Form):
                 "item_7",
                 "item_8",
             )
-            build_version = builds.order_by("-version").first().version + 1
+            last_build = builds.order_by("-version").first()
+
+            build_version = 1
+            if last_build:
+                build_version = last_build.version + 1
 
         except CharacterModel.DoesNotExist:
             redirect("oops")

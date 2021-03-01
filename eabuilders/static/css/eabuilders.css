@@ -53,3 +53,9 @@ select[multiple] option:checked {
   -webkit-text-fill-color: yellow;
   border-radius: 0.375rem;
 }
+
+.skill-icon {
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}

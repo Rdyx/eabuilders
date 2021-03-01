@@ -46,7 +46,9 @@ class SkillModel(models.Model):
         )
 
     def __str__(self):
-        return "{} ({} (Level {}))".format(self.name, self.owner.name, self.level)
+        return "{}. {} ({} (Level {}))".format(
+            self.id, self.name, self.owner.name, self.level
+        )
 
 
 class CharacterModel(models.Model):
